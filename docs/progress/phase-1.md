@@ -13,7 +13,7 @@ Create a runnable, tested, documented monorepo foundation for the Java control p
 | 3 | FastAPI intelligence-service skeleton | COMPLETE_VERIFIED |
 | 4 | React and TypeScript web skeleton | COMPLETE_VERIFIED |
 | 5 | Docker Compose local environment | COMPLETE_VERIFIED |
-| 6 | CI, quality gates, and Phase 1 documentation | COMPLETE_UNVERIFIED |
+| 6 | CI, quality gates, and Phase 1 documentation | COMPLETE_VERIFIED |
 
 ## Previous verification records
 
@@ -39,7 +39,23 @@ Batches 1 through 5 were verified on 2026-08-01 from developer-supplied command 
 
 ## Batch 6 verification record
 
-No verification output has been supplied yet for Batch 6.
+Verified on 2026-08-01 from developer-supplied local and GitHub Actions output:
+
+- Repository structure validation passed locally and in GitHub Actions.
+- Java formatting, analysis, tests, coverage, and executable JAR packaging passed.
+- All 5 Java tests passed.
+- Python lockfile validation, Ruff formatting, Ruff linting, MyPy, and Pytest passed.
+- All 11 Python tests passed with 98 percent coverage.
+- Frontend Prettier, ESLint, Vitest, production build, and Playwright passed.
+- All 5 frontend unit and component tests passed.
+- The Playwright navigation test passed.
+- Control-plane, intelligence-service, and web container builds passed.
+- Docker Compose configuration validation passed.
+- Dependency Review passed after the repository dependency graph became available.
+- Dependabot configuration covers Gradle, Python, npm, Docker, and GitHub Actions.
+- The aggregate Phase 1 quality gate passed.
+- All 10 pull-request checks passed.
+- Repository whitespace and unfinished-marker validation passed.
 
 ## Phase 1 completion criteria
 
