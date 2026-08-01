@@ -4,7 +4,7 @@ Describe the problem solved and the resulting behaviour.
 
 ## Changes
 
-- 
+-
 
 ## Safety and evidence
 
