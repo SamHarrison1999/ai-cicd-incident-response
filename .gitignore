@@ -44,3 +44,10 @@ coverage/
 # Generated contracts and reports
 reports/
 artifacts/
+# Phase 1 Java control plane
+.gradle/
+**/build/
+!**/src/**/build/
+.idea/
+*.iml
+out/
