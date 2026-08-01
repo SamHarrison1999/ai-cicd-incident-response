@@ -1,0 +1,46 @@
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Java
+.gradle/
+build/
+out/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+htmlcov/
+.coverage
+
+# Node
+node_modules/
+dist/
+playwright-report/
+test-results/
+coverage/
+
+# Containers and local data
+.postgres-data/
+.otel-data/
+*.log
+
+# Generated contracts and reports
+reports/
+artifacts/
