@@ -1,0 +1,79 @@
+name: Bug report
+description: Report reproducible incorrect platform behaviour
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include real secrets, access tokens, customer data, or sensitive production logs.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the incorrect behaviour.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide a minimal, repeatable sequence.
+      placeholder: |
+        1. Start...
+        2. Submit...
+        3. Observe...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitised evidence
+      description: Include correlation IDs and sanitised logs only.
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: Commit or release
+      placeholder: commit SHA or version
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Control plane
+        - Intelligence service
+        - Web application
+        - Docker Compose
+        - CI/CD
+        - Documentation
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I removed secrets and sensitive data from this report.
+          required: true

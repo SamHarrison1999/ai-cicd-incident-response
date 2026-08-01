@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 0 â€” scope, architecture, risks, backlog, repository structure, and initial ADRs.
+**Current phase:** Phase 0 Ã¢â‚¬â€ scope, architecture, risks, backlog, repository structure, and initial ADRs.
 
 No runtime services are implemented in Phase 0. Phase 1 will create the Java control plane, Python intelligence service, React frontend, local infrastructure, and continuous-integration foundation.
 
@@ -109,3 +109,15 @@ docker compose down
 ```
 
 See [`docs/deployment.md`](docs/deployment.md) for health checks, logs, port overrides, and destructive volume cleanup.
+
+## Continuous integration
+
+GitHub Actions validates repository structure, the Java control plane, Python intelligence service, React web application, container images, and Docker Compose configuration.
+
+The aggregate required check is:
+
+```text
+Phase 1 quality gate
+```
+
+See [`docs/ci.md`](docs/ci.md) for workflow behaviour, local parity commands, artifacts, dependency automation, and branch-protection recommendations.

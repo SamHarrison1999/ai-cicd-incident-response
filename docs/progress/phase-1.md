@@ -13,46 +13,50 @@ Create a runnable, tested, documented monorepo foundation for the Java control p
 | 3 | FastAPI intelligence-service skeleton | COMPLETE_VERIFIED |
 | 4 | React and TypeScript web skeleton | COMPLETE_VERIFIED |
 | 5 | Docker Compose local environment | COMPLETE_VERIFIED |
-| 6 | CI, quality gates, and Phase 1 documentation | NOT_STARTED |
+| 6 | CI, quality gates, and Phase 1 documentation | COMPLETE_VERIFIED |
 
 ## Previous verification records
 
-Batches 1 through 4 were verified on 2026-08-01 from developer-supplied command output.
+Batches 1 through 5 were verified on 2026-08-01 from developer-supplied command output.
 
-## Batch 5 acceptance criteria
+## Batch 6 acceptance criteria
 
-- `docker compose config` succeeds.
-- All four service images build.
-- PostgreSQL becomes healthy.
-- The control plane starts after PostgreSQL and becomes healthy.
-- The intelligence service becomes healthy.
-- The web service starts after both backends become healthy.
-- The web application is reachable on the configured host port.
-- Both backend status endpoints return the expected service identity.
-- Flyway applies the existing migration in the Compose environment.
-- The PostgreSQL named volume persists across a normal restart.
-- `verify-local-stack.ps1` passes.
-- `docker compose down` stops the stack cleanly.
-- `docker compose down --volumes` removes disposable local data when explicitly requested.
+- The primary CI workflow parses successfully in GitHub Actions.
+- Repository-quality validation passes locally and in CI.
+- The Java job passes formatting, analysis, tests, coverage, and JAR packaging.
+- The Python job passes lockfile validation, Ruff, MyPy, Pytest, and coverage.
+- The web job passes Prettier, ESLint, Vitest, production build, and Playwright.
+- The three application container images build in CI without publishing.
+- Docker Compose configuration validation passes.
+- The aggregate quality-gate job fails when any required job fails.
+- Dependency Review is enabled for pull requests.
+- Dependabot covers Gradle, Python, npm, Docker, and GitHub Actions.
+- Pull-request and issue templates capture verification, security, and AI-safety considerations.
+- CI documentation and ADR 0011 are complete.
+- Phase 1 documentation links are discoverable from the README.
 - Repository whitespace and unfinished-marker checks produce no errors.
-- Developer-supplied output is recorded before Batch 5 is marked verified.
+- Developer-supplied local and GitHub Actions output is recorded before Batch 6 and Phase 1 are marked verified.
 
-## Batch 5 verification record
+## Batch 6 verification record
 
-Verified on 2026-08-01 from developer-supplied command output:
+Verified on 2026-08-01 from developer-supplied local and GitHub Actions output:
 
-- docker compose config rendered successfully.
-- The control-plane, intelligence-service, and web images built successfully.
-- PostgreSQL 18.1 started and became healthy.
-- The intelligence service started and became healthy.
-- The control plane waited for PostgreSQL and became healthy.
-- The web service started after its dependencies became healthy.
-- Flyway validated and applied migration V1.
-- The Java and Python system-status endpoints returned the expected service identities.
-- The web application was reachable on port 3000.
-- erify-local-stack.ps1 completed successfully.
-- Structured service logs were observed.
-- The PostgreSQL named volume survived a normal Compose shutdown and restart.
-- docker compose down removed the containers and network cleanly.
-- docker compose down --volumes explicitly removed the disposable database volume.
-- Repository whitespace and unfinished-marker validation produced no errors.
+- Repository structure validation passed locally and in GitHub Actions.
+- Java formatting, analysis, tests, coverage, and executable JAR packaging passed.
+- All 5 Java tests passed.
+- Python lockfile validation, Ruff formatting, Ruff linting, MyPy, and Pytest passed.
+- All 11 Python tests passed with 98 percent coverage.
+- Frontend Prettier, ESLint, Vitest, production build, and Playwright passed.
+- All 5 frontend unit and component tests passed.
+- The Playwright navigation test passed.
+- Control-plane, intelligence-service, and web container builds passed.
+- Docker Compose configuration validation passed.
+- Dependency Review passed after the repository dependency graph became available.
+- Dependabot configuration covers Gradle, Python, npm, Docker, and GitHub Actions.
+- The aggregate Phase 1 quality gate passed.
+- All 10 pull-request checks passed.
+- Repository whitespace and unfinished-marker validation passed.
+
+## Phase 1 completion criteria
+
+Phase 1 is complete only when all six batches are `COMPLETE_VERIFIED`, the pull-request quality gate passes on GitHub, and the final Phase 1 changes are merged into `main`.
