@@ -1,0 +1,84 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "incident-intelligence-service"
+version = "0.1.0"
+description = "Evidence-grounded intelligence service for CI/CD incident response"
+readme = "README.md"
+requires-python = "==3.14.*"
+license = { text = "MIT" }
+authors = [
+    { name = "Samuel Harrison" },
+]
+dependencies = [
+    "fastapi[standard]>=0.116,<1",
+    "pydantic>=2.13.4,<3",
+    "pydantic-settings>=2.14.2,<3",
+    "structlog>=26.1,<27",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28,<1",
+    "mypy>=1.16,<2",
+    "pytest>=8.4,<9",
+    "pytest-cov>=6.2,<7",
+    "ruff>=0.16,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/incident_intelligence"]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+addopts = [
+    "-ra",
+    "--strict-config",
+    "--strict-markers",
+    "--cov=incident_intelligence",
+    "--cov-branch",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["incident_intelligence"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "B",
+    "UP",
+    "SIM",
+    "RUF",
+    "ASYNC",
+]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["incident_intelligence"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+warn_unreachable = true
+pretty = true
+show_error_codes = true
+files = ["src", "tests"]
