@@ -50,3 +50,24 @@ Docker Compose support is introduced in Phase 1 Batch 5.
 ## Current limitation
 
 There are no executable services or automated application tests after Batch 1. This is intentional; the Java, Python, and frontend skeletons are introduced in Batches 2 through 4.
+
+## Docker Compose local platform
+
+After installing Docker Desktop:
+
+```powershell
+Copy-Item .env.example .env
+docker compose config
+docker compose build
+docker compose up -d
+.\scripts\verify-local-stack.ps1
+```
+
+The default local endpoints are:
+
+- Web: `http://localhost:3000`
+- Control plane: `http://localhost:8080`
+- Intelligence service: `http://localhost:8000`
+- PostgreSQL: `localhost:5432`
+
+Use `docker compose down` to stop services while preserving the database volume.

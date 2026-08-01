@@ -12,7 +12,11 @@ RUN ./gradlew clean bootJar --no-daemon
 
 FROM eclipse-temurin:25-jre
 
-RUN useradd --system --uid 10001 --create-home appuser
+RUN apt-get update \
+    && apt-get install --no-install-recommends --yes curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --system --uid 10001 --create-home appuser
+
 WORKDIR /app
 
 COPY --from=builder /workspace/build/libs/control-plane-*.jar app.jar
