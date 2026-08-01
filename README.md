@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 0 — scope, architecture, risks, backlog, repository structure, and initial ADRs.
+**Current phase:** Phase 0 â€” scope, architecture, risks, backlog, repository structure, and initial ADRs.
 
 No runtime services are implemented in Phase 0. Phase 1 will create the Java control plane, Python intelligence service, React frontend, local infrastructure, and continuous-integration foundation.
 
@@ -87,3 +87,25 @@ git diff --check
 ```
 
 Expected result: the documented Phase 0 files are present and `git diff --check` produces no output.
+
+## Run the local platform
+
+Copy the local environment template and start the complete stack:
+
+```powershell
+Copy-Item .env.example .env
+docker compose config
+docker compose build
+docker compose up -d
+.\scripts\verify-local-stack.ps1
+```
+
+Open the web application at `http://localhost:3000`.
+
+Stop the stack:
+
+```powershell
+docker compose down
+```
+
+See [`docs/deployment.md`](docs/deployment.md) for health checks, logs, port overrides, and destructive volume cleanup.

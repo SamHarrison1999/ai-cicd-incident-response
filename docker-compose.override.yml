@@ -1,0 +1,16 @@
+services:
+  postgres:
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  control-plane:
+    ports:
+      - "${CONTROL_PLANE_PORT:-8080}:8080"
+
+  intelligence-service:
+    ports:
+      - "${INTELLIGENCE_SERVICE_PORT:-8000}:8000"
+
+  web:
+    ports:
+      - "${WEB_PORT:-3000}:8080"
