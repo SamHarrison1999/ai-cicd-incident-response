@@ -62,3 +62,15 @@ find docs -type f -maxdepth 3 | sort
 ```
 
 A Markdown link and Mermaid renderer may be introduced as documentation CI in Phase 1.
+
+## Continuous integration quality gate
+
+Phase 1 CI runs independent Java, Python, frontend, container, Compose, and repository-quality jobs in parallel. A final aggregate job fails unless every required job succeeds.
+
+This structure preserves component-specific failure evidence while giving branch protection one stable required check:
+
+```text
+Phase 1 quality gate
+```
+
+Detailed commands and artifact behaviour are documented in [`ci.md`](ci.md).

@@ -1,0 +1,246 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-quality:
+    name: Repository quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Verify repository structure and markers
+        shell: pwsh
+        run: ./scripts/verify-repository.ps1
+
+  control-plane:
+    name: Java control plane
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: services/control-plane
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
+
+      - name: Verify formatting, tests, analysis, and executable JAR
+        run: ./gradlew clean check bootJar --no-daemon --no-configuration-cache
+
+      - name: Upload Java reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: control-plane-reports
+          path: |
+            services/control-plane/build/reports/
+            services/control-plane/build/test-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  intelligence-service:
+    name: Python intelligence service
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: services/intelligence-service
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python 3.14
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install pinned uv
+        run: python -m pip install --disable-pip-version-check uv==0.11.29
+
+      - name: Validate lockfile
+        run: python -m uv lock --check
+
+      - name: Synchronise environment
+        run: python -m uv sync --frozen
+
+      - name: Verify formatting
+        run: python -m uv run ruff format --check .
+
+      - name: Run linting
+        run: python -m uv run ruff check .
+
+      - name: Run strict type checking
+        run: python -m uv run mypy
+
+      - name: Run tests and branch coverage
+        run: python -m uv run pytest
+
+      - name: Upload Python coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: intelligence-service-coverage
+          path: |
+            services/intelligence-service/coverage.xml
+            services/intelligence-service/htmlcov/
+          if-no-files-found: warn
+          retention-days: 14
+
+  web:
+    name: React web application
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24.18.0"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify formatting
+        run: npm run format:check
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run unit and component tests
+        run: npm run test
+
+      - name: Build production assets
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser tests
+        run: npm run test:e2e
+
+      - name: Upload frontend reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-reports
+          path: |
+            web/coverage/
+            web/playwright-report/
+            web/test-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  container-builds:
+    name: Container build validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: control-plane
+            context: services/control-plane
+          - image: intelligence-service
+            context: services/intelligence-service
+          - image: web
+            context: web
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build ${{ matrix.image }}
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.context }}
+          push: false
+          tags: local/${{ matrix.image }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+
+  compose-configuration:
+    name: Docker Compose configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Create local environment file
+        run: cp .env.example .env
+
+      - name: Validate rendered Compose model
+        run: docker compose config --quiet
+
+  quality-gate:
+    name: Phase 1 quality gate
+    if: always()
+    needs:
+      - repository-quality
+      - control-plane
+      - intelligence-service
+      - web
+      - container-builds
+      - compose-configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require every quality job to succeed
+        env:
+          REPOSITORY_QUALITY_RESULT: ${{ needs.repository-quality.result }}
+          CONTROL_PLANE_RESULT: ${{ needs.control-plane.result }}
+          INTELLIGENCE_SERVICE_RESULT: ${{ needs.intelligence-service.result }}
+          WEB_RESULT: ${{ needs.web.result }}
+          CONTAINER_BUILDS_RESULT: ${{ needs.container-builds.result }}
+          COMPOSE_CONFIGURATION_RESULT: ${{ needs.compose-configuration.result }}
+        run: |
+          results=(
+            "$REPOSITORY_QUALITY_RESULT"
+            "$CONTROL_PLANE_RESULT"
+            "$INTELLIGENCE_SERVICE_RESULT"
+            "$WEB_RESULT"
+            "$CONTAINER_BUILDS_RESULT"
+            "$COMPOSE_CONFIGURATION_RESULT"
+          )
+
+          for result in "${results[@]}"; do
+            if [[ "$result" != "success" ]]; then
+              echo "Required quality job ended with result: $result"
+              exit 1
+            fi
+          done
+
+          echo "All Phase 1 quality jobs succeeded."

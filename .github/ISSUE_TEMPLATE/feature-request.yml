@@ -1,0 +1,48 @@
+name: Feature request
+description: Propose a platform capability or engineering improvement
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What engineering or incident-response problem should be solved?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Describe behaviour, not only an implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and user value
+      description: Explain why this matters to platform engineers, release engineers, developers, or managers.
+    validations:
+      required: true
+
+  - type: textarea
+    id: safety
+    attributes:
+      label: AI safety and security considerations
+      description: Cover evidence grounding, abstention, prompt injection, tenant isolation, and human review where relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - Given...
+        - When...
+        - Then...
+    validations:
+      required: true
