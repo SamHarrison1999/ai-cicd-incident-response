@@ -107,6 +107,28 @@ public class RefreshTokenSession {
     return revokedAt != null;
   }
 
+  public boolean isReplaced() {
+    return replacedBySessionId != null;
+  }
+
+  public boolean isUsableAt(Instant instant) {
+    return !isRevoked() && expiresAt.isAfter(instant);
+  }
+
+  public void rotateTo(UUID replacementSessionId, Instant rotatedAt) {
+    replacedBySessionId = Objects.requireNonNull(replacementSessionId);
+    revokedAt = Objects.requireNonNull(rotatedAt);
+    revocationReason = "ROTATED";
+    lastUsedAt = rotatedAt;
+  }
+
+  public void revoke(String reason, Instant revokedAt) {
+    if (this.revokedAt == null) {
+      this.revokedAt = Objects.requireNonNull(revokedAt);
+      revocationReason = requireText(reason, "reason");
+    }
+  }
+
   private static String requireText(String value, String fieldName) {
     if (value == null || value.isBlank()) {
       throw new IllegalArgumentException(fieldName + " must not be blank");

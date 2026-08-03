@@ -10,7 +10,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 |---|---|---|
 | 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
 | 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
-| 3 | Authentication and session lifecycle | NOT_STARTED |
+| 3 | Authentication and session lifecycle | COMPLETE_UNVERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
 | 5 | Frontend authentication and organisation shell | NOT_STARTED |
 | 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
@@ -76,3 +76,22 @@ Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
 - No unresolved implementation markers were found.
 - No generated dependency or report directories are tracked.
 - Git whitespace and staged-diff validation passed.
+## Batch 3 acceptance criteria
+
+- Registration normalises email addresses and stores only BCrypt password hashes.
+- Login uses generic credential errors and rejects disabled users.
+- Access tokens are signed JWTs with issuer, audience, user, session, issued-at, and expiry claims.
+- Refresh tokens are opaque, stored only as SHA-256 hashes, and rotated after successful refresh.
+- Reuse of a replaced refresh token revokes its token family.
+- Logout revokes the token family and expires the browser cookie.
+- Refresh tokens use an HTTP-only SameSite Strict cookie.
+- The API never returns refresh tokens in JSON.
+- Security is stateless and protected endpoints require a valid bearer token.
+- Validation and authentication failures return stable error codes with correlation identifiers.
+- Unit tests cover token hashing, email normalisation, duplicate registration, password policy, generic login failure, and disabled-user rejection.
+- Existing persistence and Phase 1 tests continue to pass.
+- Developer-supplied output is recorded before Batch 3 is marked verified.
+
+## Batch 3 verification record
+
+No verification output has been supplied yet for Batch 3.
