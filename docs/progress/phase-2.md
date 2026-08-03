@@ -13,7 +13,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | COMPLETE_VERIFIED |
 | 5 | Frontend authentication and organisation shell | COMPLETE_VERIFIED |
-| 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
+| 6 | Security tests, documentation, and Phase 2 verification | COMPLETE_UNVERIFIED |
 
 ## Batch 1 acceptance criteria
 
@@ -185,3 +185,22 @@ Verified on 2026-08-03 from developer-supplied PowerShell, Gradle, npm, Vitest a
 - No unresolved implementation markers were found.
 - No generated dependency or report directories are tracked.
 - Git whitespace and staged-diff validation passed.
+## Batch 6 acceptance criteria
+
+- API documentation describes authentication, organisation, project, and error contracts.
+- The security threat model documents session, token, role, tenant, browser, audit, and known-limitation boundaries.
+- Architecture documentation includes the Phase 2 authentication and tenant-authorization sequence.
+- Testing documentation records the Phase 2 release gates.
+- The README accurately describes the current project phase and links the Phase 2 documentation.
+- A repeatable `verify-phase-2.ps1` command validates repository, Java, Python, frontend, Playwright, Compose, and container quality gates.
+- Java formatting, analysis, tests, coverage, and executable JAR packaging pass.
+- Python lockfile, Ruff, MyPy, Pytest, and coverage checks pass.
+- Frontend Prettier, ESLint, Vitest, production build, and Playwright pass.
+- Docker Compose configuration and all application container builds pass.
+- GitHub Actions required checks pass on the final Phase 2 pull request.
+- Repository whitespace and unfinished-marker validation pass.
+- Developer-supplied local and GitHub Actions output is recorded before Batch 6 and Phase 2 are marked verified.
+
+## Batch 6 verification record
+
+No verification output has been supplied yet for Batch 6.

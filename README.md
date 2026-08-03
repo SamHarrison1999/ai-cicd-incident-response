@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 0 Ã¢â‚¬â€ scope, architecture, risks, backlog, repository structure, and initial ADRs.
+**Current phase:** Phase 0 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â scope, architecture, risks, backlog, repository structure, and initial ADRs.
 
 No runtime services are implemented in Phase 0. Phase 1 will create the Java control plane, Python intelligence service, React frontend, local infrastructure, and continuous-integration foundation.
 
@@ -121,3 +121,20 @@ Phase 1 quality gate
 ```
 
 See [`docs/ci.md`](docs/ci.md) for workflow behaviour, local parity commands, artifacts, dependency automation, and branch-protection recommendations.
+
+## Phase 2 local verification
+
+Run the complete Phase 2 local quality gate from PowerShell:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\verify-phase-2.ps1
+```
+
+For a faster application-only pass that skips container builds:
+
+```powershell
+.\scripts\verify-phase-2.ps1 -SkipDocker
+```
+
+The full release verification requires repository checks, Java tests with PostgreSQL Testcontainers, Python quality gates, frontend formatting/lint/tests/build, Playwright, Docker Compose validation, and application image builds.
