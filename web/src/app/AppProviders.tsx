@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type PropsWithChildren, useState } from "react";
 
+import { AuthProvider } from "../auth/AuthContext";
+
 export function AppProviders({ children }: PropsWithChildren) {
     const [queryClient] = useState(
         () =>
@@ -17,7 +19,7 @@ export function AppProviders({ children }: PropsWithChildren) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {children}
+            <AuthProvider>{children}</AuthProvider>
         </QueryClientProvider>
     );
 }

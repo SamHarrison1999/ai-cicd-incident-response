@@ -12,7 +12,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
 | 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | COMPLETE_VERIFIED |
-| 5 | Frontend authentication and organisation shell | NOT_STARTED |
+| 5 | Frontend authentication and organisation shell | COMPLETE_UNVERIFIED |
 | 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
 
 ## Batch 1 acceptance criteria
@@ -148,3 +148,24 @@ Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
 - No generated dependency or report directories are tracked.
 - Git whitespace validation passed.
 - Git diff validation produced no errors.
+
+## Batch 5 acceptance criteria
+
+- The frontend provides accessible registration and login pages.
+- Registration validates the 12-character password minimum before submission.
+- The browser never receives or stores a refresh token in JavaScript.
+- Refresh-token cookies are sent with credentials for login, refresh, and logout.
+- Access tokens are held in React state and attached only to protected API requests.
+- Application startup attempts a cookie-backed session refresh.
+- Unauthenticated users are redirected to the login page.
+- Successful login returns the user to the originally requested route.
+- Logout clears frontend authentication state and returns the user to login.
+- Authenticated users can list and create organisations.
+- The top bar displays the authenticated user without exposing token data.
+- Tests cover unauthenticated redirection and successful login into the protected workspace.
+- Prettier, ESLint, Vitest, production build, and Playwright continue to pass.
+- Developer-supplied output is recorded before Batch 5 is marked verified.
+
+## Batch 5 verification record
+
+No verification output has been supplied yet for Batch 5.
