@@ -9,7 +9,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
-| 2 | Persistence model and Flyway migrations | NOT_STARTED |
+| 2 | Persistence model and Flyway migrations | COMPLETE_UNVERIFIED |
 | 3 | Authentication and session lifecycle | NOT_STARTED |
 | 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
 | 5 | Frontend authentication and organisation shell | NOT_STARTED |
@@ -43,3 +43,20 @@ Verified on 2026-08-03 from developer-supplied PowerShell output:
 ## Phase 2 completion criteria
 
 Phase 2 is complete only when all six batches are `COMPLETE_VERIFIED`, all local and GitHub Actions quality gates pass, and the final Phase 2 pull request is merged into `main`.
+## Batch 2 acceptance criteria
+
+- Flyway creates users, organisations, memberships, projects, refresh-token sessions, and audit events.
+- JPA entities map to the migration without Hibernate schema generation.
+- Normalised email uniqueness is enforced by PostgreSQL.
+- Organisation membership uniqueness is enforced by PostgreSQL.
+- Project slugs are unique within an organisation and reusable across organisations.
+- Refresh-token hashes are unique.
+- Project repository lookups can require an organisation boundary.
+- Repository and domain-model tests cover the principal constraints.
+- Existing Phase 1 tests continue to pass.
+- Formatting, static analysis, tests, coverage, and executable JAR packaging pass.
+- Developer-supplied output is recorded before Batch 2 is marked verified.
+
+## Batch 2 verification record
+
+No verification output has been supplied yet for Batch 2.
