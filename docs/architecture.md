@@ -222,3 +222,34 @@ sequenceDiagram
 ```
 
 The Java control plane remains the authoritative security boundary. The frontend controls navigation and user experience but cannot grant access. Organisation membership and repository scoping are both required for tenant-owned resource access.
+
+## Phase 3 secure event-ingestion architecture
+
+Phase 3 adds a deterministic ingestion path between external CI/CD systems and
+the future incident-correlation subsystem.
+
+```mermaid
+flowchart LR
+    Simulators[GitHub Actions and Jenkins simulators]
+    Verification[Webhook verification]
+    Deliveries[Webhook deliveries]
+    Adapters[Provider adapters]
+    Events[Normalised CI/CD events]
+    Runs[Pipeline-run projection]
+    Future[Future incident correlation]
+
+    Simulators --> Verification
+    Verification --> Deliveries
+    Deliveries --> Adapters
+    Adapters --> Events
+    Events --> Runs
+    Events -. Phase 4 and later .-> Future
+```
+
+Security and correctness controls include exact-byte HMAC verification,
+timestamp replay protection, database-backed delivery idempotency, tenant-scoped
+lookups, bounded payload parsing, deterministic provider adapters, and explicit
+abstention through `UNKNOWN` values when source evidence is insufficient.
+
+See [Secure Event Ingestion](event-ingestion.md) and
+[CI/CD Event Schemas](event-schemas.md).
