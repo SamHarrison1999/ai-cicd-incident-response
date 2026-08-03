@@ -16,6 +16,7 @@ Phase 3 adds configured event sources, signed webhook verification, replay
 protection, idempotent delivery handling, provider-neutral event normalisation,
 and pipeline-run tracking. AI analysis and automatic remediation remain outside
 this phase.
+
 ## Product objective
 
 The platform helps platform engineers, release engineers, developers, and engineering managers answer:
