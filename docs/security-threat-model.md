@@ -118,8 +118,7 @@ higher-severity finding.
 
 The following controls apply:
 
-- 
-pm audit fix --force must not be used because it performs uncontrolled
+- npm audit fix --force must not be used because it performs uncontrolled
   breaking dependency changes.
 - React Router upgrades must be performed deliberately and verified with
   formatting, linting, unit tests, production build, browser tests, and
