@@ -77,6 +77,10 @@ public class Organisation {
     return version;
   }
 
+  public void rename(String name) {
+    this.name = requireText(name, "name");
+  }
+
   private static String requireText(String value, String fieldName) {
     if (value == null || value.isBlank()) {
       throw new IllegalArgumentException(fieldName + " must not be blank");

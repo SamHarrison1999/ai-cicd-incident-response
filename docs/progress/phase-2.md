@@ -11,7 +11,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
 | 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
 | 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
-| 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
+| 4 | Organisation and project APIs with tenant isolation | COMPLETE_UNVERIFIED |
 | 5 | Frontend authentication and organisation shell | NOT_STARTED |
 | 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
 
@@ -111,3 +111,23 @@ Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
 - No unresolved implementation markers were found.
 - No generated dependency or report directories are tracked.
 - Git whitespace and staged-diff validation passed.
+## Batch 4 acceptance criteria
+
+- Authenticated users can create organisations and become their owner.
+- Users can list and retrieve only organisations with an active membership.
+- Organisation updates require an owner or administrator role.
+- Active organisation members can list and retrieve tenant-scoped projects.
+- Owners, administrators, and members can create, update, and archive projects.
+- Viewers cannot perform project mutations.
+- Project lookups always include the organisation identifier.
+- Cross-tenant and unauthorised resource access does not disclose resource existence.
+- Organisation and project slug conflicts return stable conflict responses.
+- Organisation and project mutations create audit events.
+- Request validation enforces identifier and field-length rules.
+- Unit tests cover missing membership, insufficient role, cross-tenant project lookup, and duplicate project slug handling.
+- Existing authentication, persistence, and Phase 1 tests continue to pass.
+- Developer-supplied output is recorded before Batch 4 is marked verified.
+
+## Batch 4 verification record
+
+No verification output has been supplied yet for Batch 4.

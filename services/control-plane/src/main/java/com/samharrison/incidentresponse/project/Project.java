@@ -121,6 +121,15 @@ public class Project {
     return version;
   }
 
+  public void updateDetails(String name, String description) {
+    this.name = requireText(name, "name");
+    this.description = description;
+  }
+
+  public void archive() {
+    status = ProjectStatus.ARCHIVED;
+  }
+
   private static String requireText(String value, String fieldName) {
     if (value == null || value.isBlank()) {
       throw new IllegalArgumentException(fieldName + " must not be blank");
