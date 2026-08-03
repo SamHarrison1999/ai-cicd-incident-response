@@ -8,7 +8,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 
 | Batch | Scope | Status |
 |---|---|---|
-| 1 | Identity, tenancy, and API design | COMPLETE_UNVERIFIED |
+| 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
 | 2 | Persistence model and Flyway migrations | NOT_STARTED |
 | 3 | Authentication and session lifecycle | NOT_STARTED |
 | 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
@@ -30,7 +30,15 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 
 ## Batch 1 verification record
 
-No verification output has been supplied yet for Batch 1.
+Verified on 2026-08-03 from developer-supplied PowerShell output:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories are tracked.
+- Git whitespace validation passed.
+- Git staged-diff validation produced no errors.
+- No TODO, TBD, FIXME, or PLACEHOLDER markers were found in the Batch 1 documents.
+- The five expected Phase 2 Batch 1 design documents were staged.
 
 ## Phase 2 completion criteria
 
