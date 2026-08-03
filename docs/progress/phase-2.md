@@ -9,7 +9,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
-| 2 | Persistence model and Flyway migrations | COMPLETE_UNVERIFIED |
+| 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
 | 3 | Authentication and session lifecycle | NOT_STARTED |
 | 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
 | 5 | Frontend authentication and organisation shell | NOT_STARTED |
@@ -59,4 +59,20 @@ Phase 2 is complete only when all six batches are `COMPLETE_VERIFIED`, all local
 
 ## Batch 2 verification record
 
-No verification output has been supplied yet for Batch 2.
+Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
+
+- Spotless formatting completed successfully.
+- The Java control-plane clean, check, and bootJar tasks completed successfully.
+- All 14 Java tests passed.
+- Flyway applied the Phase 2 migration against PostgreSQL Testcontainers.
+- User normalised-email uniqueness was verified.
+- Organisation membership uniqueness was verified.
+- Project slug uniqueness within an organisation was verified.
+- Project slug reuse across different organisations was verified.
+- Organisation-scoped project lookup isolation was verified.
+- Refresh-token hash uniqueness was verified.
+- Existing Phase 1 control-plane tests continued to pass.
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories are tracked.
+- Git whitespace and staged-diff validation passed.
