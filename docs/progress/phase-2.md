@@ -12,7 +12,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
 | 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | COMPLETE_VERIFIED |
-| 5 | Frontend authentication and organisation shell | COMPLETE_UNVERIFIED |
+| 5 | Frontend authentication and organisation shell | COMPLETE_VERIFIED |
 | 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
 
 ## Batch 1 acceptance criteria
@@ -168,4 +168,20 @@ Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
 
 ## Batch 5 verification record
 
-No verification output has been supplied yet for Batch 5.
+Verified on 2026-08-03 from developer-supplied PowerShell, Gradle, npm, Vitest and Playwright output:
+
+- Prettier formatting completed successfully.
+- Prettier format verification passed.
+- ESLint completed with zero warnings.
+- TypeScript compilation completed successfully.
+- Vite production build completed successfully.
+- Vitest executed successfully.
+- All 7 frontend tests passed.
+- Playwright end-to-end navigation test passed.
+- React Router future flags were enabled for MemoryRouter tests, removing upgrade warnings.
+- Authentication flow successfully redirected unauthenticated users.
+- Login flow successfully displayed the protected dashboard after authentication.
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories are tracked.
+- Git whitespace and staged-diff validation passed.
