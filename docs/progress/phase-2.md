@@ -10,7 +10,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 |---|---|---|
 | 1 | Identity, tenancy, and API design | COMPLETE_VERIFIED |
 | 2 | Persistence model and Flyway migrations | COMPLETE_VERIFIED |
-| 3 | Authentication and session lifecycle | COMPLETE_UNVERIFIED |
+| 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | NOT_STARTED |
 | 5 | Frontend authentication and organisation shell | NOT_STARTED |
 | 6 | Security tests, documentation, and Phase 2 verification | NOT_STARTED |
@@ -94,4 +94,20 @@ Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
 
 ## Batch 3 verification record
 
-No verification output has been supplied yet for Batch 3.
+Verified on 2026-08-03 from developer-supplied PowerShell and Gradle output:
+
+- Spotless formatting completed successfully.
+- The Java control-plane clean, check, and bootJar tasks completed successfully.
+- All 21 Java tests passed.
+- The Spring Boot application context started successfully.
+- JWT resource-server security configuration loaded successfully.
+- Registration email normalisation and password hashing tests passed.
+- Duplicate registration and password-policy tests passed.
+- Generic invalid-login handling passed.
+- Disabled-user login rejection passed.
+- SHA-256 refresh-token hashing tests passed.
+- Existing persistence, tenant-boundary, correlation-ID, and system-status tests continued to pass.
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories are tracked.
+- Git whitespace and staged-diff validation passed.
