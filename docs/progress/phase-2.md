@@ -13,7 +13,7 @@ Add secure identity, organisation membership, projects, and tenant-isolation fou
 | 3 | Authentication and session lifecycle | COMPLETE_VERIFIED |
 | 4 | Organisation and project APIs with tenant isolation | COMPLETE_VERIFIED |
 | 5 | Frontend authentication and organisation shell | COMPLETE_VERIFIED |
-| 6 | Security tests, documentation, and Phase 2 verification | COMPLETE_UNVERIFIED |
+| 6 | Security tests, documentation, and Phase 2 verification | COMPLETE_VERIFIED |
 
 ## Batch 1 acceptance criteria
 
@@ -203,4 +203,27 @@ Verified on 2026-08-03 from developer-supplied PowerShell, Gradle, npm, Vitest a
 
 ## Batch 6 verification record
 
-No verification output has been supplied yet for Batch 6.
+Verified on 2026-08-03 from developer-supplied PowerShell, Gradle, uv, npm, Vitest, Playwright, Docker, and Docker Compose output:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories are tracked.
+- Git whitespace validation passed.
+- Java formatting, analysis, tests, coverage, and executable JAR packaging passed.
+- All 25 Java tests passed.
+- PostgreSQL Testcontainers persistence and tenant-isolation tests passed.
+- Python lockfile validation passed.
+- Ruff formatting and linting passed.
+- MyPy reported no issues across 21 source files.
+- All 11 Python tests passed with 98 percent coverage.
+- The deprecated HTTPX test dependency was replaced by HTTPX2.
+- Python tests passed with deprecation warnings treated as errors.
+- Frontend Prettier and ESLint checks passed.
+- All 7 Vitest tests passed.
+- The frontend production build passed.
+- The Playwright authentication and navigation test passed.
+- React Router 7.18.2 was evaluated and rejected because it introduced a higher-severity dependency finding.
+- The retained React Router 6.30.4 risk is documented in the security threat model.
+- Docker Compose configuration validation passed.
+- The control-plane, intelligence-service, and web images built successfully.
+- The complete Phase 2 local verifier completed successfully.
