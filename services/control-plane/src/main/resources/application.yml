@@ -67,3 +67,13 @@ logging:
   level:
     root: INFO
     com.samharrison.incidentresponse: INFO
+application:
+  authentication:
+    issuer: ${AUTH_ISSUER:incident-response-control-plane}
+    audience: ${AUTH_AUDIENCE:incident-response-web}
+    signing-secret: ${AUTH_SIGNING_SECRET:local-development-signing-secret-change-me}
+    access-token-ttl: ${AUTH_ACCESS_TOKEN_TTL:PT15M}
+    refresh-token-ttl: ${AUTH_REFRESH_TOKEN_TTL:P7D}
+    refresh-cookie-name: ${AUTH_REFRESH_COOKIE_NAME:incident_refresh}
+    secure-cookies: ${AUTH_SECURE_COOKIES:false}
+    password-minimum-length: ${AUTH_PASSWORD_MINIMUM_LENGTH:12}

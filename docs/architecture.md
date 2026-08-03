@@ -14,7 +14,7 @@ The initial release deliberately uses a modular monolith for the Java control pl
 
 ```mermaid
 C4Context
-    title AI-Assisted CI/CD Incident Response Platform — System Context
+    title AI-Assisted CI/CD Incident Response Platform â€” System Context
     Person(engineer, "Engineer", "Investigates pipeline and deployment incidents")
     Person(manager, "Engineering Manager", "Reviews incident and recommendation trends")
     System(platform, "Incident Response Platform", "Correlates delivery failures and provides evidence-grounded assistance")
@@ -194,3 +194,31 @@ Untrusted log text is data, never instruction. It is delimited, size-limited, sa
 - **Operability:** deterministic local mode, health endpoints, metrics, traces, and synthetic scenarios.
 - **Testability:** pure correlation/classification policies, contract tests, Testcontainers, and fixed evaluation cases.
 - **Evolvability:** versioned event schemas and provider interfaces isolate external changes.
+
+## Phase 2 identity and tenancy architecture
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Browser
+    participant Web as React Web
+    participant API as Spring Control Plane
+    participant DB as PostgreSQL
+
+    Browser->>Web: Open protected route
+    Web->>API: POST /api/v1/auth/refresh with HTTP-only cookie
+    API->>DB: Find SHA-256 token hash and active family
+    alt valid refresh session
+        API->>DB: Rotate refresh token session
+        API-->>Web: Access JWT plus replacement cookie
+        Web->>API: Protected request with Bearer JWT
+        API->>DB: Active membership and tenant-scoped query
+        API-->>Web: Authorized resource
+    else invalid, expired, or replayed token
+        API->>DB: Revoke family when replay is detected
+        API-->>Web: Stable authentication error
+        Web-->>Browser: Redirect to login
+    end
+```
+
+The Java control plane remains the authoritative security boundary. The frontend controls navigation and user experience but cannot grant access. Organisation membership and repository scoping are both required for tenant-owned resource access.

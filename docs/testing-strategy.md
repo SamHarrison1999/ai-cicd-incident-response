@@ -74,3 +74,18 @@ Phase 1 quality gate
 ```
 
 Detailed commands and artifact behaviour are documented in [`ci.md`](ci.md).
+
+## Phase 2 release verification
+
+Phase 2 adds these mandatory test categories:
+
+- Authentication unit tests for normalisation, password policy, generic failures, and disabled accounts.
+- Token tests for deterministic SHA-256 hashing and non-disclosure of raw token values.
+- PostgreSQL Testcontainers tests for identity, membership, project, and refresh-session constraints.
+- Tenant-policy tests for absent membership and insufficient roles.
+- Project-service tests for organisation-scoped lookup and duplicate slug handling.
+- Frontend tests for protected-route redirection and successful login.
+- Playwright navigation using deterministic API interception.
+- Full repository, Java, Python, frontend, container, and Compose verification through `scripts/verify-phase-2.ps1`.
+
+A Phase 2 batch or phase is not marked verified until developer-supplied command output has been reviewed and recorded.
