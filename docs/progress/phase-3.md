@@ -8,35 +8,53 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 
 | Batch | Scope | Status |
 |---|---|---|
-| 1 | Event-ingestion architecture, schemas, and security decisions | COMPLETE_UNVERIFIED |
-| 2 | Event-source and webhook-delivery persistence model | NOT_STARTED |
+| 1 | Event-ingestion architecture, schemas, and security decisions | COMPLETE_VERIFIED |
+| 2 | Event-source and webhook-delivery persistence model | COMPLETE_VERIFIED |
 | 3 | Signed webhook verification and idempotent ingestion | NOT_STARTED |
 | 4 | Provider adapters and normalised event processing | NOT_STARTED |
 | 5 | Pipeline-run APIs, frontend workspace, and simulations | NOT_STARTED |
 | 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
 
-## Batch 1 acceptance criteria
-
-- The event-source, webhook-delivery, normalised-event, and pipeline-run boundaries are explicitly documented.
-- Provider payloads are treated as untrusted input.
-- GitHub Actions-style and Jenkins-style source contracts are documented.
-- A provider-neutral normalised event envelope is defined.
-- Event identifiers, delivery identifiers, timestamps, and tenant ownership rules are defined.
-- HMAC verification, timestamp tolerance, constant-time comparison, replay protection, and secret handling are documented.
-- Idempotency behaviour is defined independently from provider retry behaviour.
-- Duplicate deliveries return a deterministic accepted response without repeating side effects.
-- Payload-size and content-type limits are defined.
-- Pipeline-run lifecycle and status transitions are defined.
-- Raw payload retention is minimised and sensitive fields are not copied into normalised records.
-- Deterministic ingestion rules are clearly separated from future model-generated analysis.
-- ADRs record the normalised event model, webhook verification, and idempotency decisions.
-- Phase 3 risks, non-goals, and failure handling are documented.
-- Repository whitespace and unfinished-marker checks produce no errors.
-- Developer-supplied output is recorded before Batch 1 is marked verified.
-
 ## Batch 1 verification record
 
-No verification output has been supplied yet for Batch 1.
+Developer-supplied output confirmed on 12 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- `git diff --check` produced no output.
+- Seven documentation files were committed in `fed1275` and pushed.
+
+## Batch 2 acceptance criteria
+
+- Flyway V3 creates event sources, webhook deliveries, pipeline runs, and normalised CI events.
+- Composite foreign keys enforce organisation and project ownership at the database boundary.
+- The signing secret is represented only by an opaque secret reference.
+- Exact-payload SHA-256 hashes are stored without raw payloads or signatures.
+- `(event_source_id, provider_delivery_id)` enforces webhook idempotency.
+- `(event_source_id, external_run_id, attempt)` uniquely identifies pipeline attempts.
+- One delivery can produce at most one normalised event.
+- JPA entities, enums, and tenant-scoped repositories match the migration.
+- Domain tests cover invalid secret references, invalid payload hashes, and terminal-run regression.
+- Testcontainers tests cover persistence, uniqueness, graph relationships, and tenant-scoped queries.
+- The data-model documentation records constraints, trust boundaries, and retention decisions.
+- Phase 1 and Phase 2 tests remain green.
+- Developer-supplied verification output is recorded before Batch 2 is marked verified.
+
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 13 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Google Java formatting completed successfully.
+- Flyway V3 applied and Hibernate validated the persistence model.
+- All 32 Java tests passed, including 7 new Batch 2 tests.
+- The executable Spring Boot JAR was built successfully.
+- `git diff --check` produced no output.
 
 ## Phase 3 completion criteria
 

@@ -1,6 +1,6 @@
 # Data Model
 
-## Phase 2 identity and tenancy entities
+## Identity, tenancy, and event-ingestion entities
 
 ```mermaid
 erDiagram
@@ -10,88 +10,113 @@ erDiagram
     USERS ||--o{ REFRESH_TOKEN_SESSIONS : creates
     USERS ||--o{ AUDIT_EVENTS : acts
     ORGANISATIONS ||--o{ AUDIT_EVENTS : scopes
+    PROJECTS ||--o{ EVENT_SOURCES : configures
+    EVENT_SOURCES ||--o{ WEBHOOK_DELIVERIES : receives
+    EVENT_SOURCES ||--o{ PIPELINE_RUNS : projects
+    WEBHOOK_DELIVERIES ||--o| NORMALISED_CI_EVENTS : produces
+    PIPELINE_RUNS ||--o{ NORMALISED_CI_EVENTS : contains
 
-    USERS {
+    EVENT_SOURCES {
         uuid id PK
-        varchar email
-        varchar normalised_email UK
+        uuid organisation_id FK
+        uuid project_id FK
+        varchar provider
         varchar display_name
-        varchar password_hash
         varchar status
+        varchar signing_secret_reference
+        varchar signature_algorithm
+        integer timestamp_tolerance_seconds
+        integer max_payload_size_bytes
+        timestamptz secret_rotated_at
         timestamptz created_at
         timestamptz updated_at
         bigint version
     }
 
-    ORGANISATIONS {
+    WEBHOOK_DELIVERIES {
         uuid id PK
+        uuid organisation_id FK
+        uuid project_id FK
+        uuid event_source_id FK
+        varchar provider_delivery_id
+        varchar provider_event_type
+        varchar payload_sha256
+        timestamptz delivery_timestamp
+        timestamptz received_at
+        varchar status
+        varchar outcome_code
+        timestamptz processed_at
+        bigint version
+    }
+
+    PIPELINE_RUNS {
+        uuid id PK
+        uuid organisation_id FK
+        uuid project_id FK
+        uuid event_source_id FK
+        varchar provider
+        varchar external_run_id
         varchar name
-        varchar slug UK
-        timestamptz created_at
-        timestamptz updated_at
-        bigint version
-    }
-
-    ORGANISATION_MEMBERSHIPS {
-        uuid id PK
-        uuid organisation_id FK
-        uuid user_id FK
-        varchar role
+        integer attempt
         varchar status
+        varchar commit_sha
+        varchar git_ref
+        varchar environment_name
+        timestamptz started_at
+        timestamptz completed_at
+        timestamptz last_event_occurred_at
         timestamptz created_at
         timestamptz updated_at
         bigint version
     }
 
-    PROJECTS {
+    NORMALISED_CI_EVENTS {
         uuid id PK
         uuid organisation_id FK
-        varchar name
-        varchar slug
-        varchar description
-        varchar status
-        timestamptz created_at
-        timestamptz updated_at
-        bigint version
-    }
-
-    REFRESH_TOKEN_SESSIONS {
-        uuid id PK
-        uuid user_id FK
-        uuid token_family_id
-        varchar token_hash UK
-        timestamptz expires_at
-        timestamptz revoked_at
-        uuid replaced_by_session_id
-        varchar revocation_reason
-        timestamptz created_at
-        timestamptz last_used_at
-    }
-
-    AUDIT_EVENTS {
-        uuid id PK
-        uuid actor_user_id FK
-        uuid organisation_id FK
-        varchar action
-        varchar target_type
-        uuid target_id
-        varchar correlation_id
-        jsonb metadata
+        uuid project_id FK
+        uuid event_source_id FK
+        uuid webhook_delivery_id FK
+        uuid pipeline_run_id FK
+        varchar schema_version
+        varchar provider
+        varchar event_type
         timestamptz occurred_at
+        timestamptz received_at
+        varchar external_run_id
+        varchar pipeline_name
+        integer run_attempt
+        varchar pipeline_status
+        varchar evidence_summary
+        jsonb source_fields
     }
 ```
 
-## Constraints
+The Phase 2 identity tables remain unchanged: users, organisations, memberships,
+projects, refresh-token sessions, and audit events continue to provide the
+authentication and tenant boundary for the ingestion model.
 
-- `users.normalised_email` is globally unique.
-- `(organisation_id, user_id)` is unique for memberships.
-- Membership role is `OWNER`, `ADMIN`, `MEMBER`, or `VIEWER`.
-- Membership status is `ACTIVE` or `SUSPENDED`.
-- `(organisation_id, slug)` is unique for projects.
-- Project status is `ACTIVE` or `ARCHIVED`.
-- Only refresh-token hashes are persisted.
+## Event-ingestion constraints
+
+- Every event-ingestion row carries `organisation_id` and `project_id` explicitly.
+- Composite foreign keys prevent an event source, delivery, run, or event from combining identifiers from different tenants.
+- `(project_id, display_name)` is unique for event sources.
+- Signing secrets are not stored in this model. `signing_secret_reference` is an opaque lookup reference and must never be returned by read APIs or logged.
+- `(event_source_id, provider_delivery_id)` is unique and forms the database idempotency boundary.
+- Only the SHA-256 digest of exact payload bytes is retained by the delivery record; raw request bodies and signatures are not persisted.
+- Delivery status is `RECEIVED`, `PROCESSED`, `REJECTED`, `FAILED`, or `PROCESSING_RETRY`.
+- `(event_source_id, external_run_id, attempt)` uniquely identifies a pipeline attempt.
+- Terminal pipeline runs require `completed_at`; non-terminal runs cannot have it.
+- One webhook delivery produces at most one normalised CI event in Phase 3.
+- Normalised `source_fields` must be a JSON array of provider-field paths used as deterministic evidence.
 - Mutable aggregates use optimistic-lock version columns.
-- UUIDs are generated by the application.
-- Timestamps use PostgreSQL `timestamptz` and UTC ISO-8601 at API boundaries.
+- UUIDs are generated by the application and timestamps use PostgreSQL `timestamptz`.
 
-Later phases add event sources, events, pipeline runs, incidents, logs, recommendations, evidence, feedback, resolutions, and evaluation cases. Each tenant-owned entity must reference its project or organisation explicitly.
+## Retention and trust
+
+Provider payloads and identifiers are untrusted. The persistence model deliberately
+stores only bounded, normalised fields needed for idempotency, pipeline projection,
+auditability, and later incident correlation. Log fragments and model inputs are
+separate later-phase concerns and must not be placed in these tables.
+
+Later phases add incidents, incident timelines, redacted log fragments,
+recommendations, evidence citations, human feedback, resolutions, and evaluation cases.
