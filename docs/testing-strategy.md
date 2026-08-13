@@ -89,3 +89,7 @@ Phase 2 adds these mandatory test categories:
 - Full repository, Java, Python, frontend, container, and Compose verification through `scripts/verify-phase-2.ps1`.
 
 A Phase 2 batch or phase is not marked verified until developer-supplied command output has been reviewed and recorded.
+
+## Phase 3 cumulative verification
+
+Phase 3 verification combines provider-adapter unit tests, persistence-backed webhook tests, tenant-boundary API tests, frontend tests, repository checks, Compose validation, and repeatable signed webhook simulations. A passing unit test is not evidence that an AI-generated root cause is correct; later AI features must cite retained evidence and abstain when it is insufficient.

@@ -208,6 +208,39 @@ Authorization: Bearer <access-token>
 
 Archiving is a lifecycle transition. Normal product workflows do not physically delete projects.
 
+## Signed webhook ingestion
+
+~~~http
+POST /api/v1/event-sources/{eventSourceId}/deliveries
+Content-Type: application/json
+X-CICD-Delivery-ID: provider-delivery-42
+X-CICD-Event-Type: workflow_run
+X-CICD-Delivery-Timestamp: 2026-08-13T12:00:00Z
+X-CICD-Signature: sha256=<64 lowercase hexadecimal characters>
+~~~
+
+The webhook signature authenticates the request; a bearer token is not used.
+The signature binds a version prefix, delivery ID, event type, exact timestamp
+header, and exact payload bytes. The timestamp must fall within the configured
+event-source tolerance.
+
+Successful first delivery:
+
+~~~json
+{
+  "deliveryId": "00000000-0000-0000-0000-000000000010",
+  "duplicate": false,
+  "status": "RECEIVED",
+  "receivedAt": "2026-08-13T12:00:02Z"
+}
+~~~
+
+A retry with the same provider delivery ID, event type, and exact payload bytes
+returns HTTP 202 with the original delivery identifier and `duplicate: true`.
+Reusing the provider delivery ID with a different event type or payload returns
+HTTP 409. Batch 3 stores only the digest and safe metadata; raw bodies, signatures,
+and secrets are not persisted.
+
 ## Error contract
 
 Representative response:
@@ -236,3 +269,27 @@ Important codes include:
 | `ORGANISATION_SLUG_IN_USE` | Organisation slug is already used |
 | `PROJECT_SLUG_IN_USE` | Project slug is already used in that organisation |
 | `RESOURCE_CONFLICT` | A database uniqueness constraint rejected the operation |
+| `EVENT_SOURCE_NOT_FOUND` | Event source is unknown or disabled |
+| `WEBHOOK_HEADER_MISSING` | A required signed webhook header is absent |
+| `WEBHOOK_HEADER_INVALID` | A webhook header exceeds its limit or contains unsafe characters |
+| `WEBHOOK_SIGNATURE_MALFORMED` | Signature does not match the required wire format |
+| `WEBHOOK_SIGNATURE_INVALID` | Constant-time HMAC comparison failed |
+| `WEBHOOK_TIMESTAMP_INVALID` | Delivery timestamp is not valid RFC 3339 UTC |
+| `WEBHOOK_TIMESTAMP_OUTSIDE_TOLERANCE` | Signed delivery is too old or too far in the future |
+| `WEBHOOK_PAYLOAD_TOO_LARGE` | Body exceeds the event-source limit |
+| `WEBHOOK_CONTENT_TYPE_UNSUPPORTED` | Request is not JSON |
+| `WEBHOOK_JSON_INVALID` | Verified body is not syntactically valid JSON |
+| `WEBHOOK_DELIVERY_PAYLOAD_CONFLICT` | Delivery ID was reused with a different event type or payload |
+| `WEBHOOK_SECRET_UNAVAILABLE` | Configured signing material cannot be resolved |
+
+## Pipeline runs and event sources
+
+Pipeline-run reads are protected by the authenticated organisation and project boundary:
+
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/pipeline-runs
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/pipeline-runs/{pipelineRunId}
+
+Event-source configuration exposes only safe metadata. The signing secret is represented by an opaque reference and is never returned:
+
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources
+POST /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources

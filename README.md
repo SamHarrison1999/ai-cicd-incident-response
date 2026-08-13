@@ -4,9 +4,18 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 0 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â scope, architecture, risks, backlog, repository structure, and initial ADRs.
+**Current phase:** Phase 3 — secure, idempotent CI/CD event ingestion.
 
-No runtime services are implemented in Phase 0. Phase 1 will create the Java control plane, Python intelligence service, React frontend, local infrastructure, and continuous-integration foundation.
+Phases 0, 1, and 2 are complete. The repository now contains a runnable Java
+control plane, Python intelligence service, React web application, PostgreSQL
+persistence, Docker Compose environment, continuous-integration quality gates,
+authentication, organisations, projects, tenant isolation, and a protected
+frontend workspace.
+
+Phase 3 adds configured event sources, signed webhook verification, replay
+protection, idempotent delivery handling, provider-neutral event normalisation,
+and pipeline-run tracking. AI analysis and automatic remediation remain outside
+this phase.
 
 ## Product objective
 

@@ -41,6 +41,17 @@ The `.java-version`, `.python-version`, and `.nvmrc` files document the reposito
 
 `.env.example` contains non-secret local-development variable names and defaults. Do not commit a populated `.env` file.
 
+Signed webhook simulations resolve secrets through an opaque event-source
+reference. The built-in local reference is `local-simulator`; configure its
+value before sending webhook requests:
+
+~~~powershell
+$env:WEBHOOK_SECRET_LOCAL_SIMULATOR = "replace-with-a-long-random-local-secret"
+~~~
+
+The secret value is not stored in PostgreSQL, returned by APIs, or written to
+application logs.
+
 Docker Compose support is introduced in Phase 1 Batch 5.
 
 ## Line endings
