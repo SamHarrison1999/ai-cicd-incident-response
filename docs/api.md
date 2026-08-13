@@ -281,3 +281,15 @@ Important codes include:
 | `WEBHOOK_JSON_INVALID` | Verified body is not syntactically valid JSON |
 | `WEBHOOK_DELIVERY_PAYLOAD_CONFLICT` | Delivery ID was reused with a different event type or payload |
 | `WEBHOOK_SECRET_UNAVAILABLE` | Configured signing material cannot be resolved |
+
+## Pipeline runs and event sources
+
+Pipeline-run reads are protected by the authenticated organisation and project boundary:
+
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/pipeline-runs
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/pipeline-runs/{pipelineRunId}
+
+Event-source configuration exposes only safe metadata. The signing secret is represented by an opaque reference and is never returned:
+
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources
+POST /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources
