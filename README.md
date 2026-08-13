@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 3 — secure, idempotent CI/CD event ingestion.
+**Current phase:** Phase 4 — canonical pipeline events, runs, and timelines.
 
 Phases 0, 1, and 2 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
