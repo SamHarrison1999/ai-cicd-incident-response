@@ -12,7 +12,7 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 | 2 | Event-source and webhook-delivery persistence model | COMPLETE_VERIFIED |
 | 3 | Signed webhook verification and idempotent ingestion | COMPLETE_VERIFIED |
 | 4 | Provider adapters and normalised event processing | COMPLETE_VERIFIED |
-| 5 | Pipeline-run APIs, frontend workspace, and simulations | IN_PROGRESS |
+| 5 | Pipeline-run APIs, frontend workspace, and simulations | COMPLETE_VERIFIED |
 | 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
 
 ## Batch 1 verification record
@@ -133,3 +133,17 @@ Batch 5 implementation has been applied and remains IN_PROGRESS until developer-
 - The signed simulator produces repeatable GitHub Actions and Jenkins-shaped deliveries.
 - No signing secrets are returned by API responses or written to source control.
 - Java, frontend, repository, and Compose verification remain green.
+
+## Batch 5 verification record
+
+Developer-supplied output confirmed on 13 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- Git whitespace validation passed.
+- Java formatting, tests, Checkstyle, `check`, and `bootJar` passed.
+- Frontend formatting and ESLint passed.
+- All seven frontend tests passed.
+- Frontend production build passed.
+- Docker Compose configuration validation passed.
+- Pipeline APIs, frontend workspace, and signed webhook simulations were verified.
