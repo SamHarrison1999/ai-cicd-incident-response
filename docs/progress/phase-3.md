@@ -13,7 +13,7 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 | 3 | Signed webhook verification and idempotent ingestion | COMPLETE_VERIFIED |
 | 4 | Provider adapters and normalised event processing | COMPLETE_VERIFIED |
 | 5 | Pipeline-run APIs, frontend workspace, and simulations | COMPLETE_VERIFIED |
-| 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
+| 6 | Security tests, documentation, observability, and Phase 3 verification | COMPLETE_VERIFIED |
 
 ## Batch 1 verification record
 
@@ -147,3 +147,29 @@ Developer-supplied output confirmed on 13 August 2026:
 - Frontend production build passed.
 - Docker Compose configuration validation passed.
 - Pipeline APIs, frontend workspace, and signed webhook simulations were verified.
+## Batch 6 implementation record
+
+Batch 6 implementation has been applied and remains IN_PROGRESS until cumulative local verification and repeatable signed simulations have been demonstrated.
+
+## Batch 6 acceptance criteria
+
+- Security tests prove metadata-bound signatures and exact-payload verification.
+- Micrometer counters expose normalised and unsupported ingestion outcomes.
+- Security, API, event-schema, setup, observability, limitations, and testing documentation describe the Phase 3 boundaries.
+- The repository contains no raw signing secrets, generated build output, or unresolved implementation markers.
+- Java, frontend, repository, Docker Compose, and repeatable simulation checks pass.
+- All six Phase 3 batches can be marked COMPLETE_VERIFIED only after developer-supplied output is recorded.
+
+## Batch 6 verification record
+
+Developer-supplied output confirmed on 13 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, tests, analysis, coverage, and `bootJar` passed.
+- All security contract, metrics, provider adapter, webhook, persistence, and regression tests passed.
+- Frontend formatting, ESLint, seven frontend tests, and production build passed.
+- Docker Compose configuration validation passed.
+- Phase 3 cumulative verification completed successfully.
