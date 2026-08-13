@@ -25,6 +25,7 @@ public class WebhookIngestionService {
   private final WebhookSecretResolver secretResolver;
   private final WebhookSignatureService signatureService;
   private final WebhookDeliveryStore deliveryStore;
+  private final NormalisedEventProcessingService processingService;
   private final ObjectMapper objectMapper;
   private final Clock clock;
 
@@ -33,11 +34,13 @@ public class WebhookIngestionService {
       WebhookSecretResolver secretResolver,
       WebhookSignatureService signatureService,
       WebhookDeliveryStore deliveryStore,
+      NormalisedEventProcessingService processingService,
       Clock clock) {
     this.eventSourceRepository = eventSourceRepository;
     this.secretResolver = secretResolver;
     this.signatureService = signatureService;
     this.deliveryStore = deliveryStore;
+    this.processingService = processingService;
     this.objectMapper = new ObjectMapper();
     this.clock = clock;
   }
@@ -106,8 +109,13 @@ public class WebhookIngestionService {
             receivedAt);
 
     WebhookDelivery delivery = result.delivery();
-    return new WebhookAcceptanceResponse(
-        delivery.getId(), result.duplicate(), delivery.getStatus(), delivery.getReceivedAt());
+    WebhookAcceptanceResponse response =
+        new WebhookAcceptanceResponse(
+            delivery.getId(), result.duplicate(), delivery.getStatus(), delivery.getReceivedAt());
+    if (!result.duplicate()) {
+      processingService.process(eventSource, delivery, payload, receivedAt);
+    }
+    return response;
   }
 
   private void validateContentType(String contentTypeHeader) {
