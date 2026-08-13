@@ -16,16 +16,19 @@ class NormalisedEventProcessingService {
   private final PipelineRunRepository pipelineRunRepository;
   private final NormalisedCiEventRepository normalisedCiEventRepository;
   private final WebhookDeliveryRepository webhookDeliveryRepository;
+  private final IngestionMetrics ingestionMetrics;
 
   NormalisedEventProcessingService(
       ProviderEventAdapterRegistry adapterRegistry,
       PipelineRunRepository pipelineRunRepository,
       NormalisedCiEventRepository normalisedCiEventRepository,
-      WebhookDeliveryRepository webhookDeliveryRepository) {
+      WebhookDeliveryRepository webhookDeliveryRepository,
+      IngestionMetrics ingestionMetrics) {
     this.adapterRegistry = adapterRegistry;
     this.pipelineRunRepository = pipelineRunRepository;
     this.normalisedCiEventRepository = normalisedCiEventRepository;
     this.webhookDeliveryRepository = webhookDeliveryRepository;
+    this.ingestionMetrics = ingestionMetrics;
   }
 
   @Transactional
@@ -46,6 +49,7 @@ class NormalisedEventProcessingService {
 
     if (candidate.isEmpty()) {
       delivery.markProcessed("UNSUPPORTED_PROVIDER_EVENT", receivedAt);
+      ingestionMetrics.recordUnsupportedEvent();
       webhookDeliveryRepository.save(delivery);
       return;
     }
@@ -103,6 +107,7 @@ class NormalisedEventProcessingService {
             mapped.sourceFields()));
 
     delivery.markProcessed("NORMALISED_EVENT_CREATED", receivedAt);
+    ingestionMetrics.recordNormalisedEvent();
     webhookDeliveryRepository.save(delivery);
   }
 }

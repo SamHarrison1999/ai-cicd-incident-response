@@ -127,3 +127,13 @@ The following controls apply:
   release.
 - The current application does not use React Router RSC mode or server-side
   hydration.
+
+## Phase 3 ingestion controls
+
+- Webhook requests are authenticated with metadata-bound HMAC-SHA-256 before persistence.
+- Delivery timestamps are bounded to reduce replay exposure.
+- Raw payload bytes and supplied signatures are not persisted.
+- Secret references are opaque and resolved only at verification time.
+- Provider payloads are untrusted input; adapters copy only allow-listed typed fields.
+- Unsupported provider events are not converted into invented normalised facts.
+- Metrics intentionally exclude request identifiers, payload values, signatures, and secrets.
