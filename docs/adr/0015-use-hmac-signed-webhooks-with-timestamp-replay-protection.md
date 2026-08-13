@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted
+Superseded by ADR 0017 for the signed-input format. The HMAC-SHA-256,
+constant-time comparison, exact-payload-byte, secret-handling, and timestamp-tolerance
+decisions remain in force.
 
 ## Context
 

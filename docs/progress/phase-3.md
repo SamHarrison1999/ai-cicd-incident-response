@@ -10,7 +10,7 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 |---|---|---|
 | 1 | Event-ingestion architecture, schemas, and security decisions | COMPLETE_VERIFIED |
 | 2 | Event-source and webhook-delivery persistence model | COMPLETE_VERIFIED |
-| 3 | Signed webhook verification and idempotent ingestion | NOT_STARTED |
+| 3 | Signed webhook verification and idempotent ingestion | COMPLETE_UNVERIFIED |
 | 4 | Provider adapters and normalised event processing | NOT_STARTED |
 | 5 | Pipeline-run APIs, frontend workspace, and simulations | NOT_STARTED |
 | 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
@@ -55,6 +55,28 @@ Developer-supplied output confirmed on 13 August 2026:
 - All 32 Java tests passed, including 7 new Batch 2 tests.
 - The executable Spring Boot JAR was built successfully.
 - `git diff --check` produced no output.
+
+## Batch 3 acceptance criteria
+
+- The webhook endpoint is public only because the request is authenticated by its HMAC signature.
+- Delivery ID, event type, exact timestamp header, and exact payload bytes are bound into a versioned signature.
+- HMAC-SHA-256 comparison uses a constant-time operation.
+- Timestamp tolerance rejects stale and implausibly future requests.
+- Event-source secrets are resolved from opaque references and are not persisted, returned, or logged.
+- Disabled and unknown event sources use the same not-found response.
+- Content type, header length, control characters, payload size, empty bodies, and JSON syntax are validated.
+- Payload bytes are bounded before full request-body consumption.
+- The first verified delivery is inserted atomically at the database idempotency boundary.
+- Retries with the same delivery ID, event type, and exact payload bytes return the original deterministic acceptance response without another insert.
+- Delivery-ID reuse with a different event type or payload returns a conflict.
+- Raw payloads and supplied signatures are not stored.
+- Security, API, setup, event-schema, and ingestion documentation reflect the implemented contract.
+- Unit and Testcontainers integration tests cover valid signatures, metadata tampering, stale requests, duplicates, conflicts, size limits, malformed JSON, and disabled sources.
+- Developer-supplied verification output is recorded before Batch 3 is marked verified.
+
+## Batch 3 verification record
+
+No verification output has been supplied yet for Batch 3.
 
 ## Phase 3 completion criteria
 

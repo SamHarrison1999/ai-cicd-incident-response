@@ -22,14 +22,30 @@ Each webhook request includes:
 | Field | Location | Required | Rule |
 |---|---|---:|---|
 | Event source ID | Path | Yes | UUID owned by the authenticated project configuration |
-| Delivery ID | Header | Yes | Provider-scoped opaque identifier, 1â€“200 characters |
-| Event type | Header | Yes | Provider event type, 1â€“100 characters |
+| Delivery ID | Header | Yes | Provider-scoped opaque identifier, 1–200 characters |
+| Event type | Header | Yes | Provider event type, 1–100 characters |
 | Delivery timestamp | Header | Yes | RFC 3339 UTC timestamp |
-| Signature | Header | Yes | `sha256=<lowercase hexadecimal HMAC>` |
+| Signature | Header | Yes | `sha256=<64 lowercase hexadecimal HMAC characters>` |
 | Content type | Header | Yes | `application/json` |
 | Payload | Body | Yes | UTF-8 JSON within the configured size limit |
 
-The server verifies the signature over the exact received request bytes. JSON must not be parsed or re-serialised before signature verification.
+The server verifies a versioned signed envelope containing the delivery ID,
+event type, exact timestamp header, and exact received payload bytes. JSON must
+not be parsed or re-serialised before signature verification.
+
+### Version 1 signed input
+
+~~~text
+CICD-WEBHOOK-V1\n
+<delivery-id>\n
+<event-type>\n
+<exact-timestamp-header>\n
+<exact-payload-bytes>
+~~~
+
+The line breaks shown above are single LF bytes. Header values reject control
+characters, preventing separator ambiguity. Binding the timestamp and delivery
+identifier prevents a captured body signature from being replayed with fresh metadata.
 
 ## Normalised event envelope
 

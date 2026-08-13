@@ -81,10 +81,12 @@ Signing secrets are never returned by read APIs and never logged.
 4. Enforce the byte-size limit before parsing.
 5. Parse and validate the delivery timestamp.
 6. Reject timestamps outside the configured tolerance.
-7. Compute HMAC-SHA-256 over the exact request bytes.
-8. Decode the supplied lowercase hexadecimal signature.
-9. Compare signatures using a constant-time operation.
-10. Continue only after all verification checks pass.
+7. Construct the versioned signed envelope from the validated delivery ID,
+   event type, exact timestamp header, and exact body bytes.
+8. Compute HMAC-SHA-256 over that envelope.
+9. Decode the supplied lowercase hexadecimal signature.
+10. Compare signatures using a constant-time operation.
+11. Continue only after all verification checks pass.
 
 Verification failures do not create normalised events or pipeline-run changes.
 
@@ -93,9 +95,10 @@ Verification failures do not create normalised events or pipeline-run changes.
 Replay protection and idempotency are related but separate:
 
 - Timestamp validation rejects stale captured requests.
+- The timestamp, delivery ID, and event type are cryptographically bound to the exact payload bytes.
 - The unique key `(event_source_id, delivery_id)` prevents repeated processing.
-- A valid retry with the same delivery ID returns the original deterministic acceptance result.
-- A reused delivery ID with different payload bytes is rejected as a conflict and recorded for audit.
+- A valid retry with the same delivery ID, event type, and payload bytes returns the original deterministic acceptance result.
+- A reused delivery ID with a different event type or payload is rejected as a conflict.
 - Side effects occur only for the transaction that successfully creates the delivery record.
 
 ## Delivery lifecycle
@@ -124,6 +127,16 @@ Allowed progression is evidence-driven. For example:
 - an existing terminal status may be corrected only by a later provider event with stronger ordering evidence
 
 Out-of-order events are retained but must not silently regress a terminal run to a non-terminal state.
+
+## Batch 3 acceptance boundary
+
+Batch 3 verifies and stores deliveries with status `RECEIVED`. It validates JSON
+syntax but deliberately does not interpret provider fields or create normalised
+events. Provider adapters and delivery processing are introduced in Batch 4.
+
+The database insert uses `ON CONFLICT DO NOTHING` at the
+`(event_source_id, provider_delivery_id)` boundary. The stored payload digest
+then distinguishes an idempotent retry from identifier reuse with different bytes.
 
 ## Failure responses
 

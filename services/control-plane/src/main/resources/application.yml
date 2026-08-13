@@ -77,3 +77,6 @@ application:
     refresh-cookie-name: ${AUTH_REFRESH_COOKIE_NAME:incident_refresh}
     secure-cookies: ${AUTH_SECURE_COOKIES:false}
     password-minimum-length: ${AUTH_PASSWORD_MINIMUM_LENGTH:12}
+  webhooks:
+    secrets:
+      local-simulator: ${WEBHOOK_SECRET_LOCAL_SIMULATOR:}

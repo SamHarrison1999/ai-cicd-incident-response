@@ -33,6 +33,8 @@ public class SecurityConfiguration {
                         "/api/v1/auth/refresh",
                         "/api/v1/auth/logout")
                     .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/v1/event-sources/*/deliveries")
+                    .permitAll()
                     .anyRequest()
                     .authenticated())
         .oauth2ResourceServer(resourceServer -> resourceServer.jwt(withDefaults()));
