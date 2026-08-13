@@ -10,7 +10,7 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 |---|---|---|
 | 1 | Event-ingestion architecture, schemas, and security decisions | COMPLETE_VERIFIED |
 | 2 | Event-source and webhook-delivery persistence model | COMPLETE_VERIFIED |
-| 3 | Signed webhook verification and idempotent ingestion | COMPLETE_UNVERIFIED |
+| 3 | Signed webhook verification and idempotent ingestion | COMPLETE_VERIFIED |
 | 4 | Provider adapters and normalised event processing | NOT_STARTED |
 | 5 | Pipeline-run APIs, frontend workspace, and simulations | NOT_STARTED |
 | 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
@@ -76,7 +76,17 @@ Developer-supplied output confirmed on 13 August 2026:
 
 ## Batch 3 verification record
 
-No verification output has been supplied yet for Batch 3.
+Developer-supplied output confirmed on 13 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting completed successfully.
+- All 49 Java tests passed, including the Batch 3 webhook tests.
+- `check` and `bootJar` completed successfully.
+- Docker Compose configuration validation passed.
+- Webhook signature, metadata binding, timestamp tolerance, payload limits, JSON validation, idempotency, and conflict handling all passed.
 
 ## Phase 3 completion criteria
 
