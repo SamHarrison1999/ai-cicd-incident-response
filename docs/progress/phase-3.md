@@ -11,7 +11,7 @@ Add secure, replay-resistant, idempotent CI/CD event ingestion, provider-neutral
 | 1 | Event-ingestion architecture, schemas, and security decisions | COMPLETE_VERIFIED |
 | 2 | Event-source and webhook-delivery persistence model | COMPLETE_VERIFIED |
 | 3 | Signed webhook verification and idempotent ingestion | COMPLETE_VERIFIED |
-| 4 | Provider adapters and normalised event processing | NOT_STARTED |
+| 4 | Provider adapters and normalised event processing | COMPLETE_VERIFIED |
 | 5 | Pipeline-run APIs, frontend workspace, and simulations | NOT_STARTED |
 | 6 | Security tests, documentation, observability, and Phase 3 verification | NOT_STARTED |
 
@@ -91,3 +91,33 @@ Developer-supplied output confirmed on 13 August 2026:
 ## Phase 3 completion criteria
 
 Phase 3 is complete only when all six batches are `COMPLETE_VERIFIED`, local and GitHub Actions quality gates pass, signed webhook simulations are repeatable, and the final Phase 3 pull request is merged into `main`.
+
+## Batch 4 implementation record
+
+Batch 4 implementation has been applied and remains `IN_PROGRESS` until developer-supplied verification output confirms the provider adapter, normalisation, persistence, and regression test criteria.
+
+## Batch 4 acceptance criteria
+
+- GitHub Actions and Jenkins payloads are mapped through provider-specific adapters.
+- Provider adapters return provider-neutral pipeline candidates without persisting raw payloads.
+- Pipeline runs are upserted by event source, external run ID, and attempt.
+- Terminal pipeline states cannot regress from later or duplicate events.
+- Normalised events retain safe source-field names and evidence summaries.
+- Unsupported provider event types are recorded as processed without fabricating a normalised event.
+- Existing signed-ingestion and persistence tests remain green.
+
+## Batch 4 verification record
+
+Developer-supplied output confirmed on 13 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting passed.
+- All Java tests passed, including provider adapter tests and existing regression tests.
+- Checkstyle passed.
+- `clean check bootJar` completed successfully.
+- Docker Compose configuration validation passed.
+- GitHub Actions and Jenkins provider adapter tests passed.
+- Webhook ingestion and persistence regression tests passed.
