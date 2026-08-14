@@ -18,7 +18,7 @@ provider integrations.
 | 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
 | 3 | Deterministic diagnosis rules, confidence, and abstention | COMPLETE_VERIFIED |
 | 4 | Diagnosis API and human-readable workspace | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 7 verification | IN_PROGRESS |
+| 5 | Security, end-to-end, documentation, and Phase 7 verification | COMPLETE_VERIFIED |
 
 ## Phase 7 completion criteria
 
@@ -133,3 +133,17 @@ Batch 5 defines the cumulative Phase 7 security, synthetic end-to-end, documenta
 - Synthetic scenarios distinguish suspected hypotheses from confirmed causes.
 - Security documentation excludes raw content, secret material, and autonomous remediation.
 - The Phase 7 verification record is based on complete developer-supplied output.
+## Batch 5 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, cumulative tests, analysis, coverage, `check`, and `bootJar` passed.
+- Frontend formatting, ESLint, frontend tests, and production build passed.
+- Docker Compose configuration validation passed.
+- Sanitisation, tenant isolation, deterministic diagnosis, bounded confidence, abstention, and API security boundaries were cumulatively verified.
+- Synthetic evidence-to-diagnosis scenarios covered authorised access, prompt-injection removal, ambiguous evidence, cross-tenant rejection, and bounded responses.
+- Phase 7 cumulative verification completed successfully.
