@@ -11,7 +11,7 @@ Phase 5 consumes the Phase 4 canonical timeline. It does not introduce productio
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Incident correlation contract, policy, and state machine | COMPLETE_VERIFIED |
-| 2 | Incident persistence and lifecycle domain model | IN_PROGRESS |
+| 2 | Incident persistence and lifecycle domain model | COMPLETE_VERIFIED |
 | 3 | Deterministic correlation engine and audit decisions | NOT_STARTED |
 | 4 | Tenant-scoped incident API and frontend workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 5 verification | NOT_STARTED |
@@ -57,3 +57,16 @@ Batch 2 adds the tenant-owned incident aggregate, explicit lifecycle transitions
 - A normalised event can be linked to at most one primary incident.
 - Java tests cover valid lifecycle progression and invalid transition rejection.
 - Database constraints reinforce tenant ownership and event-link uniqueness.
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting passed.
+- All Java tests passed, including incident lifecycle tests.
+- `check` and `bootJar` completed successfully.
+- Docker Compose configuration validation passed.
+- Incident persistence, tenant ownership, lifecycle transitions, reopening, and primary event-link constraints were verified.
