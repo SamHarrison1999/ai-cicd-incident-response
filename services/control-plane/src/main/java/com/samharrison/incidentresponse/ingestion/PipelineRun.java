@@ -212,8 +212,7 @@ public class PipelineRun {
     Objects.requireNonNull(nextStatus);
     Objects.requireNonNull(occurredAt);
     if (occurredAt.isBefore(lastEventOccurredAt)) {
-      throw new IllegalArgumentException(
-          "pipeline status evidence is older than the current projection");
+      return;
     }
     if (isTerminal(status) && !isTerminal(nextStatus)) {
       throw new IllegalStateException(

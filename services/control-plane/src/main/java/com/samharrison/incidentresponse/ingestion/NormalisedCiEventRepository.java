@@ -13,4 +13,7 @@ public interface NormalisedCiEventRepository extends JpaRepository<NormalisedCiE
 
   List<NormalisedCiEvent> findAllByProjectIdAndOrganisationIdOrderByOccurredAtAsc(
       UUID projectId, UUID organisationId);
+
+  List<NormalisedCiEvent> findAllByProjectIdAndOrganisationIdOrderByOccurredAtAscReceivedAtAscIdAsc(
+      UUID projectId, UUID organisationId);
 }

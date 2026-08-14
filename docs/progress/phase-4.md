@@ -34,3 +34,14 @@ Phase 4 is complete only when all five batches are `COMPLETE_VERIFIED`, the cumu
 ## Batch 1 implementation record
 
 Batch 1 establishes the canonical event, pipeline-run, and timeline boundaries for the implementation batches that follow.
+## Batch 2 implementation record
+
+Batch 2 adds the persistence indexes and monotonic aggregation behaviour required for deterministic timeline reads. Older evidence is retained as history but cannot move a pipeline projection backwards.
+
+## Batch 2 acceptance criteria
+
+- Timeline ordering has database support for organisation, project, occurred-at, received-at, and stable event identity.
+- Older events do not regress the pipeline-run projection or fail the transaction.
+- Later non-terminal events cannot regress terminal pipeline runs.
+- Pipeline-run attempt identity remains source-scoped and deterministic.
+- Regression tests cover late evidence and terminal-state protection.
