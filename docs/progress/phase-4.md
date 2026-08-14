@@ -57,3 +57,15 @@ Batch 3 adds the tenant-scoped pipeline timeline endpoint with allow-listed filt
 - Cursor values are opaque, contain the complete ordering position, and reject malformed input.
 - The API returns bounded safe event summaries and never raw payloads or signing material.
 - Cursor and filter behaviour has unit coverage and remains compatible with the Phase 3 pipeline-run API.
+## Batch 4 implementation record
+
+Batch 4 adds the accessible pipeline timeline workspace, filter controls, run summaries, event cards, loading/error/empty states, and cursor-based loading of additional events.
+
+## Batch 4 acceptance criteria
+
+- Users can enter an organisation and project scope before data is queried.
+- Timeline filters are represented by accessible controls and update the read-model query.
+- Pipeline runs and canonical events are presented separately but share the same tenant scope.
+- Loading, error, empty, and pagination states are visible and actionable.
+- The frontend never displays raw provider payloads or signing material.
+- API query construction has frontend test coverage and the production build remains green.
