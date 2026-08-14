@@ -14,7 +14,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 | 2 | Evidence persistence, redaction, and retention enforcement | COMPLETE_VERIFIED |
 | 3 | Tenant-scoped evidence search and incident/event linking | COMPLETE_VERIFIED |
 | 4 | Evidence viewer and investigation workspace | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 6 verification | IN_PROGRESS |
 
 ## Batch 1 acceptance criteria
 
@@ -121,3 +121,14 @@ Developer-supplied output confirmed on 14 August 2026:
 - Docker Compose configuration validation passed.
 - Tenant-scoped evidence detail access and redacted viewer content were verified.
 - The evidence investigation workspace passed route, search, selection, pagination, and viewer contract checks.
+## Batch 5 implementation record
+
+Batch 5 closes Phase 6 with explicit security controls, synthetic evidence-to-incident end-to-end scenarios, cumulative quality-gate instructions, and the final verification boundary. It does not introduce AI diagnosis, causal certainty, autonomous remediation, or production provider integrations.
+
+## Batch 5 acceptance criteria
+
+- Tenant isolation, role enforcement, redaction, bounded content, provenance, and retention controls are covered by the cumulative verification plan.
+- Synthetic evidence flows cover persistence, metadata search, incident/event linking, viewer access, duplicate processing, and cross-tenant rejection.
+- Security evidence excludes raw webhook payloads, signatures, credentials, access tokens, and unbounded content from persistence, indexing, API, and frontend outputs.
+- Java, frontend, repository, and Docker Compose gates are repeatable from a clean checkout.
+- Phase 6 remains evidence storage and presentation, not AI diagnosis or autonomous remediation.

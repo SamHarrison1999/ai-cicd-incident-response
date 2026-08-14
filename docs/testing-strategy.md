@@ -108,3 +108,14 @@ content hashes, tenant-scoped evidence links, search authorization, viewer
 outputs, and synthetic evidence-to-incident flows. Tests must confirm that
 secret material and raw webhook signatures do not cross persistence, indexing,
 API, or frontend boundaries.
+## Phase 6 final verification gate
+
+The cumulative Phase 6 gate runs repository validation, Java formatting and
+tests, frontend formatting/lint/tests/build, and Docker Compose configuration
+validation. The evidence scenarios must demonstrate tenant isolation,
+redaction before persistence, bounded search and viewer output, deterministic
+links, duplicate safety, and safe rejection of invalid cross-tenant access.
+
+The final record must cite the command output supplied for the exact branch
+commit being verified. A green unit test alone is not evidence that an
+incident cause has been established.
