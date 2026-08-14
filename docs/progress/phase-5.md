@@ -13,7 +13,7 @@ Phase 5 consumes the Phase 4 canonical timeline. It does not introduce productio
 | 1 | Incident correlation contract, policy, and state machine | COMPLETE_VERIFIED |
 | 2 | Incident persistence and lifecycle domain model | COMPLETE_VERIFIED |
 | 3 | Deterministic correlation engine and audit decisions | COMPLETE_VERIFIED |
-| 4 | Tenant-scoped incident API and frontend workspace | NOT_STARTED |
+| 4 | Tenant-scoped incident API and frontend workspace | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 5 verification | NOT_STARTED |
 
 ## Batch 1 acceptance criteria
@@ -95,3 +95,15 @@ Developer-supplied output confirmed on 14 August 2026:
 - `check` and `bootJar` completed successfully.
 - Docker Compose configuration validation passed.
 - Policy versioning, failure eligibility, tenant gates, scoring, deterministic tie-breaking, idempotent decision persistence, and audit recording were verified.
+## Batch 4 implementation record
+
+Batch 4 adds tenant-scoped incident reads and guarded lifecycle transitions, plus an accessible frontend workspace for incident summaries and status changes.
+
+## Batch 4 acceptance criteria
+
+- Incident list and detail reads require active organisation membership and project scope.
+- Viewer members cannot transition incident state.
+- Invalid lifecycle transitions remain rejected by the domain aggregate.
+- The frontend waits for both scope IDs before querying.
+- Loading, error, empty, and transition states are visible.
+- Frontend API construction and bounded response handling have test coverage.
