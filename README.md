@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 6 - evidence storage, search, and viewer
+**Current phase:** Phase 7 - sanitisation and deterministic diagnosis
 
 Phases 0, 1, and 2 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
@@ -50,6 +50,7 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Architecture](docs/architecture.md)
 - [Phase 5 correlation model](docs/phase-5-correlation-model.md)
 - [Phase 6 evidence model](docs/phase-6-evidence-model.md)
+- [Phase 7 diagnosis model](docs/phase-7-diagnosis-model.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -149,3 +150,6 @@ For a faster application-only pass that skips container builds:
 ```
 
 The full release verification requires repository checks, Java tests with PostgreSQL Testcontainers, Python quality gates, frontend formatting/lint/tests/build, Playwright, Docker Compose validation, and application image builds.
+
+
+Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
