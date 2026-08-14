@@ -12,7 +12,7 @@ Phase 5 consumes the Phase 4 canonical timeline. It does not introduce productio
 |---|---|---|
 | 1 | Incident correlation contract, policy, and state machine | COMPLETE_VERIFIED |
 | 2 | Incident persistence and lifecycle domain model | COMPLETE_VERIFIED |
-| 3 | Deterministic correlation engine and audit decisions | IN_PROGRESS |
+| 3 | Deterministic correlation engine and audit decisions | COMPLETE_VERIFIED |
 | 4 | Tenant-scoped incident API and frontend workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 5 verification | NOT_STARTED |
 
@@ -82,3 +82,16 @@ Batch 3 adds the deterministic policy v1 engine, tenant and project gates, stabl
 - Resolved incidents are not eligible candidates.
 - Decisions are idempotent on event identity and contain bounded metadata only.
 - Correlation policy version and audit action are recorded.
+## Batch 3 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting passed.
+- All Java tests passed, including deterministic correlation-engine tests.
+- `check` and `bootJar` completed successfully.
+- Docker Compose configuration validation passed.
+- Policy versioning, failure eligibility, tenant gates, scoring, deterministic tie-breaking, idempotent decision persistence, and audit recording were verified.
