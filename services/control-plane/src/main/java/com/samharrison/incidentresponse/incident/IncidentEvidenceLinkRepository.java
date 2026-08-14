@@ -12,4 +12,8 @@ public interface IncidentEvidenceLinkRepository extends JpaRepository<IncidentEv
   List<IncidentEvidenceLink>
       findAllByIncidentIdAndOrganisationIdAndProjectIdOrderByLinkedAtAscIdAsc(
           UUID incidentId, UUID organisationId, UUID projectId);
+
+  List<IncidentEvidenceLink>
+      findAllByEvidenceIdAndOrganisationIdAndProjectIdOrderByLinkedAtAscIdAsc(
+          UUID evidenceId, UUID organisationId, UUID projectId);
 }

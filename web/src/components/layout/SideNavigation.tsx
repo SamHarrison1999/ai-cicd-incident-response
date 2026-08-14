@@ -5,6 +5,7 @@ const navigationItems = [
     { to: "/organisations", label: "Organisations", end: false },
     { to: "/pipelines", label: "Pipeline runs", end: false },
     { to: "/incidents", label: "Incidents", end: false },
+    { to: "/evidence", label: "Evidence", end: false },
     { to: "/settings", label: "Settings", end: false },
 ] as const;
 

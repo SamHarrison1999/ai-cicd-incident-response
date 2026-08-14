@@ -13,7 +13,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 | 1 | Evidence and log model, provenance, retention, and viewer boundary | COMPLETE_VERIFIED |
 | 2 | Evidence persistence, redaction, and retention enforcement | COMPLETE_VERIFIED |
 | 3 | Tenant-scoped evidence search and incident/event linking | COMPLETE_VERIFIED |
-| 4 | Evidence viewer and investigation workspace | NOT_STARTED |
+| 4 | Evidence viewer and investigation workspace | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
 
 ## Batch 1 acceptance criteria
@@ -94,3 +94,16 @@ Developer-supplied output confirmed on 14 August 2026:
 - `clean check bootJar` completed successfully.
 - Docker Compose configuration validation passed.
 - Tenant-scoped evidence search, bounded metadata responses, deterministic cursor pagination, and incident/event link boundaries were verified.
+
+## Batch 4 implementation record
+
+Batch 4 adds the tenant-scoped evidence detail projection and frontend investigation workspace. The viewer returns only persisted, bounded, redacted content plus incident and event identifiers.
+
+## Batch 4 acceptance criteria
+
+- Viewer access requires active membership and validates organisation/project/evidence ownership.
+- Viewer content is bounded and remains redacted before presentation.
+- Viewer responses expose no raw webhook payload, signature, credential, or secret material.
+- Evidence search and cursor pagination remain available from the workspace.
+- Evidence selection loads one detail projection without changing tenant scope.
+- The workspace remains evidence inspection, not AI diagnosis or remediation.
