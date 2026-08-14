@@ -16,7 +16,7 @@ provider integrations.
 |---|---|---|
 | 1 | Sanitisation and deterministic diagnosis contract | COMPLETE_VERIFIED |
 | 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
-| 3 | Deterministic diagnosis rules, confidence, and abstention | NOT_STARTED |
+| 3 | Deterministic diagnosis rules, confidence, and abstention | IN_PROGRESS |
 | 4 | Diagnosis API and human-readable workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 7 verification | NOT_STARTED |
 
@@ -76,3 +76,13 @@ Developer-supplied output confirmed on 14 August 2026:
 - Frontend formatting, ESLint, twelve frontend tests, and production build passed.
 - Docker Compose configuration validation passed.
 - EvidenceService sanitised content before hashing and persistence.
+## Batch 3 implementation record
+
+Batch 3 adds a versioned deterministic diagnosis engine over sanitised signals. It emits bounded suspected categories, confidence values, supporting signal identifiers, warnings, and explicit abstention reasons without exposing raw evidence.
+
+## Batch 3 acceptance criteria
+
+- Dependency, deployment, configuration, and resource hypotheses use explicit deterministic rules.
+- Confidence remains bounded and equal inputs produce equal outputs.
+- Empty, unmatched, tied, and over-bound inputs abstain safely.
+- Results contain provenance identifiers and no raw content, secrets, or signatures.
