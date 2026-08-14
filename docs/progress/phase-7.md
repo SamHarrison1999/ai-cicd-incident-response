@@ -17,7 +17,7 @@ provider integrations.
 | 1 | Sanitisation and deterministic diagnosis contract | COMPLETE_VERIFIED |
 | 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
 | 3 | Deterministic diagnosis rules, confidence, and abstention | COMPLETE_VERIFIED |
-| 4 | Diagnosis API and human-readable workspace | NOT_STARTED |
+| 4 | Diagnosis API and human-readable workspace | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 7 verification | NOT_STARTED |
 
 ## Phase 7 completion criteria
@@ -99,3 +99,13 @@ Developer-supplied output confirmed on 14 August 2026:
 - Deterministic rule selection, bounded confidence, signal provenance, tie abstention, empty-input abstention, and content bounds were verified.
 - Frontend formatting, ESLint, twelve frontend tests, and production build passed.
 - Docker Compose configuration validation passed.
+## Batch 4 implementation record
+
+Batch 4 exposes the deterministic diagnosis projection through a tenant-scoped read-only API and a human-readable workspace. The response contains no raw evidence or remediation action.
+
+## Batch 4 acceptance criteria
+
+- Active organisation membership and project ownership are required.
+- Diagnosis responses expose rule version, bounded confidence, signal identifiers, warnings, and abstention information.
+- The workspace labels suspected categories as human-review decision support.
+- Route, API, controller, and bounded-response contracts are covered by tests.

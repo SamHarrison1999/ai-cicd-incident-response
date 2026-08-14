@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { AppProviders } from "./app/AppProviders";
 import { AppRoutes } from "./app/AppRoutes";
+import "./styles/diagnosis.css";
 import "./styles/evidence.css";
 import "./styles/global.css";
 

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
 import { AppLayout } from "../components/layout/AppLayout";
 import { DashboardPage } from "../pages/DashboardPage";
+import { DiagnosisPage } from "../pages/DiagnosisPage";
 import { EvidencePage } from "../pages/EvidencePage";
 import { IncidentsPage } from "../pages/IncidentsPage";
 import { LoginPage } from "../pages/LoginPage";
@@ -28,6 +29,7 @@ export function AppRoutes() {
                     <Route path="pipelines" element={<PipelinesPage />} />
                     <Route path="incidents" element={<IncidentsPage />} />
                     <Route path="evidence" element={<EvidencePage />} />
+                    <Route path="diagnosis" element={<DiagnosisPage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFoundPage />} />

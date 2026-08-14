@@ -1,0 +1,51 @@
+.diagnosis-panel {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+}
+
+.diagnosis-confidence {
+  color: var(--accent-strong);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.diagnosis-detail-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0;
+}
+
+.diagnosis-detail-list div {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--surface-muted);
+}
+
+.diagnosis-detail-list dt {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.diagnosis-detail-list dd {
+  margin: 0.35rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.diagnosis-callout {
+  margin: 0;
+  padding: 1rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-muted);
+}
+
+@media (max-width: 800px) {
+  .diagnosis-detail-list {
+    grid-template-columns: 1fr;
+  }
+}
