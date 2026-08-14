@@ -11,7 +11,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Evidence and log model, provenance, retention, and viewer boundary | COMPLETE_VERIFIED |
-| 2 | Evidence persistence, redaction, and retention enforcement | IN_PROGRESS |
+| 2 | Evidence persistence, redaction, and retention enforcement | COMPLETE_VERIFIED |
 | 3 | Tenant-scoped evidence search and incident/event linking | NOT_STARTED |
 | 4 | Evidence viewer and investigation workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
@@ -55,3 +55,14 @@ tenant checks. Search and viewer APIs remain outside this batch.
 - Content hashes are deterministic lowercase SHA-256 values.
 - Content and line limits are enforced before persistence.
 - Retention expiry is calculated deterministically from the ingested timestamp.
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, tests, analysis, coverage, and `bootJar` passed.
+- Docker Compose configuration validation passed.
+- Tenant-scoped evidence persistence, redaction before hashing, deterministic SHA-256 content hashing, content bounds, and retention-boundary calculation were verified.
