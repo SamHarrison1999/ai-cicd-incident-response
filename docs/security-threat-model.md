@@ -137,3 +137,13 @@ The following controls apply:
 - Provider payloads are untrusted input; adapters copy only allow-listed typed fields.
 - Unsupported provider events are not converted into invented normalised facts.
 - Metrics intentionally exclude request identifiers, payload values, signatures, and secrets.
+
+## Phase 5 incident-correlation controls
+
+- Incident reads require active organisation membership and project scoping.
+- Lifecycle writes use an explicit role allow-list and domain transition policy.
+- Correlation candidates are gated by organisation and project before scoring.
+- Correlation decisions persist policy version, bounded dimensions, and result.
+- Incident responses exclude raw payloads, signatures, secrets, and provider
+  credentials.
+- Synthetic end-to-end checks cover duplicate processing and tenant boundaries.

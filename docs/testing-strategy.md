@@ -93,3 +93,11 @@ A Phase 2 batch or phase is not marked verified until developer-supplied command
 ## Phase 3 cumulative verification
 
 Phase 3 verification combines provider-adapter unit tests, persistence-backed webhook tests, tenant-boundary API tests, frontend tests, repository checks, Compose validation, and repeatable signed webhook simulations. A passing unit test is not evidence that an AI-generated root cause is correct; later AI features must cite retained evidence and abstain when it is insufficient.
+
+## Phase 5 cumulative verification
+
+Phase 5 verification combines deterministic correlation-engine tests, incident
+lifecycle and API contract tests, tenant-boundary checks, bounded frontend API
+tests, frontend interaction tests, repository checks, and Docker Compose
+validation. The synthetic end-to-end scenarios document expected technical
+flow without making production or human-outcome claims.

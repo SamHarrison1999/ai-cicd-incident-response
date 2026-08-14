@@ -707,3 +707,93 @@ a {
     flex-direction: column;
   }
 }
+
+/* Phase 5 incident workspace */
+.incident-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.incident-card {
+  display: grid;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: linear-gradient(145deg, var(--surface-raised), var(--surface));
+  padding: 1.25rem;
+}
+
+.incident-card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.incident-card h3 {
+  margin: 0;
+}
+
+.incident-status {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.incident-status-detected,
+.incident-status-reopened {
+  background: rgb(250 204 21 / 12%);
+  color: var(--warning);
+}
+
+.incident-status-triaged,
+.incident-status-mitigating,
+.incident-status-monitoring {
+  background: rgb(125 211 252 / 12%);
+  color: var(--accent);
+}
+
+.incident-status-resolved {
+  background: rgb(74 222 128 / 12%);
+  color: var(--healthy);
+}
+
+.incident-summary {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.incident-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.incident-transition {
+  display: grid;
+  max-width: 18rem;
+  gap: 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.incident-transition select {
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--surface-muted);
+  color: var(--text);
+  padding: 0.7rem 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .incident-card-header {
+    flex-direction: column;
+  }
+}
