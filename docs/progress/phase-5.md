@@ -14,7 +14,7 @@ Phase 5 consumes the Phase 4 canonical timeline. It does not introduce productio
 | 2 | Incident persistence and lifecycle domain model | COMPLETE_VERIFIED |
 | 3 | Deterministic correlation engine and audit decisions | COMPLETE_VERIFIED |
 | 4 | Tenant-scoped incident API and frontend workspace | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 5 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 5 verification | IN_PROGRESS |
 
 ## Batch 1 acceptance criteria
 
@@ -121,3 +121,17 @@ Developer-supplied output confirmed on 14 August 2026:
 - Tenant-scoped incident reads and lifecycle transitions were verified.
 - Viewer access was prevented from changing incident state.
 - Bounded incident responses excluded raw payloads, signatures, and secrets.
+## Batch 5 implementation record
+
+Batch 5 records the Phase 5 security boundary, synthetic end-to-end scenarios,
+cumulative verification contract, and known exclusions before final close-out.
+
+## Batch 5 acceptance criteria
+
+- Security controls cover tenant access, role enforcement, bounded responses,
+  audit recording, and deterministic correlation decisions.
+- Synthetic end-to-end scenarios cover projection, duplicate processing, tenant
+  boundaries, role boundaries, and invalid transitions.
+- Final documentation distinguishes technical verification from production or
+  human-outcome evidence.
+- Cumulative Java, frontend, repository, and Compose gates pass.
