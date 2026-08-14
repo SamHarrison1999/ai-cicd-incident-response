@@ -11,7 +11,7 @@ Phase 5 consumes the Phase 4 canonical timeline. It does not introduce productio
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Incident correlation contract, policy, and state machine | COMPLETE_VERIFIED |
-| 2 | Incident persistence and lifecycle domain model | NOT_STARTED |
+| 2 | Incident persistence and lifecycle domain model | IN_PROGRESS |
 | 3 | Deterministic correlation engine and audit decisions | NOT_STARTED |
 | 4 | Tenant-scoped incident API and frontend workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 5 verification | NOT_STARTED |
@@ -44,3 +44,16 @@ Developer-supplied output confirmed on 14 August 2026:
 - Git whitespace validation passed.
 - Incident correlation boundaries, policy versioning, deterministic selection, primary incident membership, state transitions, and safety exclusions were documented.
 - Phase 5 Batch 1 kickoff verification completed successfully.
+## Batch 2 implementation record
+
+Batch 2 adds the tenant-owned incident aggregate, explicit lifecycle transitions, one-primary-incident event links, repositories, and migration V5. Correlation scoring remains reserved for Batch 3.
+
+## Batch 2 acceptance criteria
+
+- Incident rows are scoped to an organisation and project.
+- Valid lifecycle transitions match the Phase 5 contract.
+- Invalid transitions are rejected without changing state.
+- Reopening preserves incident identity and clears the active resolution timestamp.
+- A normalised event can be linked to at most one primary incident.
+- Java tests cover valid lifecycle progression and invalid transition rejection.
+- Database constraints reinforce tenant ownership and event-link uniqueness.
