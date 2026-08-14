@@ -293,3 +293,41 @@ Event-source configuration exposes only safe metadata. The signing secret is rep
 
 GET /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources
 POST /api/v1/organisations/{organisationId}/projects/{projectId}/event-sources
+
+## Pipeline timeline
+
+```http
+GET /api/v1/organisations/{organisationId}/projects/{projectId}/timeline
+Authorization: Bearer <access-token>
+```
+
+The timeline is tenant-scoped and returns newest events first. Optional filters are `status`, `branch`, `commitSha`, `environment`, `eventType`, `from`, and `to`, where the time values are RFC 3339 instants. `limit` defaults to 25 and is bounded to 100. The `nextCursor` value is opaque and must be sent unchanged to retrieve the next stable page.
+
+Example response:
+
+```json
+{
+  "items": [
+    {
+      "id": "00000000-0000-0000-0000-000000000042",
+      "pipelineRunId": "00000000-0000-0000-0000-000000000043",
+      "provider": "GITHUB_ACTIONS",
+      "eventType": "PIPELINE_RUN_COMPLETED",
+      "status": "FAILED",
+      "externalRunId": "run-42",
+      "pipelineName": "continuous-integration",
+      "attempt": 1,
+      "commitSha": "<commit-sha>",
+      "gitRef": "refs/heads/main",
+      "environmentName": null,
+      "occurredAt": "2026-08-14T10:00:00Z",
+      "receivedAt": "2026-08-14T10:00:01Z",
+      "evidenceSummary": "GitHub Actions workflow completed with conclusion failure."
+    }
+  ],
+  "nextCursor": "<opaque-cursor-or-null>",
+  "hasNext": false
+}
+```
+
+Invalid filters, invalid time ranges, and malformed cursors return `TIMELINE_FILTER_INVALID`. The endpoint never returns raw provider payloads, supplied signatures, or signing material.
