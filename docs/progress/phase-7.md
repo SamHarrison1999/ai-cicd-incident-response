@@ -15,7 +15,7 @@ provider integrations.
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Sanitisation and deterministic diagnosis contract | COMPLETE_VERIFIED |
-| 2 | Evidence sanitisation and prompt-injection defence | IN_PROGRESS |
+| 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
 | 3 | Deterministic diagnosis rules, confidence, and abstention | NOT_STARTED |
 | 4 | Diagnosis API and human-readable workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 7 verification | NOT_STARTED |
@@ -63,3 +63,16 @@ Batch 2 adds deterministic evidence sanitisation, prompt-injection-like instruct
 - Secret redaction and content bounds remain applied before hashing and persistence.
 - Sanitisation warnings and version identifiers are deterministic.
 - Existing tenant and provenance boundaries remain unchanged.
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, cumulative tests, analysis, coverage, and `bootJar` passed.
+- Evidence sanitiser tests passed, including prompt-injection-like instruction removal, deterministic output, secret redaction, and blank-input rejection.
+- Frontend formatting, ESLint, twelve frontend tests, and production build passed.
+- Docker Compose configuration validation passed.
+- EvidenceService sanitised content before hashing and persistence.
