@@ -165,3 +165,6 @@ The final evidence boundary is verified as a chain rather than at the viewer alo
 5. Synthetic duplicate and cross-tenant scenarios must fail safely without creating a second projection or leaking identifiers.
 
 Evidence remains an authorised technical observation. It is not proof of causality, an AI conclusion, or permission to perform remediation.
+## Phase 7 diagnosis boundary
+
+Diagnosis consumes only sanitised, tenant-authorised evidence. Results are bounded suspected hypotheses; raw content, credentials, signatures, and remediation actions are excluded.

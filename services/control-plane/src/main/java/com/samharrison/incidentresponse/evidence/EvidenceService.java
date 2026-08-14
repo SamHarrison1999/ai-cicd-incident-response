@@ -44,8 +44,8 @@ public class EvidenceService {
       String rawContent) {
     tenantAccessService.requireActiveMembership(organisationId, userId);
     Project project = requireProject(organisationId, projectId);
-    EvidenceRedactor.RedactedContent redacted = EvidenceRedactor.redact(rawContent);
-    String hash = EvidenceContentHasher.sha256Hex(redacted.content());
+    SanitisedEvidence sanitised = EvidenceSanitiser.sanitise(rawContent);
+    String hash = EvidenceContentHasher.sha256Hex(sanitised.content());
     Evidence evidence =
         new Evidence(
             UUID.randomUUID(),
@@ -58,8 +58,8 @@ public class EvidenceService {
             occurredAt,
             Instant.now(),
             hash,
-            redacted.content(),
-            redacted.lineCount());
+            sanitised.content(),
+            sanitised.lineCount());
     Evidence saved = evidenceRepository.save(evidence);
     auditRecorder.record(
         userId,

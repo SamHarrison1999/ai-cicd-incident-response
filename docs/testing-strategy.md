@@ -119,3 +119,6 @@ links, duplicate safety, and safe rejection of invalid cross-tenant access.
 The final record must cite the command output supplied for the exact branch
 commit being verified. A green unit test alone is not evidence that an
 incident cause has been established.
+## Phase 7 cumulative scenarios
+
+The cumulative suite covers sanitisation before diagnosis, deterministic rule evaluation, explicit abstention, tenant isolation, bounded API responses, and human-review presentation.
