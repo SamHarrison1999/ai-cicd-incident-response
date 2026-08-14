@@ -11,7 +11,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Evidence and log model, provenance, retention, and viewer boundary | COMPLETE_VERIFIED |
-| 2 | Evidence persistence, redaction, and retention enforcement | NOT_STARTED |
+| 2 | Evidence persistence, redaction, and retention enforcement | IN_PROGRESS |
 | 3 | Tenant-scoped evidence search and incident/event linking | NOT_STARTED |
 | 4 | Evidence viewer and investigation workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
@@ -42,3 +42,16 @@ Developer-supplied output confirmed on 14 August 2026:
 - Git whitespace validation passed.
 - The tenant-scoped evidence model, provenance fields, retention classes, redaction boundary, evidence links, and viewer exclusions were documented.
 - Phase 6 Batch 1 kickoff verification completed successfully.
+## Batch 2 implementation record
+
+Batch 2 adds the tenant-owned evidence item, bounded redaction before hashing,
+deterministic content hashes, retention classes, migration V7, and service-level
+tenant checks. Search and viewer APIs remain outside this batch.
+
+## Batch 2 acceptance criteria
+
+- Evidence is persisted only inside an organisation and project boundary.
+- Secret-like values, bearer tokens, and signatures are redacted before storage.
+- Content hashes are deterministic lowercase SHA-256 values.
+- Content and line limits are enforced before persistence.
+- Retention expiry is calculated deterministically from the ingested timestamp.
