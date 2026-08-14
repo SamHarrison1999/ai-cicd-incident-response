@@ -101,3 +101,10 @@ lifecycle and API contract tests, tenant-boundary checks, bounded frontend API
 tests, frontend interaction tests, repository checks, and Docker Compose
 validation. The synthetic end-to-end scenarios document expected technical
 flow without making production or human-outcome claims.
+## Phase 6 evidence verification
+
+Phase 6 verification covers bounded content, redaction, retention classes,
+content hashes, tenant-scoped evidence links, search authorization, viewer
+outputs, and synthetic evidence-to-incident flows. Tests must confirm that
+secret material and raw webhook signatures do not cross persistence, indexing,
+API, or frontend boundaries.

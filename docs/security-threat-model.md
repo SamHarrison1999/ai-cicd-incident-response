@@ -147,3 +147,10 @@ The following controls apply:
 - Incident responses exclude raw payloads, signatures, secrets, and provider
   credentials.
 - Synthetic end-to-end checks cover duplicate processing and tenant boundaries.
+## Phase 6 evidence controls
+
+- Evidence is authorised by active organisation membership and project scope.
+- Content is bounded and redacted before persistence or indexing.
+- Secret values, signatures, credentials, and access tokens are excluded from viewer outputs.
+- Provenance, content hashes, retention classes, and links are auditable.
+- Evidence is technical observation, not proof of causality or an AI conclusion.
