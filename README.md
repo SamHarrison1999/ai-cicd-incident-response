@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 4 — canonical pipeline events, runs, and timelines.
+**Current phase:** Phase 5 - incident correlation and state machine
 
 Phases 0, 1, and 2 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
@@ -48,6 +48,7 @@ Exact dependency patch versions will be pinned when each executable service is c
 ## Documentation
 
 - [Architecture](docs/architecture.md)
+- [Phase 5 correlation model](docs/phase-5-correlation-model.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
