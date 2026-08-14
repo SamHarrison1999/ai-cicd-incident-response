@@ -12,7 +12,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 |---|---|---|
 | 1 | Evidence and log model, provenance, retention, and viewer boundary | COMPLETE_VERIFIED |
 | 2 | Evidence persistence, redaction, and retention enforcement | COMPLETE_VERIFIED |
-| 3 | Tenant-scoped evidence search and incident/event linking | IN_PROGRESS |
+| 3 | Tenant-scoped evidence search and incident/event linking | COMPLETE_VERIFIED |
 | 4 | Evidence viewer and investigation workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
 
@@ -80,3 +80,17 @@ Batch 3 adds tenant-scoped evidence metadata search, deterministic cursor pagina
 - Search responses exclude raw evidence content.
 - Evidence-to-incident and evidence-to-event links enforce the same organisation and project boundary.
 - Link creation requires an incident-writer role and records an audit event.
+
+## Batch 3 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting passed.
+- All Java tests passed, including evidence search, cursor, metadata contract, and linking tests.
+- `clean check bootJar` completed successfully.
+- Docker Compose configuration validation passed.
+- Tenant-scoped evidence search, bounded metadata responses, deterministic cursor pagination, and incident/event link boundaries were verified.
