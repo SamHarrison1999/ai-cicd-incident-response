@@ -16,7 +16,7 @@ provider integrations.
 |---|---|---|
 | 1 | Sanitisation and deterministic diagnosis contract | COMPLETE_VERIFIED |
 | 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
-| 3 | Deterministic diagnosis rules, confidence, and abstention | IN_PROGRESS |
+| 3 | Deterministic diagnosis rules, confidence, and abstention | COMPLETE_VERIFIED |
 | 4 | Diagnosis API and human-readable workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 7 verification | NOT_STARTED |
 
@@ -86,3 +86,16 @@ Batch 3 adds a versioned deterministic diagnosis engine over sanitised signals. 
 - Confidence remains bounded and equal inputs produce equal outputs.
 - Empty, unmatched, tied, and over-bound inputs abstain safely.
 - Results contain provenance identifiers and no raw content, secrets, or signatures.
+## Batch 3 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, cumulative tests, analysis, coverage, and `bootJar` passed.
+- Determistic diagnosis engine tests passed.
+- Deterministic rule selection, bounded confidence, signal provenance, tie abstention, empty-input abstention, and content bounds were verified.
+- Frontend formatting, ESLint, twelve frontend tests, and production build passed.
+- Docker Compose configuration validation passed.
