@@ -14,7 +14,7 @@ provider integrations.
 
 | Batch | Scope | Status |
 |---|---|---|
-| 1 | Historical retrieval contract, ranking, and tenant boundary | IN_PROGRESS |
+| 1 | Historical retrieval contract, ranking, and tenant boundary | COMPLETE_VERIFIED |
 | 2 | Historical retrieval persistence and query service | NOT_STARTED |
 | 3 | Historical retrieval API, filters, and pagination | NOT_STARTED |
 | 4 | Retrieval workspace and incident context presentation | NOT_STARTED |
@@ -40,3 +40,15 @@ read-only safety boundary for later executable batches.
 - Match explanations and source identifiers remain available for human review.
 - Secrets, signatures, raw unsafe material, and autonomous actions remain outside the retrieval boundary.
 - No historical match is treated as proof of causality or resolution effectiveness.
+
+## Batch 1 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- README project status and Phase 8 documentation were updated.
+- Historical retrieval query dimensions, deterministic ordering, provenance, tenant isolation, read-only access, and empty/ambiguous match behaviour were documented.
+- Phase 8 Batch 1 kickoff verification completed successfully.
