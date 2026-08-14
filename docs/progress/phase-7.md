@@ -14,7 +14,7 @@ provider integrations.
 
 | Batch | Scope | Status |
 |---|---|---|
-| 1 | Sanitisation and deterministic diagnosis contract | IN_PROGRESS |
+| 1 | Sanitisation and deterministic diagnosis contract | COMPLETE_VERIFIED |
 | 2 | Evidence sanitisation and prompt-injection defence | NOT_STARTED |
 | 3 | Deterministic diagnosis rules, confidence, and abstention | NOT_STARTED |
 | 4 | Diagnosis API and human-readable workspace | NOT_STARTED |
@@ -41,3 +41,14 @@ executable batches.
 - Deterministic diagnosis uses a versioned rule boundary and stable outputs.
 - Confidence is bounded and insufficient evidence produces explicit abstention.
 - Phase 7 remains human decision support, not causal proof or autonomous remediation.
+
+## Batch 1 verification record
+
+Developer-supplied output confirmed on 14 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- The bounded sanitisation, prompt-injection, deterministic diagnosis, confidence, provenance, and abstention contracts were documented.
+- Phase 7 Batch 1 kickoff verification completed successfully.
