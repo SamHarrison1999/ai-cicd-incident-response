@@ -147,3 +147,21 @@ The following controls apply:
 - Incident responses exclude raw payloads, signatures, secrets, and provider
   credentials.
 - Synthetic end-to-end checks cover duplicate processing and tenant boundaries.
+## Phase 6 evidence controls
+
+- Evidence is authorised by active organisation membership and project scope.
+- Content is bounded and redacted before persistence or indexing.
+- Secret values, signatures, credentials, and access tokens are excluded from viewer outputs.
+- Provenance, content hashes, retention classes, and links are auditable.
+- Evidence is technical observation, not proof of causality or an AI conclusion.
+## Phase 6 final security verification
+
+The final evidence boundary is verified as a chain rather than at the viewer alone:
+
+1. Tenant and project ownership are checked before repository access.
+2. Evidence content is bounded and redacted before hashing, persistence, or indexing.
+3. Search returns metadata only; viewer responses return persisted redacted content with bounded links.
+4. Raw webhook payloads, signatures, credentials, access tokens, and hidden policy internals remain excluded.
+5. Synthetic duplicate and cross-tenant scenarios must fail safely without creating a second projection or leaking identifiers.
+
+Evidence remains an authorised technical observation. It is not proof of causality, an AI conclusion, or permission to perform remediation.
