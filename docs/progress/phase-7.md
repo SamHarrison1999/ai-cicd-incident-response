@@ -18,7 +18,7 @@ provider integrations.
 | 2 | Evidence sanitisation and prompt-injection defence | COMPLETE_VERIFIED |
 | 3 | Deterministic diagnosis rules, confidence, and abstention | COMPLETE_VERIFIED |
 | 4 | Diagnosis API and human-readable workspace | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 7 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 7 verification | IN_PROGRESS |
 
 ## Phase 7 completion criteria
 
@@ -123,3 +123,13 @@ Developer-supplied output confirmed on 14 August 2026:
 - Docker Compose configuration validation passed.
 - Tenant-scoped diagnosis access and human-review presentation were verified.
 - Raw evidence content, credentials, signatures, and remediation actions were excluded from diagnosis responses.
+## Batch 5 implementation record
+
+Batch 5 defines the cumulative Phase 7 security, synthetic end-to-end, documentation, and verification boundary.
+
+## Batch 5 acceptance criteria
+
+- Sanitisation, deterministic diagnosis, tenant isolation, bounded responses, and abstention remain covered cumulatively.
+- Synthetic scenarios distinguish suspected hypotheses from confirmed causes.
+- Security documentation excludes raw content, secret material, and autonomous remediation.
+- The Phase 7 verification record is based on complete developer-supplied output.
