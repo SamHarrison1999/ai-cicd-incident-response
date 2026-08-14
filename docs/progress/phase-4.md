@@ -45,3 +45,15 @@ Batch 2 adds the persistence indexes and monotonic aggregation behaviour require
 - Later non-terminal events cannot regress terminal pipeline runs.
 - Pipeline-run attempt identity remains source-scoped and deterministic.
 - Regression tests cover late evidence and terminal-state protection.
+## Batch 3 implementation record
+
+Batch 3 adds the tenant-scoped pipeline timeline endpoint with allow-listed filters, deterministic cursor pagination, stable ordering, and malformed-query rejection.
+
+## Batch 3 acceptance criteria
+
+- Timeline reads require active organisation membership and a project belonging to that organisation.
+- Status, branch, commit, environment, event-type, and time-range filters are supported.
+- Results are ordered by occurred-at, received-at, and event ID without duplicate page boundaries.
+- Cursor values are opaque, contain the complete ordering position, and reject malformed input.
+- The API returns bounded safe event summaries and never raw payloads or signing material.
+- Cursor and filter behaviour has unit coverage and remains compatible with the Phase 3 pipeline-run API.
