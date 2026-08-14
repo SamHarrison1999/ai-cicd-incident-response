@@ -12,7 +12,7 @@ Phase 6 consumes the Phase 5 incident and timeline models. It does not introduce
 |---|---|---|
 | 1 | Evidence and log model, provenance, retention, and viewer boundary | COMPLETE_VERIFIED |
 | 2 | Evidence persistence, redaction, and retention enforcement | COMPLETE_VERIFIED |
-| 3 | Tenant-scoped evidence search and incident/event linking | NOT_STARTED |
+| 3 | Tenant-scoped evidence search and incident/event linking | IN_PROGRESS |
 | 4 | Evidence viewer and investigation workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 6 verification | NOT_STARTED |
 
@@ -32,6 +32,7 @@ Phase 6 is complete only when all five batches are COMPLETE_VERIFIED, cumulative
 ## Batch 1 implementation record
 
 Batch 1 establishes the typed evidence, provenance, retention, redaction, linking, and viewer boundaries for the executable implementation batches.
+
 ## Batch 1 verification record
 
 Developer-supplied output confirmed on 14 August 2026:
@@ -42,11 +43,10 @@ Developer-supplied output confirmed on 14 August 2026:
 - Git whitespace validation passed.
 - The tenant-scoped evidence model, provenance fields, retention classes, redaction boundary, evidence links, and viewer exclusions were documented.
 - Phase 6 Batch 1 kickoff verification completed successfully.
+
 ## Batch 2 implementation record
 
-Batch 2 adds the tenant-owned evidence item, bounded redaction before hashing,
-deterministic content hashes, retention classes, migration V7, and service-level
-tenant checks. Search and viewer APIs remain outside this batch.
+Batch 2 adds the tenant-owned evidence item, bounded redaction before hashing, deterministic content hashes, retention classes, migration V7, and service-level tenant checks. Search and viewer APIs remain outside this batch.
 
 ## Batch 2 acceptance criteria
 
@@ -55,6 +55,7 @@ tenant checks. Search and viewer APIs remain outside this batch.
 - Content hashes are deterministic lowercase SHA-256 values.
 - Content and line limits are enforced before persistence.
 - Retention expiry is calculated deterministically from the ingested timestamp.
+
 ## Batch 2 verification record
 
 Developer-supplied output confirmed on 14 August 2026:
@@ -66,3 +67,16 @@ Developer-supplied output confirmed on 14 August 2026:
 - Java formatting, tests, analysis, coverage, and `bootJar` passed.
 - Docker Compose configuration validation passed.
 - Tenant-scoped evidence persistence, redaction before hashing, deterministic SHA-256 content hashing, content bounds, and retention-boundary calculation were verified.
+
+## Batch 3 implementation record
+
+Batch 3 adds tenant-scoped evidence metadata search, deterministic cursor pagination, and explicit evidence links to incidents and normalised CI events. Raw evidence content remains outside the search response and is reserved for Batch 4.
+
+## Batch 3 acceptance criteria
+
+- Search requires active membership and validates the requested project inside the organisation.
+- Search filters are bounded and ordered by `occurredAt DESC, id DESC`.
+- Cursor values are opaque, deterministic, and reject malformed input.
+- Search responses exclude raw evidence content.
+- Evidence-to-incident and evidence-to-event links enforce the same organisation and project boundary.
+- Link creation requires an incident-writer role and records an audit event.
