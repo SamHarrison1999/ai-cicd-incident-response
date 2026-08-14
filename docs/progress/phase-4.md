@@ -14,7 +14,7 @@ Phase 4 is a read-model and product-surface phase. It does not introduce inciden
 | 2 | Timeline persistence and deterministic run aggregation | NOT_STARTED |
 | 3 | Tenant-scoped timeline API, filters, and pagination | NOT_STARTED |
 | 4 | Pipeline timeline frontend workspace | NOT_STARTED |
-| 5 | Security, end-to-end, documentation, and Phase 4 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 4 verification | IN_PROGRESS |
 
 ## Batch 1 acceptance criteria
 
@@ -69,3 +69,14 @@ Batch 4 adds the accessible pipeline timeline workspace, filter controls, run su
 - Loading, error, empty, and pagination states are visible and actionable.
 - The frontend never displays raw provider payloads or signing material.
 - API query construction has frontend test coverage and the production build remains green.
+## Batch 5 implementation record
+
+Batch 5 provides the cumulative Phase 4 verification boundary. It confirms deterministic ordering, tenant-scoped filters, cursor pagination, frontend query behaviour, documentation, and the absence of raw secrets or generated artefacts.
+
+## Batch 5 acceptance criteria
+
+- All Phase 4 Java, frontend, repository, and Compose quality gates pass with individual command exit checks.
+- Timeline API filters, cursor pagination, tenant boundaries, and safe response fields are documented and tested.
+- The frontend timeline workspace passes formatting, linting, tests, and production build checks.
+- No raw payloads, signatures, signing material, generated dependency directories, or report directories are tracked.
+- The final Phase 4 verification output is recorded before all five batches are marked `COMPLETE_VERIFIED`.
