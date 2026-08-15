@@ -15,7 +15,7 @@ provider integrations.
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Historical retrieval contract, ranking, and tenant boundary | COMPLETE_VERIFIED |
-| 2 | Historical retrieval persistence and query service | IN_PROGRESS |
+| 2 | Historical retrieval persistence and query service | COMPLETE_VERIFIED |
 | 3 | Historical retrieval API, filters, and pagination | NOT_STARTED |
 | 4 | Retrieval workspace and incident context presentation | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 8 verification | NOT_STARTED |
@@ -57,3 +57,14 @@ Developer-supplied output confirmed on 14 August 2026:
 Batch 2 adds a bounded, tenant-scoped historical retrieval projection with
 immutable provenance metadata and deterministic query ordering. It stores no
 raw secrets, signatures, unsafe payloads, or model-generated embeddings.
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 15 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting and retrieval tests passed.
+- Tenant-scoped retrieval persistence, bounded metadata, immutable provenance, deterministic ordering, and page limits were verified.
+- Phase 8 Batch 2 verification completed successfully.
