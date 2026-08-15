@@ -4,8 +4,8 @@ Phase 12 focuses on bounded operational learning and deterministic trend intelli
 
 | Batch | Scope | Status |
 | --- | --- | --- |
-| 1 | Operational-learning contract, trend dimensions, and tenant boundary | IN_PROGRESS |
-| 2 | Trend persistence and deterministic observation windows | NOT_STARTED |
+| 1 | Operational-learning contract, trend dimensions, and tenant boundary | COMPLETE_VERIFIED |
+| 2 | Trend persistence and deterministic observation windows | IN_PROGRESS |
 | 3 | Bounded trend API and comparison responses | NOT_STARTED |
 | 4 | Operational-learning workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 12 verification | NOT_STARTED |
@@ -15,5 +15,10 @@ Phase 12 focuses on bounded operational learning and deterministic trend intelli
 - Operational-learning outputs are tenant-scoped, provider-neutral, attributable, versioned, and advisory.
 - Trend projections preserve observation windows, source references, deterministic ordering, sample size, and suppression state.
 - Raw evidence, review comments, secrets, provider prompts, and remediation controls are outside the learning boundary.
-
 - Small-sample trend results are suppressed rather than exposed as unsupported signals.
+
+### Batch 2 implementation record
+
+- Trend projections persist explicit observation windows, dimension keys, aggregation versions, source references, and suppression state.
+- Observation input is filtered by tenant, dimension, key, and UTC window before deterministic aggregation.
+- Rebuilding a projection creates a new immutable record; persistence does not mutate incidents, policies, providers, or production systems.
