@@ -9,7 +9,7 @@ Provide attributable human review, bounded feedback, and final incident resoluti
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Human review, feedback, and resolution contract | IN_PROGRESS |
-| 2 | Review persistence, versioning, and audit model | IN_PROGRESS |
+| 2 | Review persistence, versioning, and audit model | COMPLETE_VERIFIED |
 | 3 | Review API and authorisation boundaries | NOT_STARTED |
 | 4 | Review workspace and resolution presentation | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 10 verification | NOT_STARTED |
@@ -29,3 +29,12 @@ Phase 10 is complete only when review actions are tenant scoped and attributable
 - Added bounded review reasons, comments, edited content, and resolution text.
 - Added append-only version numbering and same-tenant resolution references.
 - Added persistence tests for rejection reasons, bounded content, and reviewed-version requirements.
+## Batch 2 verification record
+
+Developer-supplied output confirmed on 15 August 2026:
+
+- Repository verification passed.
+- All 105 cumulative Java tests passed.
+- `clean check bootJar` completed successfully.
+- Review persistence, immutable edited versions, bounded fields, rejection reasons, and reviewed-version resolution references were verified.
+- Phase 10 Batch 2 verification completed successfully.
