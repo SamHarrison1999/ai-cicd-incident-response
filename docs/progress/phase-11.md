@@ -7,7 +7,7 @@ Phase 11 focuses on governed, tenant-scoped and versioned feedback analytics der
 | 1 | Feedback governance contract, aggregation dimensions, and tenant boundary | IN_PROGRESS |
 | 2 | Feedback persistence and deterministic aggregation | IN_PROGRESS |
 | 3 | Feedback API and bounded analytics responses | IN_PROGRESS |
-| 4 | Feedback and governance workspace | NOT_STARTED |
+| 4 | Feedback and governance workspace | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 11 verification | NOT_STARTED |
 
 ### Batch 2 implementation record
@@ -21,3 +21,8 @@ Phase 11 focuses on governed, tenant-scoped and versioned feedback analytics der
 - Policy and time-window filters are validated before a deterministic maximum-result cap is applied.
 - API responses expose bounded counts and suppression state without raw review or evidence content.
 - Bounded feedback API and analytics responses are tenant-scoped, filtered, capped, and suppression-aware.
+### Batch 4 implementation record
+
+- The authenticated feedback workspace presents tenant-scoped aggregate outcomes, filters, and suppression state.
+- Navigation and route coverage preserve existing workspaces while adding a read-only feedback view.
+- No retraining, provider mutation, raw-comment display, or remediation control is exposed.

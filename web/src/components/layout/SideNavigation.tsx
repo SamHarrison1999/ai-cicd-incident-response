@@ -10,6 +10,7 @@ const navigationItems = [
     { to: "/diagnosis", label: "Diagnosis", end: false },
     { to: "/recommendations", label: "Recommendations", end: false },
     { to: "/review", label: "Human review", end: false },
+    { to: "/feedback", label: "Feedback", end: false },
     { to: "/settings", label: "Settings", end: false },
 ] as const;
 
