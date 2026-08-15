@@ -6,6 +6,7 @@ const navigationItems = [
     { to: "/pipelines", label: "Pipeline runs", end: false },
     { to: "/incidents", label: "Incidents", end: false },
     { to: "/evidence", label: "Evidence", end: false },
+    { to: "/historical-retrieval", label: "Historical retrieval", end: false },
     { to: "/diagnosis", label: "Diagnosis", end: false },
     { to: "/settings", label: "Settings", end: false },
 ] as const;

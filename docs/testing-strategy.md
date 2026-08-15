@@ -122,3 +122,8 @@ incident cause has been established.
 ## Phase 7 cumulative scenarios
 
 The cumulative suite covers sanitisation before diagnosis, deterministic rule evaluation, explicit abstention, tenant isolation, bounded API responses, and human-review presentation.
+### Phase 8 historical retrieval
+
+Verification covers deterministic ranking, cursor pagination, tenant isolation,
+invalid-filter rejection, explicit empty and ambiguous results, bounded
+responses, and the human-review workspace.

@@ -6,6 +6,7 @@ import { AppProviders } from "./app/AppProviders";
 import { AppRoutes } from "./app/AppRoutes";
 import "./styles/diagnosis.css";
 import "./styles/evidence.css";
+import "./styles/retrieval.css";
 import "./styles/global.css";
 
 const rootElement = document.getElementById("root");

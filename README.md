@@ -4,18 +4,25 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 7 - sanitisation and deterministic diagnosis
+**Current phase:** Phase 8 - historical retrieval
 
-Phases 0, 1, and 2 are complete. The repository now contains a runnable Java
+Phases 0 through 7 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
 persistence, Docker Compose environment, continuous-integration quality gates,
-authentication, organisations, projects, tenant isolation, and a protected
-frontend workspace.
+authentication, organisations, projects, tenant isolation, pipeline timelines,
+incident correlation, evidence persistence and search, sanitisation, and
+bounded deterministic diagnosis for human review.
 
-Phase 3 adds configured event sources, signed webhook verification, replay
-protection, idempotent delivery handling, provider-neutral event normalisation,
-and pipeline-run tracking. AI analysis and automatic remediation remain outside
-this phase.
+Phase 3 established secure event ingestion. Phase 4 added provider-neutral
+pipeline timelines. Phase 5 added deterministic incident correlation and the
+incident workspace. Phase 6 added bounded evidence persistence, redaction,
+search, linking, and the investigation viewer. Phase 7 added sanitisation,
+prompt-injection defence, deterministic diagnosis, bounded confidence,
+abstention, and a human-review diagnosis workspace.
+
+Phase 8 begins historical retrieval: tenant-scoped, deterministic, read-only
+retrieval of authorised prior incident-response context. AI recommendations and
+automatic remediation remain outside this phase.
 
 ## Product objective
 
@@ -51,6 +58,7 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 5 correlation model](docs/phase-5-correlation-model.md)
 - [Phase 6 evidence model](docs/phase-6-evidence-model.md)
 - [Phase 7 diagnosis model](docs/phase-7-diagnosis-model.md)
+- [Phase 8 retrieval model](docs/phase-8-retrieval-model.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
