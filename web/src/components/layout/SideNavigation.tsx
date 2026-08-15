@@ -7,8 +7,9 @@ const navigationItems = [
     { to: "/incidents", label: "Incidents", end: false },
     { to: "/evidence", label: "Evidence", end: false },
     { to: "/historical-retrieval", label: "Historical retrieval", end: false },
-    { to: "/recommendations", label: "Recommendations", end: false },
     { to: "/diagnosis", label: "Diagnosis", end: false },
+    { to: "/recommendations", label: "Recommendations", end: false },
+    { to: "/review", label: "Human review", end: false },
     { to: "/settings", label: "Settings", end: false },
 ] as const;
 
@@ -24,7 +25,6 @@ export function SideNavigation() {
                     <span>Platform engineering</span>
                 </div>
             </div>
-
             <nav>
                 <ul className="navigation-list">
                     {navigationItems.map((item) => (
@@ -44,7 +44,6 @@ export function SideNavigation() {
                     ))}
                 </ul>
             </nav>
-
             <p className="environment-badge">Local foundation</p>
         </aside>
     );

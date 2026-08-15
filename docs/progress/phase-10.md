@@ -51,3 +51,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - All 105 cumulative Java tests passed.
 - Review history, review submission, resolution references, authentication, and tenant boundaries were verified.
 - Phase 10 Batch 3 verification completed successfully.
+### Batch 4 implementation record
+
+- Added the human review route, navigation entry, bounded review controls, and review history presentation.
+- Added edit, reject-reason, comment, and reviewed-version-backed resolution fields.
+- Kept remediation execution and provider controls outside the workspace.

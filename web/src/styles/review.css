@@ -1,0 +1,34 @@
+.review-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+.review-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+}
+.review-card textarea,
+.review-card select,
+.review-card input,
+.review-resolution textarea,
+.review-resolution input {
+  width: 100%;
+  box-sizing: border-box;
+}
+.review-history-item {
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--border-color);
+}
+.review-history-item span {
+  margin-left: 0.75rem;
+  color: var(--muted-text);
+}
+.review-resolution {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
