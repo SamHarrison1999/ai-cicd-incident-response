@@ -358,3 +358,9 @@ Review and resolution operations require tenant membership, preserve actor attri
 ## Phase 12 operational learning
 
 Phase 12 defines the contract for future trend and operational-learning projections. No operational-learning write or provider-training endpoint is exposed by this batch.
+## Phase 12 operational learning API
+
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/operational-learning/trends` returns bounded tenant-scoped trend projections. Optional filters are `dimension`, `dimensionKey`, `from`, `to`, and `limit`; the response contains aggregate metadata, an opaque `nextCursor`, and `hasNext`.
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/operational-learning/trends/compare` returns a bounded comparison of adjacent persisted projections and a deterministic delta.
+
+Both routes are read-only, require active organisation membership, and exclude raw evidence, review comments, secrets, provider prompts, credentials, policy mutation, and remediation controls.

@@ -5,8 +5,8 @@ Phase 12 focuses on bounded operational learning and deterministic trend intelli
 | Batch | Scope | Status |
 | --- | --- | --- |
 | 1 | Operational-learning contract, trend dimensions, and tenant boundary | COMPLETE_VERIFIED |
-| 2 | Trend persistence and deterministic observation windows | IN_PROGRESS |
-| 3 | Bounded trend API and comparison responses | NOT_STARTED |
+| 2 | Trend persistence and deterministic observation windows | COMPLETE_VERIFIED |
+| 3 | Bounded trend API and comparison responses | IN_PROGRESS |
 | 4 | Operational-learning workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 12 verification | NOT_STARTED |
 
@@ -22,3 +22,12 @@ Phase 12 focuses on bounded operational learning and deterministic trend intelli
 - Trend projections persist explicit observation windows, dimension keys, aggregation versions, source references, and suppression state.
 - Observation input is filtered by tenant, dimension, key, and UTC window before deterministic aggregation.
 - Rebuilding a projection creates a new immutable record; persistence does not mutate incidents, policies, providers, or production systems.
+
+### Batch 3 implementation record
+
+- Authenticated trend reads require active tenant membership and address both organisation and project scope.
+- Dimension, key, window, and limit filters are validated before a bounded deterministic result is returned.
+- Opaque cursors preserve stable page boundaries and comparison responses expose only bounded aggregate metadata.
+
+- authenticated trend reads require active tenant membership and preserve organisation and project scope.
+- opaque cursors preserve stable page boundaries for deterministic trend retrieval.
