@@ -53,3 +53,8 @@ batch status is maintained in `docs/progress/phase-9.md`.
 ## Phase 10 current boundary
 
 Phase 10 is in progress. It introduces attributable human review, immutable generated content, bounded feedback, reviewed versions, and final resolution eligibility without executing remediation. The detailed batch status is maintained in `docs/progress/phase-10.md`.
+## Phase 11 - Feedback governance and learning signals
+
+| Phase | Scope | Status |
+| --- | --- | --- |
+| 11 | Governed feedback analytics derived from human review | IN_PROGRESS |
