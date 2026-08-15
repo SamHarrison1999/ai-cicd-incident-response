@@ -24,9 +24,9 @@ A phase cannot be `COMPLETE_VERIFIED` until Samuel provides or records the requi
 | 7 — Deterministic diagnosis | COMPLETE_VERIFIED | Redaction, injection checks, rules, tests | — |
 | 8 — Historical retrieval | COMPLETE_VERIFIED | Reviewed resolution store and similarity retrieval | — |
 | 9 - AI recommendations | COMPLETE_VERIFIED | Provider abstraction, evidence-grounded recommendations, and human-review safety | - |
-| 10 - Human review | IN_PROGRESS | Accept, edit, reject, feedback, and resolution workflow | - |
-| 11 — Evaluation | NOT_STARTED | Golden data, metrics, dashboard | — |
-| 12 — Observability and simulation | NOT_STARTED | Generator, logs, metrics, traces, dashboards | — |
+| 10 - Human review | COMPLETE_VERIFIED | Accept, edit, reject, feedback, and resolution workflow | - |
+| 11 — Feedback governance and learning signals | COMPLETE_VERIFIED | Golden data, metrics, dashboard | — |
+| 12 — Operational learning and trend intelligence | IN_PROGRESS | Generator, logs, metrics, traces, dashboards | — |
 | 13 — Security hardening | NOT_STARTED | Threat model, limits, scans, adversarial tests | — |
 | 14 — Deployment and release | NOT_STARTED | Images, deployment, demo, case study | — |
 
@@ -57,4 +57,9 @@ Phase 10 is in progress. It introduces attributable human review, immutable gene
 
 | Phase | Scope | Status |
 | --- | --- | --- |
-| 11 | Governed feedback analytics derived from human review | IN_PROGRESS |
+| 11 | Governed feedback analytics derived from human review | COMPLETE_VERIFIED |
+## Phase 12 - Operational learning and trend intelligence
+
+| Phase | Scope | Status |
+| --- | --- | --- |
+| 12 | Bounded operational learning derived from governed platform records | IN_PROGRESS |

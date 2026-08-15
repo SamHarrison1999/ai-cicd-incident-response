@@ -146,3 +146,6 @@ Review mutations require authenticated tenant membership, preserve immutable ver
 ## Phase 11 feedback controls
 
 Feedback analytics are authenticated, tenant-scoped, bounded, suppression-aware, and advisory. Raw evidence, review comments, provider credentials, provider prompts, silent retraining, policy mutation, and remediation actions are excluded.
+## Phase 12 operational learning controls
+
+Test tenant isolation, deterministic windowing and ordering, provenance references, sample suppression, stale-data handling, bounded responses, and the absence of provider-training or remediation side effects.

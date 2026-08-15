@@ -4,29 +4,15 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 10 - human review, feedback, and resolutions
+**Current phase:** Phase 12 - operational learning and trend intelligence
 
-Phases 0 through 9 are complete. The repository now contains a runnable Java
-control plane, Python intelligence service, React web application, PostgreSQL
-persistence, Docker Compose environment, continuous-integration quality gates,
-authentication, organisations, projects, tenant isolation, pipeline timelines,
-incident correlation, evidence persistence and search, sanitisation, and
-bounded deterministic diagnosis for human review.
+Phases 0 through 11 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, and the initial operational-learning contract.
 
-Phase 3 established secure event ingestion. Phase 4 added provider-neutral
-pipeline timelines. Phase 5 added deterministic incident correlation and the
-incident workspace. Phase 6 added bounded evidence persistence, redaction,
-search, linking, and the investigation viewer. Phase 7 added sanitisation,
-prompt-injection defence, deterministic diagnosis, bounded confidence,
-abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped
-historical retrieval with deterministic ranking, filters, pagination, and
-incident context.
+Phase 3 established secure event ingestion. Phase 4 added provider-neutral pipeline timelines. Phase 5 added deterministic incident correlation and the incident workspace. Phase 6 added bounded evidence persistence, redaction, search, linking, and the investigation viewer. Phase 7 added sanitisation, prompt-injection defence, deterministic diagnosis, bounded confidence, abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped historical retrieval with deterministic ranking, filters, pagination, and incident context.
 
-Phase 9 completed provider abstraction and evidence-grounded AI recommendations. Phase 10 now adds
-bounded recommendation requests, provider-neutral adapters, provenance,
-confidence, abstention, and human-review safety. Automatic remediation and
-production-changing actions remain outside this phase.
+Phase 9 added provider abstraction and evidence-grounded recommendations. Phase 10 added attributable human review, immutable versions, bounded feedback, and governed resolutions. Phase 11 added immutable feedback signals, deterministic aggregation, bounded feedback analytics, and a read-only governance workspace.
 
+Phase 12 now defines bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. Automatic retraining, production policy changes, and remediation actions remain outside the platform boundary.
 ## Product objective
 
 The platform helps platform engineers, release engineers, developers, and engineering managers answer:
@@ -62,6 +48,10 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 6 evidence model](docs/phase-6-evidence-model.md)
 - [Phase 7 diagnosis model](docs/phase-7-diagnosis-model.md)
 - [Phase 8 retrieval model](docs/phase-8-retrieval-model.md)
+- [Phase 9 recommendation model](docs/phase-9-recommendation-model.md)
+- [Phase 10 review model](docs/phase-10-review-model.md)
+- [Phase 11 feedback model](docs/phase-11-feedback-model.md)
+- [Phase 12 learning model](docs/phase-12-learning-model.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -86,8 +76,8 @@ Exact dependency patch versions will be pinned when each executable service is c
 | 8 | Historical retrieval |
 | 9 | Provider abstraction and evidence-grounded AI recommendations |
 | 10 | Human review, feedback, and resolutions |
-| 11 | Golden dataset and evaluation dashboard |
-| 12 | Failure simulation and observability |
+| 11 | Governed feedback analytics and learning signals |
+| 12 | Operational learning and deterministic trend intelligence |
 | 13 | Security hardening |
 | 14 | Deployment, release, demo, and portfolio case study |
 
@@ -165,22 +155,18 @@ The full release verification requires repository checks, Java tests with Postgr
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
 
-## Project status through Phase 11
+## Project status through Phase 12
 
-Phases 1-10 are complete and Phase 11 is now in progress. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, and human review with immutable versions and governed resolutions.
+Phases 1-11 are complete and Phase 12 is now in progress. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
 
-Phase 11 is focused on governed feedback analytics derived from human review. Feedback remains tenant-scoped, attributable, versioned, bounded, and advisory. It does not silently retrain providers, change production policy, or execute remediation.
+Phase 12 is focused on bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. They do not silently retrain providers, change production policy, or execute remediation.
 
 ## Phase 3 local verification
-
-From the repository root in PowerShell:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\verify-phase-3.ps1
 ```
-
-Expected result: repository, Java, frontend, Docker Compose, and Git whitespace checks pass.
 
 ## Phase 4 local verification
 
@@ -188,15 +174,11 @@ Expected result: repository, Java, frontend, Docker Compose, and Git whitespace 
 .\scripts\verify-phase-4.ps1
 ```
 
-Expected result: the pipeline timeline API, pagination, frontend workspace, and cumulative quality checks pass.
-
 ## Phase 5 local verification
 
 ```powershell
 .\scripts\verify-phase-5.ps1
 ```
-
-Expected result: incident persistence, deterministic correlation, incident API, frontend checks, and cumulative quality checks pass.
 
 ## Phase 6 local verification
 
@@ -204,15 +186,11 @@ Expected result: incident persistence, deterministic correlation, incident API, 
 .\scripts\verify-phase-6.ps1
 ```
 
-Expected result: evidence persistence, redaction, search, linking, viewer checks, frontend checks, and cumulative quality checks pass.
-
 ## Phase 7 local verification
 
 ```powershell
 .\scripts\verify-phase-7.ps1
 ```
-
-Expected result: sanitisation, prompt-injection defence, deterministic diagnosis, security checks, frontend checks, and cumulative quality checks pass.
 
 ## Phase 8 local verification
 
@@ -220,15 +198,11 @@ Expected result: sanitisation, prompt-injection defence, deterministic diagnosis
 .\scripts\verify-phase-8.ps1
 ```
 
-Expected result: historical retrieval persistence, API filters, pagination, workspace checks, frontend checks, and cumulative quality checks pass.
-
 ## Phase 9 local verification
 
 ```powershell
 .\scripts\verify-phase-9.ps1
 ```
-
-Expected result: provider-neutral recommendations, persistence, security, workspace checks, frontend checks, and cumulative quality checks pass.
 
 ## Phase 10 local verification
 
@@ -236,12 +210,16 @@ Expected result: provider-neutral recommendations, persistence, security, worksp
 .\scripts\verify-phase-10.ps1
 ```
 
-Expected result: human review persistence, review and resolution APIs, workspace checks, authentication isolation, frontend checks, and cumulative quality checks pass.
-
 ## Phase 11 local verification
 
 ```powershell
 .\scripts\verify-phase-11.ps1
 ```
 
-Expected result: the Phase 11 feedback governance contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
+## Phase 12 local verification
+
+```powershell
+.\scripts\verify-phase-12.ps1
+```
+
+Expected result: the Phase 12 operational-learning contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
