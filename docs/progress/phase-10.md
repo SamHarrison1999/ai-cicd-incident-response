@@ -38,3 +38,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - `clean check bootJar` completed successfully.
 - Review persistence, immutable edited versions, bounded fields, rejection reasons, and reviewed-version resolution references were verified.
 - Phase 10 Batch 2 verification completed successfully.
+### Batch 3 implementation record
+
+- Added authenticated review history and review submission endpoints.
+- Added reviewed-version-backed incident resolution endpoint.
+- Enforced tenant and project checks before returning or mutating review data.
