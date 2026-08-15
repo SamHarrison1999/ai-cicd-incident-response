@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 8 - historical retrieval
+**Current phase:** Phase 9 - provider abstraction and evidence-grounded AI recommendations
 
 Phases 0 through 7 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
@@ -18,11 +18,14 @@ pipeline timelines. Phase 5 added deterministic incident correlation and the
 incident workspace. Phase 6 added bounded evidence persistence, redaction,
 search, linking, and the investigation viewer. Phase 7 added sanitisation,
 prompt-injection defence, deterministic diagnosis, bounded confidence,
-abstention, and a human-review diagnosis workspace.
+abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped
+historical retrieval with deterministic ranking, filters, pagination, and
+incident context.
 
-Phase 8 begins historical retrieval: tenant-scoped, deterministic, read-only
-retrieval of authorised prior incident-response context. AI recommendations and
-automatic remediation remain outside this phase.
+Phase 9 begins provider abstraction and evidence-grounded AI recommendations:
+bounded recommendation requests, provider-neutral adapters, provenance,
+confidence, abstention, and human-review safety. Automatic remediation and
+production-changing actions remain outside this phase.
 
 ## Product objective
 

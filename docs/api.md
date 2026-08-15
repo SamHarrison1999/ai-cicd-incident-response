@@ -338,3 +338,8 @@ returns bounded, tenant-scoped historical context. Supported filters are
 `diagnosisCategory`, `provider`, `pipeline`, `environment`, `branch`,
 `commitSha`, `from`, `to`, and `q`. The response includes `items`, `nextCursor`,
 and `hasNext`; the cursor preserves deterministic occurred-time and ID ordering.
+## Recommendation API
+
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations` lists bounded, tenant-scoped recommendations.
+- `POST /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations` generates a deterministic or abstained recommendation from bounded evidence identifiers.
+- Responses include confidence, status, abstention, provider provenance, and citation metadata. Raw prompts and secrets are excluded.
