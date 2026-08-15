@@ -173,3 +173,15 @@ Diagnosis consumes only sanitised, tenant-authorised evidence. Results are bound
 Historical retrieval is tenant-scoped, read-only, bounded, provenance-linked,
 and limited to sanitised metadata. Cross-tenant access, raw secret disclosure,
 causal claims, and autonomous remediation remain outside the boundary.
+## Phase 9 provider-recommendation controls
+
+- Provider requests contain only bounded, sanitised, tenant-authorised evidence
+  and historical projections.
+- Provider output is untrusted, schema-validated, length-bounded, and cannot
+  execute commands or mutate incidents, pipelines, deployments, or hosts.
+- Provider, model or ruleset, prompt-template, retrieval, schema, and evidence
+  provenance are retained with each recommendation.
+- Insufficient, conflicting, unsafe, or low-confidence inputs produce explicit
+  abstention rather than an unsupported recommendation.
+- Cross-tenant evidence, secrets, signatures, raw payloads, and hidden policy
+  instructions remain outside the provider boundary.

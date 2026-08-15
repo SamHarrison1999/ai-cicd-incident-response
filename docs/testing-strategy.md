@@ -127,3 +127,10 @@ The cumulative suite covers sanitisation before diagnosis, deterministic rule ev
 Verification covers deterministic ranking, cursor pagination, tenant isolation,
 invalid-filter rejection, explicit empty and ambiguous results, bounded
 responses, and the human-review workspace.
+### Phase 9 provider-grounded recommendations
+
+Verification covers provider-interface substitution, bounded evidence-bundle
+assembly, schema validation, provenance completeness, citation authorization,
+confidence and abstention behaviour, provider failure fallback, prompt-injection
+resistance, and the non-executable recommendation boundary. External providers
+remain optional; the deterministic offline path must remain safe and repeatable.
