@@ -16,7 +16,7 @@ production-changing actions.
 |---|---|---|
 | 1 | Provider abstraction, recommendation contract, and safety boundary | COMPLETE_VERIFIED |
 | 2 | Recommendation persistence and evidence-bundle assembly | IN_PROGRESS |
-| 3 | Provider adapters, deterministic fallback, and recommendation API | NOT_STARTED |
+| 3 | Provider adapters, deterministic fallback, and recommendation API | IN_PROGRESS |
 | 4 | Recommendation workspace and bounded presentation | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 9 verification | NOT_STARTED |
 
@@ -50,3 +50,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - Recommendation citations retain evidence and historical retrieval identifiers with bounded claims.
 - Evidence bundle assembly enforces organisation and project ownership before provider use.
 - Raw payloads, credentials, signatures, and executable remediation instructions remain outside the recommendation boundary.
+## Batch 3 implementation record
+
+- Provider adapters are isolated behind a provider-neutral request and candidate contract.
+- Deterministic local rules provide a safe fallback and abstain for unsupported or untrusted evidence.
+- Tenant-scoped GET and POST recommendation endpoints expose bounded metadata and no remediation action.
