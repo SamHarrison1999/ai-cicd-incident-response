@@ -204,3 +204,6 @@ Feedback analytics are authenticated, tenant-scoped, bounded, suppression-aware,
 ## Phase 12 operational learning controls
 
 Learning outputs are tenant-scoped, bounded, provenance-preserving, suppression-aware, and advisory. Raw evidence, comments, secrets, provider prompts, silent retraining, policy mutation, and remediation actions are excluded.
+## Phase 12 verification controls
+
+Verification covers tenant isolation, authenticated read access, deterministic ordering, bounded limits, opaque cursors, suppression-aware output, provenance references, and the exclusion of raw content, credentials, training controls, policy mutation, and remediation.

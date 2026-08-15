@@ -6,13 +6,13 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 **Current phase:** Phase 12 - operational learning and trend intelligence
 
-Phases 0 through 11 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, and the initial operational-learning contract.
+Phases 0 through 12 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, and the initial operational-learning contract.
 
 Phase 3 established secure event ingestion. Phase 4 added provider-neutral pipeline timelines. Phase 5 added deterministic incident correlation and the incident workspace. Phase 6 added bounded evidence persistence, redaction, search, linking, and the investigation viewer. Phase 7 added sanitisation, prompt-injection defence, deterministic diagnosis, bounded confidence, abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped historical retrieval with deterministic ranking, filters, pagination, and incident context.
 
 Phase 9 added provider abstraction and evidence-grounded recommendations. Phase 10 added attributable human review, immutable versions, bounded feedback, and governed resolutions. Phase 11 added immutable feedback signals, deterministic aggregation, bounded feedback analytics, and a read-only governance workspace.
 
-Phase 12 now defines bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. Automatic retraining, production policy changes, and remediation actions remain outside the platform boundary.
+Phase 12 established bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. Automatic retraining, production policy changes, and remediation actions remain outside the platform boundary.
 ## Product objective
 
 The platform helps platform engineers, release engineers, developers, and engineering managers answer:
@@ -157,9 +157,9 @@ Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for
 
 ## Project status through Phase 12
 
-Phases 1-11 are complete and Phase 12 is now in progress. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
+Phases 1-12 are complete. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
 
-Phase 12 is focused on bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. They do not silently retrain providers, change production policy, or execute remediation.
+Phase 12 established bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. They do not silently retrain providers, change production policy, or execute remediation.
 
 ## Phase 3 local verification
 

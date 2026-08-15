@@ -149,3 +149,6 @@ Feedback analytics are authenticated, tenant-scoped, bounded, suppression-aware,
 ## Phase 12 operational learning controls
 
 Test tenant isolation, deterministic windowing and ordering, provenance references, sample suppression, stale-data handling, bounded responses, and the absence of provider-training or remediation side effects.
+## Phase 12 verification controls
+
+The cumulative gate verifies trend persistence, tenant-scoped API filters, deterministic cursors and comparisons, suppressed samples, workspace rendering, security contracts, frontend behaviour, Docker Compose configuration, and Git whitespace.
