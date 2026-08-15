@@ -190,3 +190,11 @@ causal claims, and autonomous remediation remain outside the boundary.
 - Recommendation providers receive only bounded, sanitised evidence bundles.
 - Provider failures use deterministic fallback or abstention and never execute remediation.
 - Recommendation responses and citations remain tenant scoped and provenance bound.
+## Phase 10 review controls
+
+- Review actions require an authorised tenant member and derive the actor from authenticated context.
+- Generated recommendation versions are immutable; edits create attributable reviewed versions.
+- Rejection reasons and comments are bounded, and only reviewed content can become a final resolution.
+## Phase 10 human review controls
+
+Review mutations require authenticated tenant membership, preserve immutable versions, require rejection reasons, bound comments and resolution text, and never execute remediation. Tests must reject cross-tenant references and responses containing secrets or raw evidence.

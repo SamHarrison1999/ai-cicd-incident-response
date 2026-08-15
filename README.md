@@ -4,9 +4,9 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 9 - provider abstraction and evidence-grounded AI recommendations
+**Current phase:** Phase 10 - human review, feedback, and resolutions
 
-Phases 0 through 7 are complete. The repository now contains a runnable Java
+Phases 0 through 9 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
 persistence, Docker Compose environment, continuous-integration quality gates,
 authentication, organisations, projects, tenant isolation, pipeline timelines,
@@ -22,7 +22,7 @@ abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped
 historical retrieval with deterministic ranking, filters, pagination, and
 incident context.
 
-Phase 9 begins provider abstraction and evidence-grounded AI recommendations:
+Phase 9 completed provider abstraction and evidence-grounded AI recommendations. Phase 10 now adds
 bounded recommendation requests, provider-neutral adapters, provenance,
 confidence, abstention, and human-review safety. Automatic remediation and
 production-changing actions remain outside this phase.
@@ -164,3 +164,9 @@ The full release verification requires repository checks, Java tests with Postgr
 
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
+
+## Project status through Phase 10
+
+Phases 1-10 are now represented in the repository. The completed platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, and human review with immutable versions and governed resolutions.
+
+Phase 10 is the current phase: human review, feedback, and resolutions. Review actions are authenticated, tenant-scoped, auditable, bounded, and explicitly non-remediating. Use `scripts/verify-phase-3.ps1` through `scripts/verify-phase-10.ps1` for local cumulative verification.

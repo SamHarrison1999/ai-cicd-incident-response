@@ -36,6 +36,9 @@ describe("frontend authentication", () => {
     });
 
     it("redirects an unauthenticated user to sign in", async () => {
+        // Phase 10 auth isolation repair
+        localStorage.clear();
+        sessionStorage.clear();
         vi.stubGlobal(
             "fetch",
             vi.fn().mockResolvedValue(

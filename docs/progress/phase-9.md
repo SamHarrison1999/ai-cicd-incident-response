@@ -15,9 +15,9 @@ production-changing actions.
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Provider abstraction, recommendation contract, and safety boundary | COMPLETE_VERIFIED |
-| 2 | Recommendation persistence and evidence-bundle assembly | IN_PROGRESS |
-| 3 | Provider adapters, deterministic fallback, and recommendation API | IN_PROGRESS |
-| 4 | Recommendation workspace and bounded presentation | IN_PROGRESS |
+| 2 | Recommendation persistence and evidence-bundle assembly | COMPLETE_VERIFIED |
+| 3 | Provider adapters, deterministic fallback, and recommendation API | COMPLETE_VERIFIED |
+| 4 | Recommendation workspace and bounded presentation | COMPLETE_VERIFIED |
 | 5 | Security, end-to-end, documentation, and Phase 9 verification | COMPLETE_VERIFIED |
 
 ## Phase 9 completion criteria
@@ -72,3 +72,11 @@ Developer-supplied output confirmed on 15 August 2026:
 - All cumulative Java tests, recommendation security tests, frontend tests, and production build passed.
 - Tenant isolation, bounded responses, deterministic fallback, abstention, provenance, and human-review boundaries were verified.
 - Phase 9 cumulative verification completed successfully.
+## Phase 9 close-out correction
+
+Developer-supplied output confirmed on 15 August 2026:
+
+- Batches 2, 3, and 4 implementation records were committed and pushed.
+- The Phase 9 migration syntax was repaired and the cumulative Java build passed.
+- Frontend formatting, lint, tests, production build, Docker Compose validation, and security verification passed.
+- Phase 9 is complete and merged into `main`.
