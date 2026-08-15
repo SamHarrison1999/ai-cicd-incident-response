@@ -6,6 +6,7 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { DiagnosisPage } from "../pages/DiagnosisPage";
 import { EvidencePage } from "../pages/EvidencePage";
 import { HistoricalRetrievalPage } from "../pages/HistoricalRetrievalPage";
+import { RecommendationsPage } from "../pages/RecommendationsPage";
 import { IncidentsPage } from "../pages/IncidentsPage";
 import { LoginPage } from "../pages/LoginPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
@@ -33,6 +34,10 @@ export function AppRoutes() {
                     <Route
                         path="historical-retrieval"
                         element={<HistoricalRetrievalPage />}
+                    />
+                    <Route
+                        path="recommendations"
+                        element={<RecommendationsPage />}
                     />
                     <Route path="diagnosis" element={<DiagnosisPage />} />
                     <Route path="settings" element={<SettingsPage />} />

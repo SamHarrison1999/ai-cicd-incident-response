@@ -1,0 +1,53 @@
+.recommendation-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.recommendation-card {
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  background: var(--surface-raised);
+  padding: 1.25rem;
+}
+
+.recommendation-card-heading,
+.recommendation-details {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.recommendation-card-heading h3 {
+  margin: 0.25rem 0 0;
+}
+
+.recommendation-confidence {
+  color: var(--accent-strong);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.recommendation-details {
+  border-block: 1px solid var(--border-subtle);
+  margin: 1rem 0;
+  padding: 0.75rem 0;
+}
+
+.recommendation-details div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.recommendation-details dt {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.recommendation-details dd {
+  margin: 0;
+}
+
+.recommendation-warning {
+  color: var(--warning-text);
+}

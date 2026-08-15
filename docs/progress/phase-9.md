@@ -17,7 +17,7 @@ production-changing actions.
 | 1 | Provider abstraction, recommendation contract, and safety boundary | COMPLETE_VERIFIED |
 | 2 | Recommendation persistence and evidence-bundle assembly | IN_PROGRESS |
 | 3 | Provider adapters, deterministic fallback, and recommendation API | IN_PROGRESS |
-| 4 | Recommendation workspace and bounded presentation | NOT_STARTED |
+| 4 | Recommendation workspace and bounded presentation | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 9 verification | NOT_STARTED |
 
 ## Phase 9 completion criteria
@@ -55,3 +55,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - Provider adapters are isolated behind a provider-neutral request and candidate contract.
 - Deterministic local rules provide a safe fallback and abstain for unsupported or untrusted evidence.
 - Tenant-scoped GET and POST recommendation endpoints expose bounded metadata and no remediation action.
+## Batch 4 implementation record
+
+- The recommendation workspace is tenant scoped and explicitly requires human review.
+- Confidence, status, abstention, provider provenance, retrieval version, and citation counts are presented as bounded metadata.
+- Raw evidence, prompts, secrets, and execute or remediate controls are excluded from the workspace.
