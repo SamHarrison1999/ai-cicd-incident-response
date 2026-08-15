@@ -15,7 +15,7 @@ production-changing actions.
 | Batch | Scope | Status |
 |---|---|---|
 | 1 | Provider abstraction, recommendation contract, and safety boundary | COMPLETE_VERIFIED |
-| 2 | Recommendation persistence and evidence-bundle assembly | NOT_STARTED |
+| 2 | Recommendation persistence and evidence-bundle assembly | IN_PROGRESS |
 | 3 | Provider adapters, deterministic fallback, and recommendation API | NOT_STARTED |
 | 4 | Recommendation workspace and bounded presentation | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 9 verification | NOT_STARTED |
@@ -44,3 +44,9 @@ Developer-supplied output confirmed on 15 August 2026:
 - README, progress ledger, threat model, and testing strategy were synchronised through Phase 9.
 - The provider-neutral recommendation boundary, bounded evidence inputs, provenance, confidence, abstention, and non-remediation safety rules were documented.
 - Phase 9 Batch 1 kickoff verification completed successfully.
+## Batch 2 implementation record
+
+- Recommendation persistence stores bounded summaries, confidence, status, and generation provenance.
+- Recommendation citations retain evidence and historical retrieval identifiers with bounded claims.
+- Evidence bundle assembly enforces organisation and project ownership before provider use.
+- Raw payloads, credentials, signatures, and executable remediation instructions remain outside the recommendation boundary.
