@@ -343,3 +343,24 @@ and `hasNext`; the cursor preserves deterministic occurred-time and ID ordering.
 - `GET /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations` lists bounded, tenant-scoped recommendations.
 - `POST /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations` generates a deterministic or abstained recommendation from bounded evidence identifiers.
 - Responses include confidence, status, abstention, provider provenance, and citation metadata. Raw prompts and secrets are excluded.
+## Human review and resolutions
+
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations/{recommendationId}/reviews` returns bounded review history.
+- `POST /api/v1/organisations/{organisationId}/projects/{projectId}/recommendations/{recommendationId}/reviews` records an authenticated review action and creates immutable reviewed content where required.
+- `POST /api/v1/organisations/{organisationId}/projects/{projectId}/incidents/{incidentId}/resolutions` records a resolution only against an authorised reviewed version.
+
+Review and resolution operations require tenant membership, preserve actor attribution, and never execute remediation.
+
+## Feedback analytics
+
+`GET /api/v1/organisations/{organisationId}/projects/{projectId}/feedback` returns bounded, tenant-scoped aggregate outcomes. Optional filters are `policyVersion`, `from`, and `to`; `limit` is bounded to 50. Responses contain policy version, observation windows, outcome counts, sample count, and suppression reason. Raw review comments, evidence, provider prompts, secrets, and remediation controls are excluded.
+
+## Phase 12 operational learning
+
+Phase 12 defines the contract for future trend and operational-learning projections. No operational-learning write or provider-training endpoint is exposed by this batch.
+## Phase 12 operational learning API
+
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/operational-learning/trends` returns bounded tenant-scoped trend projections. Optional filters are `dimension`, `dimensionKey`, `from`, `to`, and `limit`; the response contains aggregate metadata, an opaque `nextCursor`, and `hasNext`.
+- `GET /api/v1/organisations/{organisationId}/projects/{projectId}/operational-learning/trends/compare` returns a bounded comparison of adjacent persisted projections and a deterministic delta.
+
+Both routes are read-only, require active organisation membership, and exclude raw evidence, review comments, secrets, provider prompts, credentials, policy mutation, and remediation controls.
