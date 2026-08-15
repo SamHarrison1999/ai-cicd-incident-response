@@ -91,8 +91,9 @@ public class FeedbackSignal {
   }
 
   private static String required(String value, int max) {
-    if (value == null || value.isBlank() || value.length() > max)
+    if (value == null || value.isBlank() || value.length() > max) {
       throw new IllegalArgumentException("policyVersion is outside the permitted range");
+    }
     return value;
   }
 }
