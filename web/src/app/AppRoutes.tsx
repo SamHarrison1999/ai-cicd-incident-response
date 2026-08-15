@@ -4,6 +4,7 @@ import { AppLayout } from "../components/layout/AppLayout";
 import { DashboardPage } from "../pages/DashboardPage";
 import { DiagnosisPage } from "../pages/DiagnosisPage";
 import { EvidencePage } from "../pages/EvidencePage";
+import { FeedbackPage } from "../pages/FeedbackPage";
 import { HistoricalRetrievalPage } from "../pages/HistoricalRetrievalPage";
 import { IncidentsPage } from "../pages/IncidentsPage";
 import { LoginPage } from "../pages/LoginPage";
@@ -40,6 +41,7 @@ export function AppRoutes() {
                         element={<RecommendationsPage />}
                     />
                     <Route path="review" element={<ReviewPage />} />
+                    <Route path="feedback" element={<FeedbackPage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="home" element={<Navigate to="/" replace />} />
                     <Route path="*" element={<NotFoundPage />} />

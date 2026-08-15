@@ -143,3 +143,6 @@ remain optional; the deterministic offline path must remain safe and repeatable.
 ## Phase 10 human review controls
 
 Review mutations require authenticated tenant membership, preserve immutable versions, require rejection reasons, bound comments and resolution text, and never execute remediation. Tests must reject cross-tenant references and responses containing secrets or raw evidence.
+## Phase 11 feedback controls
+
+Feedback analytics are authenticated, tenant-scoped, bounded, suppression-aware, and advisory. Raw evidence, review comments, provider credentials, provider prompts, silent retraining, policy mutation, and remediation actions are excluded.

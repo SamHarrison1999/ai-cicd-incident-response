@@ -5,6 +5,7 @@ import { AppProviders } from "./app/AppProviders";
 import { AppRoutes } from "./app/AppRoutes";
 import "./styles/diagnosis.css";
 import "./styles/evidence.css";
+import "./styles/feedback.css";
 import "./styles/global.css";
 import "./styles/recommendations.css";
 import "./styles/retrieval.css";

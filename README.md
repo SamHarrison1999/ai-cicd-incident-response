@@ -165,8 +165,83 @@ The full release verification requires repository checks, Java tests with Postgr
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
 
-## Project status through Phase 10
+## Project status through Phase 11
 
-Phases 1-10 are now represented in the repository. The completed platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, and human review with immutable versions and governed resolutions.
+Phases 1-10 are complete and Phase 11 is now in progress. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, and human review with immutable versions and governed resolutions.
 
-Phase 10 is the current phase: human review, feedback, and resolutions. Review actions are authenticated, tenant-scoped, auditable, bounded, and explicitly non-remediating. Use `scripts/verify-phase-3.ps1` through `scripts/verify-phase-10.ps1` for local cumulative verification.
+Phase 11 is focused on governed feedback analytics derived from human review. Feedback remains tenant-scoped, attributable, versioned, bounded, and advisory. It does not silently retrain providers, change production policy, or execute remediation.
+
+## Phase 3 local verification
+
+From the repository root in PowerShell:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\verify-phase-3.ps1
+```
+
+Expected result: repository, Java, frontend, Docker Compose, and Git whitespace checks pass.
+
+## Phase 4 local verification
+
+```powershell
+.\scripts\verify-phase-4.ps1
+```
+
+Expected result: the pipeline timeline API, pagination, frontend workspace, and cumulative quality checks pass.
+
+## Phase 5 local verification
+
+```powershell
+.\scripts\verify-phase-5.ps1
+```
+
+Expected result: incident persistence, deterministic correlation, incident API, frontend checks, and cumulative quality checks pass.
+
+## Phase 6 local verification
+
+```powershell
+.\scripts\verify-phase-6.ps1
+```
+
+Expected result: evidence persistence, redaction, search, linking, viewer checks, frontend checks, and cumulative quality checks pass.
+
+## Phase 7 local verification
+
+```powershell
+.\scripts\verify-phase-7.ps1
+```
+
+Expected result: sanitisation, prompt-injection defence, deterministic diagnosis, security checks, frontend checks, and cumulative quality checks pass.
+
+## Phase 8 local verification
+
+```powershell
+.\scripts\verify-phase-8.ps1
+```
+
+Expected result: historical retrieval persistence, API filters, pagination, workspace checks, frontend checks, and cumulative quality checks pass.
+
+## Phase 9 local verification
+
+```powershell
+.\scripts\verify-phase-9.ps1
+```
+
+Expected result: provider-neutral recommendations, persistence, security, workspace checks, frontend checks, and cumulative quality checks pass.
+
+## Phase 10 local verification
+
+```powershell
+.\scripts\verify-phase-10.ps1
+```
+
+Expected result: human review persistence, review and resolution APIs, workspace checks, authentication isolation, frontend checks, and cumulative quality checks pass.
+
+## Phase 11 local verification
+
+```powershell
+.\scripts\verify-phase-11.ps1
+```
+
+Expected result: the Phase 11 feedback governance contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
