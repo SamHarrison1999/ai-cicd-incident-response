@@ -18,7 +18,7 @@ provider integrations.
 | 2 | Historical retrieval persistence and query service | COMPLETE_VERIFIED |
 | 3 | Historical retrieval API, filters, and pagination | COMPLETE_VERIFIED |
 | 4 | Retrieval workspace and incident context presentation | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 8 verification | IN_PROGRESS |
+| 5 | Security, end-to-end, documentation, and Phase 8 verification | COMPLETE_VERIFIED |
 
 ## Phase 8 completion criteria
 
@@ -105,3 +105,17 @@ Developer-supplied output confirmed on 15 August 2026:
 Batch 5 defines cumulative security and end-to-end verification for historical
 retrieval, including tenant isolation, deterministic ordering, bounded output,
 explicit empty and ambiguous results, and human-review safety boundaries.
+## Batch 5 verification record
+
+Developer-supplied output confirmed on 15 August 2026:
+
+- Repository structure validation passed.
+- No unresolved implementation markers were found.
+- No generated dependency or report directories were tracked.
+- Git whitespace validation passed.
+- Java formatting, cumulative tests, analysis, coverage, `check`, and `bootJar` passed.
+- Frontend formatting, ESLint, fourteen frontend tests, and production build passed.
+- Docker Compose configuration validation passed.
+- Historical retrieval security, tenant isolation, bounded responses, provenance, and API boundaries were verified.
+- Synthetic retrieval scenarios covered authorised access, filtering, pagination, empty results, ambiguous matches, and cross-tenant rejection.
+- Phase 8 cumulative verification completed successfully.
