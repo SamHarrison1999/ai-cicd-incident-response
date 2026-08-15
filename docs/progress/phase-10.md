@@ -12,7 +12,7 @@ Provide attributable human review, bounded feedback, and final incident resoluti
 | 2 | Review persistence, versioning, and audit model | COMPLETE_VERIFIED |
 | 3 | Review API and authorisation boundaries | NOT_STARTED |
 | 4 | Review workspace and resolution presentation | NOT_STARTED |
-| 5 | Security, end-to-end, documentation, and Phase 10 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 10 verification | IN_PROGRESS |
 
 ## Phase 10 completion criteria
 
@@ -56,3 +56,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - Added the human review route, navigation entry, bounded review controls, and review history presentation.
 - Added edit, reject-reason, comment, and reviewed-version-backed resolution fields.
 - Kept remediation execution and provider controls outside the workspace.
+### Batch 5 implementation record
+
+- Added Phase 10 security, end-to-end, and final verification boundaries.
+- Added security contract coverage for rejection reasons and bounded resolutions.
+- Documented tenant isolation, immutable versions, safe responses, duplicate safety, and the non-remediation boundary.

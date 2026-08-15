@@ -140,3 +140,6 @@ remain optional; the deterministic offline path must remain safe and repeatable.
 ## Phase 10 review verification
 
 - Verify accept, edit, reject, tenant isolation, actor attribution, immutable versioning, bounded feedback, and resolution eligibility.
+## Phase 10 human review controls
+
+Review mutations require authenticated tenant membership, preserve immutable versions, require rejection reasons, bound comments and resolution text, and never execute remediation. Tests must reject cross-tenant references and responses containing secrets or raw evidence.
