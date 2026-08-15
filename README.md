@@ -164,3 +164,9 @@ The full release verification requires repository checks, Java tests with Postgr
 
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
+
+## Project status through Phase 10
+
+Phases 1-10 are now represented in the repository. The completed platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, and human review with immutable versions and governed resolutions.
+
+Phase 10 is the current phase: human review, feedback, and resolutions. Review actions are authenticated, tenant-scoped, auditable, bounded, and explicitly non-remediating. Use `scripts/verify-phase-3.ps1` through `scripts/verify-phase-10.ps1` for local cumulative verification.

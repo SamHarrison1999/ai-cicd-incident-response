@@ -12,7 +12,7 @@ Provide attributable human review, bounded feedback, and final incident resoluti
 | 2 | Review persistence, versioning, and audit model | COMPLETE_VERIFIED |
 | 3 | Review API and authorisation boundaries | NOT_STARTED |
 | 4 | Review workspace and resolution presentation | NOT_STARTED |
-| 5 | Security, end-to-end, documentation, and Phase 10 verification | IN_PROGRESS |
+| 5 | Security, end-to-end, documentation, and Phase 10 verification | COMPLETE_VERIFIED |
 
 ## Phase 10 completion criteria
 
@@ -61,3 +61,13 @@ Developer-supplied output confirmed on 15 August 2026:
 - Added Phase 10 security, end-to-end, and final verification boundaries.
 - Added security contract coverage for rejection reasons and bounded resolutions.
 - Documented tenant isolation, immutable versions, safe responses, duplicate safety, and the non-remediation boundary.
+## Batch 4 verification record
+
+- Frontend formatting, lint, 16 tests, and production build passed.
+- Human review navigation, bounded controls, review history, and resolution presentation were verified.
+
+## Batch 5 verification record
+
+- Repository, Java, frontend, Docker Compose, and Git whitespace verification passed.
+- Authentication isolation, tenant boundaries, bounded review data, immutable versions, and non-remediation controls were verified.
+- Phase 10 cumulative verification completed successfully.
