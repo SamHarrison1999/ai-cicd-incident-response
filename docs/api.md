@@ -331,3 +331,10 @@ Example response:
 ```
 
 Invalid filters, invalid time ranges, and malformed cursors return `TIMELINE_FILTER_INVALID`. The endpoint never returns raw provider payloads, supplied signatures, or signing material.
+## Historical retrieval
+
+`GET /api/v1/organisations/{organisationId}/projects/{projectId}/historical-retrieval`
+returns bounded, tenant-scoped historical context. Supported filters are
+`diagnosisCategory`, `provider`, `pipeline`, `environment`, `branch`,
+`commitSha`, `from`, `to`, and `q`. The response includes `items`, `nextCursor`,
+and `hasNext`; the cursor preserves deterministic occurred-time and ID ordering.
