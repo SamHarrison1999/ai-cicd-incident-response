@@ -137,3 +137,6 @@ remain optional; the deterministic offline path must remain safe and repeatable.
 ## Phase 9 close-out verification
 
 - Verify tenant isolation, prompt-injection exclusion, bounded responses, abstention, provider fallback, citation provenance, and human-review labelling.
+## Phase 10 review verification
+
+- Verify accept, edit, reject, tenant isolation, actor attribution, immutable versioning, bounded feedback, and resolution eligibility.

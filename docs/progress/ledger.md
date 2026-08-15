@@ -23,8 +23,8 @@ A phase cannot be `COMPLETE_VERIFIED` until Samuel provides or records the requi
 | 6 — Logs and evidence | COMPLETE_VERIFIED | Log fragments, search, citations, viewer | — |
 | 7 — Deterministic diagnosis | COMPLETE_VERIFIED | Redaction, injection checks, rules, tests | — |
 | 8 — Historical retrieval | COMPLETE_VERIFIED | Reviewed resolution store and similarity retrieval | — |
-| 9 — AI recommendations | IN_PROGRESS | Provider interface, structured output, citations, abstention | — |
-| 10 — Human review | NOT_STARTED | Accept/edit/reject and resolution workflow | — |
+| 9 - AI recommendations | COMPLETE_VERIFIED | Provider abstraction, evidence-grounded recommendations, and human-review safety | - |
+| 10 - Human review | IN_PROGRESS | Accept, edit, reject, feedback, and resolution workflow | - |
 | 11 — Evaluation | NOT_STARTED | Golden data, metrics, dashboard | — |
 | 12 — Observability and simulation | NOT_STARTED | Generator, logs, metrics, traces, dashboards | — |
 | 13 — Security hardening | NOT_STARTED | Threat model, limits, scans, adversarial tests | — |
@@ -50,3 +50,6 @@ Phase 9 is in progress. It introduces provider-neutral, evidence-grounded
 recommendations with bounded inputs and outputs, auditable provenance,
 confidence, abstention, and an explicit non-remediation boundary. The detailed
 batch status is maintained in `docs/progress/phase-9.md`.
+## Phase 10 current boundary
+
+Phase 10 is in progress. It introduces attributable human review, immutable generated content, bounded feedback, reviewed versions, and final resolution eligibility without executing remediation. The detailed batch status is maintained in `docs/progress/phase-10.md`.

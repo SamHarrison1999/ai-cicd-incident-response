@@ -4,9 +4,9 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 9 - provider abstraction and evidence-grounded AI recommendations
+**Current phase:** Phase 10 - human review, feedback, and resolutions
 
-Phases 0 through 7 are complete. The repository now contains a runnable Java
+Phases 0 through 9 are complete. The repository now contains a runnable Java
 control plane, Python intelligence service, React web application, PostgreSQL
 persistence, Docker Compose environment, continuous-integration quality gates,
 authentication, organisations, projects, tenant isolation, pipeline timelines,
@@ -22,7 +22,7 @@ abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped
 historical retrieval with deterministic ranking, filters, pagination, and
 incident context.
 
-Phase 9 begins provider abstraction and evidence-grounded AI recommendations:
+Phase 9 completed provider abstraction and evidence-grounded AI recommendations. Phase 10 now adds
 bounded recommendation requests, provider-neutral adapters, provenance,
 confidence, abstention, and human-review safety. Automatic remediation and
 production-changing actions remain outside this phase.
