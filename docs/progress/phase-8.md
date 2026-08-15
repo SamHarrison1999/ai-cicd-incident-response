@@ -17,7 +17,7 @@ provider integrations.
 | 1 | Historical retrieval contract, ranking, and tenant boundary | COMPLETE_VERIFIED |
 | 2 | Historical retrieval persistence and query service | COMPLETE_VERIFIED |
 | 3 | Historical retrieval API, filters, and pagination | COMPLETE_VERIFIED |
-| 4 | Retrieval workspace and incident context presentation | NOT_STARTED |
+| 4 | Retrieval workspace and incident context presentation | IN_PROGRESS |
 | 5 | Security, end-to-end, documentation, and Phase 8 verification | NOT_STARTED |
 
 ## Phase 8 completion criteria
@@ -84,3 +84,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - Java formatting and historical retrieval API tests passed.
 - Tenant-scoped retrieval filters, bounded responses, deterministic cursor pagination, and API contract behaviour were verified.
 - Phase 8 Batch 3 verification completed successfully.
+## Batch 4 implementation record
+
+Batch 4 adds a human-review retrieval workspace with tenant and filter inputs,
+bounded result cards, match explanations, provenance references, and explicit
+empty-result handling.
