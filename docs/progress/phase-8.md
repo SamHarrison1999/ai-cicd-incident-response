@@ -18,7 +18,7 @@ provider integrations.
 | 2 | Historical retrieval persistence and query service | COMPLETE_VERIFIED |
 | 3 | Historical retrieval API, filters, and pagination | COMPLETE_VERIFIED |
 | 4 | Retrieval workspace and incident context presentation | COMPLETE_VERIFIED |
-| 5 | Security, end-to-end, documentation, and Phase 8 verification | NOT_STARTED |
+| 5 | Security, end-to-end, documentation, and Phase 8 verification | IN_PROGRESS |
 
 ## Phase 8 completion criteria
 
@@ -100,3 +100,8 @@ Developer-supplied output confirmed on 15 August 2026:
 - Frontend formatting, ESLint, eight frontend test files, fourteen tests, and production build passed.
 - Historical retrieval navigation, filters, pagination, result selection, and incident-context presentation were verified.
 - Phase 8 Batch 4 verification completed successfully.
+## Batch 5 implementation record
+
+Batch 5 defines cumulative security and end-to-end verification for historical
+retrieval, including tenant isolation, deterministic ordering, bounded output,
+explicit empty and ambiguous results, and human-review safety boundaries.

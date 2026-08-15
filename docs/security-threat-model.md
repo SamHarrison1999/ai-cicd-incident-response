@@ -168,3 +168,8 @@ Evidence remains an authorised technical observation. It is not proof of causali
 ## Phase 7 diagnosis boundary
 
 Diagnosis consumes only sanitised, tenant-authorised evidence. Results are bounded suspected hypotheses; raw content, credentials, signatures, and remediation actions are excluded.
+## Phase 8 historical retrieval
+
+Historical retrieval is tenant-scoped, read-only, bounded, provenance-linked,
+and limited to sanitised metadata. Cross-tenant access, raw secret disclosure,
+causal claims, and autonomous remediation remain outside the boundary.
