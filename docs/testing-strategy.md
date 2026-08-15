@@ -134,3 +134,6 @@ assembly, schema validation, provenance completeness, citation authorization,
 confidence and abstention behaviour, provider failure fallback, prompt-injection
 resistance, and the non-executable recommendation boundary. External providers
 remain optional; the deterministic offline path must remain safe and repeatable.
+## Phase 9 close-out verification
+
+- Verify tenant isolation, prompt-injection exclusion, bounded responses, abstention, provider fallback, citation provenance, and human-review labelling.

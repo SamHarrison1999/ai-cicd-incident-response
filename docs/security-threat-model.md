@@ -185,3 +185,8 @@ causal claims, and autonomous remediation remain outside the boundary.
   abstention rather than an unsupported recommendation.
 - Cross-tenant evidence, secrets, signatures, raw payloads, and hidden policy
   instructions remain outside the provider boundary.
+## Phase 9 close-out controls
+
+- Recommendation providers receive only bounded, sanitised evidence bundles.
+- Provider failures use deterministic fallback or abstention and never execute remediation.
+- Recommendation responses and citations remain tenant scoped and provenance bound.
