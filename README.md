@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 13 - security hardening
+**Current phase:** Phase 14 - deployment, release, demo, and portfolio case study
 
 Phases 0 through 13 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, operational learning, and additive security hardening.
 
@@ -56,6 +56,10 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 13 abuse resistance](docs/phase-13-abuse-resistance.md)
 - [Phase 13 security verification](docs/phase-13-security-verification.md)
 - [Phase 13 final verification](docs/phase-13-final-verification.md)
+- [Phase 14 deployment and release](docs/phase-14-deployment-release-demo.md)
+- [Phase 14 demo evidence](docs/phase-14-demo-evidence.md)
+- [Phase 14 portfolio case study](docs/phase-14-portfolio-case-study.md)
+- [Phase 14 final verification](docs/phase-14-final-verification.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -282,3 +286,21 @@ security workspace checks pass:
 ```powershell
 .\scripts\verify-phase-13.ps1
 ```
+
+## Phase 14 local verification
+
+Run the documentation and Compose gate:
+
+~~~powershell
+.\scripts\verify-phase-14.ps1
+~~~
+
+Run the local stack and endpoint evidence gate:
+
+~~~powershell
+.\scripts\run-phase-14-demo.ps1 -Rebuild -OpenEndpoints
+.\scripts\verify-phase-14-demo.ps1
+~~~
+
+See the demo evidence checklist, the portfolio case study, and the final
+verification checklist in the docs directory.
