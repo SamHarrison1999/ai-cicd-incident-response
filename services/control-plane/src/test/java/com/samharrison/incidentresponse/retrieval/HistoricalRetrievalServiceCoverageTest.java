@@ -151,7 +151,8 @@ class HistoricalRetrievalServiceCoverageTest {
                     null,
                     null,
                     null,
-                    "invalid-cursor",
+                    null,
+            "invalid-cursor",
                     10))
         .isInstanceOf(com.samharrison.incidentresponse.tenancy.TenantAccessException.class)
         .extracting("status")
