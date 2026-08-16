@@ -122,7 +122,11 @@ tasks.jacocoTestCoverageVerification {
 tasks.register("jacocoCoverageSummary") {
     dependsOn(tasks.jacocoTestReport)
     doLast {
-        val report = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile
+        val report =
+            layout.buildDirectory
+                .file("reports/jacoco/test/jacocoTestReport.xml")
+                .get()
+                .asFile
         check(report.isFile) { "JaCoCo XML report was not generated: ${report.absolutePath}" }
         println("JaCoCo XML report generated: ${report.absolutePath}")
     }
