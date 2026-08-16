@@ -57,6 +57,9 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 13 security verification](docs/phase-13-security-verification.md)
 - [Phase 13 final verification](docs/phase-13-final-verification.md)
 - [Phase 14 deployment and release](docs/phase-14-deployment-release-demo.md)
+- [Phase 14 demo evidence](docs/phase-14-demo-evidence.md)
+- [Phase 14 portfolio case study](docs/phase-14-portfolio-case-study.md)
+- [Phase 14 final verification](docs/phase-14-final-verification.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -283,3 +286,21 @@ security workspace checks pass:
 ```powershell
 .\scripts\verify-phase-13.ps1
 ```
+
+## Phase 14 local verification
+
+Run the documentation and Compose gate:
+
+~~~powershell
+.\scripts\verify-phase-14.ps1
+~~~
+
+Run the local stack and endpoint evidence gate:
+
+~~~powershell
+.\scripts\run-phase-14-demo.ps1 -Rebuild -OpenEndpoints
+.\scripts\verify-phase-14-demo.ps1
+~~~
+
+See the demo evidence checklist, the portfolio case study, and the final
+verification checklist in the docs directory.

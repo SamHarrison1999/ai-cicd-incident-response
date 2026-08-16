@@ -1,36 +1,54 @@
-﻿# Phase 14: Deployment, release, demo, and portfolio case study
+# Phase 14: Deployment, release, demo, and portfolio case study
 
 Phase 14 packages the completed platform for reproducible local deployment,
 release evidence, a portfolio demonstration, and an honest case study.
 
 | Batch | Scope | Status |
 | --- | --- | --- |
-| 1 | Deployment and release contract and local runbook | IN_PROGRESS |
-| 2 | Demo workflow and screenshot evidence | NOT_STARTED |
-| 3 | Portfolio case study and close-out | NOT_STARTED |
+| 1 | Deployment contract and local runbook | COMPLETE_UNVERIFIED |
+| 2 | Demo workflow and screenshot evidence | COMPLETE_UNVERIFIED |
+| 3 | Portfolio case study and close-out | COMPLETE_UNVERIFIED |
 
-## Run the local demo
+The phase remains IN_PROGRESS until the commands in the final verification
+checklist have been run on the reviewed commit and their output recorded.
+
+## Local demonstration
 
 From the repository root:
 
-    Copy-Item .env.example .env -ErrorAction SilentlyContinue
-    docker compose config --quiet
-    docker compose build
-    docker compose up -d
-    .\scripts\verify-local-stack.ps1
-    Start-Process "http://localhost:3000"
+~~~powershell
+.\scripts\run-phase-14-demo.ps1 -Rebuild -OpenEndpoints
+~~~
 
-Or use:
+The script validates Compose configuration, builds the local images when
+requested, starts the stack, checks the health and system-status endpoints,
+and opens the web application, control-plane Swagger UI, and intelligence
+OpenAPI documentation.
 
-    .\scripts\run-phase-14-demo.ps1 -Rebuild -OpenEndpoints
+Use the individual commands when a step needs to be inspected:
 
-Suggested screenshots:
+~~~powershell
+Copy-Item .env.example .env -ErrorAction SilentlyContinue
+docker compose config --quiet
+docker compose build
+docker compose up -d
+.\scripts\verify-local-stack.ps1
+Start-Process "http://localhost:3000"
+Start-Process "http://localhost:8080/swagger-ui.html"
+Start-Process "http://localhost:8000/docs"
+~~~
 
-1. Authenticated workspace.
-2. Operational overview.
-3. Incident, pipeline, or evidence view.
-4. Diagnosis or recommendation view.
-5. Human-review state.
-6. Swagger UI and intelligence OpenAPI.
+## Screenshot evidence
 
-Remove secrets, tokens, private data, and local filesystem paths.
+The screenshot checklist and privacy rules are in Phase 14 demo evidence.
+The portfolio-facing case study is in Phase 14 portfolio case study.
+
+Capture only the application content. Crop browser chrome, taskbars, tokens,
+credentials, private data, database contents, and local filesystem paths before
+publishing any image.
+
+## Scope boundary
+
+This phase does not claim production readiness. It does not introduce cloud
+credentials, public image publishing, TLS termination, managed PostgreSQL,
+backup automation, Kubernetes production manifests, or autonomous remediation.
