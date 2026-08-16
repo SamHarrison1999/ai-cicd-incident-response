@@ -4,9 +4,9 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 12 - operational learning and trend intelligence
+**Current phase:** Phase 13 - security hardening
 
-Phases 0 through 12 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, and the initial operational-learning contract.
+Phases 0 through 13 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, operational learning, and additive security hardening.
 
 Phase 3 established secure event ingestion. Phase 4 added provider-neutral pipeline timelines. Phase 5 added deterministic incident correlation and the incident workspace. Phase 6 added bounded evidence persistence, redaction, search, linking, and the investigation viewer. Phase 7 added sanitisation, prompt-injection defence, deterministic diagnosis, bounded confidence, abstention, and a human-review diagnosis workspace. Phase 8 added tenant-scoped historical retrieval with deterministic ranking, filters, pagination, and incident context.
 
@@ -52,6 +52,10 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 10 review model](docs/phase-10-review-model.md)
 - [Phase 11 feedback model](docs/phase-11-feedback-model.md)
 - [Phase 12 learning model](docs/phase-12-learning-model.md)
+- [Phase 13 security model](docs/phase-13-security-model.md)
+- [Phase 13 abuse resistance](docs/phase-13-abuse-resistance.md)
+- [Phase 13 security verification](docs/phase-13-security-verification.md)
+- [Phase 13 final verification](docs/phase-13-final-verification.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -155,11 +159,13 @@ The full release verification requires repository checks, Java tests with Postgr
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
 
-## Project status through Phase 12
+## Project status through Phase 13
 
-Phases 1-12 are complete. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
+Phases 1-13 are complete. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, operational learning, and security hardening.
 
 Phase 12 established bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. They do not silently retrain providers, change production policy, or execute remediation.
+
+Phase 13 completed additive security hardening across transport, browser, credential, abuse-resistance, supply-chain, and adversarial-test boundaries. Security hardening does not introduce autonomous remediation or production-changing actions.
 
 ## Phase 3 local verification
 
@@ -222,4 +228,57 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\verify-phase-12.ps1
 ```
 
-Expected result: the Phase 12 operational-learning contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
+Expected result: operational-learning contracts, deterministic trend
+observation, bounded trend APIs, frontend checks, Docker Compose validation,
+and cumulative repository checks pass.
+
+## Phase 13 local verification
+
+```powershell
+.\scripts\verify-phase-13.ps1
+```
+
+Expected result: security-hardening contracts, transport and credential
+controls, adversarial tests, dependency and image checks, frontend checks,
+Docker Compose validation, and cumulative repository checks pass.
+
+## Strict coverage verification
+
+Phase 13 requires 100% coverage for the measured production application code.
+The backend gate covers JaCoCo instruction, line, branch, method, and class
+counters. The frontend gate covers Vitest statements, lines, functions, and
+branches. Generated files, type declarations, build output, and test files
+remain excluded from measurement.
+
+Run the coverage gate from PowerShell:
+
+```powershell
+.\scripts\verify-phase-13-coverage.ps1
+```
+
+The command is a release gate and must pass with every measured production
+path covered before a Phase 13 commit is accepted.
+
+## Phase 13 security workspace verification
+
+Run the dependency, image, secret-exclusion, container-user, and Compose
+security checks from PowerShell:
+
+```powershell
+.\scripts\verify-phase-13-security.ps1
+```
+
+For environments without Docker, skip only the Compose rendering step:
+
+```powershell
+.\scripts\verify-phase-13-security.ps1 -SkipDocker
+```
+
+## Phase 13 final verification
+
+Run the cumulative Phase 13 close-out gate after the strict coverage and
+security workspace checks pass:
+
+```powershell
+.\scripts\verify-phase-13.ps1
+```

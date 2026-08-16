@@ -27,6 +27,8 @@ class DeterministicTrendObservationServiceTest {
                     observation(organisation, project, "dependency", "2026-08-15T01:00:00Z"),
                     observation(organisation, project, "dependency", "2026-08-15T02:00:00Z"),
                     observation(organisation, project, "dependency", "2026-08-15T03:00:00Z"),
+                    observation(organisation, project, "dependency", "2026-08-14T23:59:59Z"),
+                    observation(organisation, project, "dependency", "2026-08-16T00:00:00Z"),
                     observation(UUID.randomUUID(), project, "dependency", "2026-08-15T04:00:00Z"),
                     observation(organisation, project, "other", "2026-08-15T05:00:00Z")));
     assertThat(trend.getSampleCount()).isEqualTo(3);

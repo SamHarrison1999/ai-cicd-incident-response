@@ -14,12 +14,27 @@ class RecommendationPersistenceTest {
     String summary = "x".repeat(2001);
     assertThatIllegalArgumentException()
         .isThrownBy(() -> recommendation(summary, RecommendationStatus.RECOMMENDED, null));
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                recommendation(
+                    "bounded", RecommendationStatus.RECOMMENDED, null, BigDecimal.valueOf(-0.1)));
   }
 
   @Test
   void requiresReasonWhenAbstained() {
     assertThatIllegalArgumentException()
         .isThrownBy(() -> recommendation("bounded", RecommendationStatus.ABSTAINED, null));
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                recommendation(
+                    "bounded", RecommendationStatus.RECOMMENDED, null, BigDecimal.valueOf(-0.1)));
+
+    Recommendation abstained =
+        recommendation("bounded", RecommendationStatus.ABSTAINED, "insufficient evidence");
+    org.assertj.core.api.Assertions.assertThat(abstained.getAbstentionReason())
+        .isEqualTo("insufficient evidence");
   }
 
   @Test
@@ -33,6 +48,11 @@ class RecommendationPersistenceTest {
 
   private static Recommendation recommendation(
       String summary, RecommendationStatus status, String reason) {
+    return recommendation(summary, status, reason, BigDecimal.valueOf(0.5));
+  }
+
+  private static Recommendation recommendation(
+      String summary, RecommendationStatus status, String reason, BigDecimal confidence) {
     return new Recommendation(
         UUID.randomUUID(),
         UUID.randomUUID(),
@@ -41,7 +61,7 @@ class RecommendationPersistenceTest {
         "category",
         summary,
         null,
-        BigDecimal.valueOf(0.5),
+        confidence,
         "bounded confidence",
         status,
         reason,

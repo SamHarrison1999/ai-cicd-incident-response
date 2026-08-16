@@ -65,6 +65,16 @@ class IncidentCorrelationEngineTest {
                 candidate(earlierId, organisationId, projectId, detectedAt, "commit-1", null)));
 
     assertThat(decision.selectedIncidentId()).isEqualTo(earlierId);
+
+    UUID firstId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+    UUID secondId = UUID.fromString("00000000-0000-0000-0000-000000000002");
+    CorrelationDecision sameTimeDecision =
+        engine.evaluate(
+            event,
+            List.of(
+                candidate(secondId, organisationId, projectId, detectedAt, "commit-1", null),
+                candidate(firstId, organisationId, projectId, detectedAt, "commit-1", null)));
+    assertThat(sameTimeDecision.selectedIncidentId()).isEqualTo(firstId);
   }
 
   @Test
@@ -99,6 +109,46 @@ class IncidentCorrelationEngineTest {
     assertThat(decision.eligible()).isFalse();
     assertThat(decision.selectedIncidentId()).isNull();
     assertThat(decision.consideredCandidates()).isEmpty();
+
+    CorrelationEvent failedEvent = newEvent(organisationId, projectId, "commit-1", "prod");
+    CorrelationDecision differentProjectDecision =
+        engine.evaluate(
+            failedEvent,
+            List.of(
+                candidate(
+                    UUID.randomUUID(),
+                    organisationId,
+                    UUID.randomUUID(),
+                    Instant.parse("2026-08-14T11:00:00Z"),
+                    "commit-1",
+                    "prod")));
+    assertThat(differentProjectDecision.consideredCandidates()).isEmpty();
+  }
+
+  @Test
+  void comparesCandidatesWithDifferentScoresBeforeTieBreakers() {
+    UUID organisationId = UUID.randomUUID();
+    UUID projectId = UUID.randomUUID();
+    CorrelationEvent event = newEvent(organisationId, projectId, "commit-1", "prod");
+    IncidentCorrelationCandidate lowerScore =
+        candidate(
+            UUID.randomUUID(),
+            organisationId,
+            projectId,
+            Instant.parse("2026-08-14T11:00:00Z"),
+            "different",
+            null);
+    IncidentCorrelationCandidate higherScore =
+        candidate(
+            UUID.randomUUID(),
+            organisationId,
+            projectId,
+            Instant.parse("2026-08-14T11:00:00Z"),
+            "commit-1",
+            null);
+
+    assertThat(engine.evaluate(event, List.of(lowerScore, higherScore)).selectedIncidentId())
+        .isEqualTo(higherScore.incidentId());
   }
 
   private static CorrelationEvent newEvent(

@@ -2,6 +2,7 @@ package com.samharrison.incidentresponse.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.samharrison.incidentresponse.security.SecurityHeaderWriter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,7 @@ public class SecurityConfiguration {
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
+        .headers(headers -> headers.addHeaderWriter(new SecurityHeaderWriter()))
         .sessionManagement(
             sessions -> sessions.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(

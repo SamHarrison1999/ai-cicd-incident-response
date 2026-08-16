@@ -207,3 +207,18 @@ Learning outputs are tenant-scoped, bounded, provenance-preserving, suppression-
 ## Phase 12 verification controls
 
 Verification covers tenant isolation, authenticated read access, deterministic ordering, bounded limits, opaque cursors, suppression-aware output, provenance references, and the exclusion of raw content, credentials, training controls, policy mutation, and remediation.
+## Phase 13 security-hardening controls
+
+Security hardening covers transport and browser controls, credential and secret handling, bounded request and rate-limit policy, dependency and image scanning, adversarial input, tenant-boundary attacks, and fail-closed error behaviour. Raw secrets, provider prompts, hidden policy instructions, and remediation actions remain excluded.
+## Phase 13 Batch 2 transport and credential controls
+
+Responses include explicit content-security, frame, MIME-sniffing, referrer, permissions, and secure-transport policies. Authentication failures are generic and bounded; passwords, tokens, and request credentials must never be echoed. HSTS applies only to secure requests so local HTTP tests do not create a false production guarantee.
+## Phase 13 Batch 3 abuse-resistance controls
+
+Bounded request models, replay-safe webhook handling, tenant-first authorization, secret redaction, prompt-injection removal, and deterministic abstention are verified as adversarial controls. Distributed rate limiting and network request shaping remain gateway responsibilities and are not claimed as application-local guarantees.
+## Phase 13 Batch 4 supply-chain controls
+
+Dependency metadata, lockfiles, secret exclusions, non-root container declarations, Compose rendering, dependency review, and CodeQL analysis are verified through a dedicated workspace and CI workflow. Generated scan output and credentials are excluded from source control.
+## Phase 13 Batch 5 close-out controls
+
+The final verifier requires all Phase 13 batch rows and the ledger row to be `COMPLETE_VERIFIED`, then runs repository, security workspace, strict backend/frontend coverage, and whitespace gates on the same commit.

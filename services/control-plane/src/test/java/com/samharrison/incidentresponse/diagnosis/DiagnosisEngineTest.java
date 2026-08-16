@@ -58,6 +58,18 @@ class DiagnosisEngineTest {
   }
 
   @Test
+  void ignoresLowerScoringDiagnosisCategoriesWhenSelectingTheWinner() {
+    DiagnosisResult result =
+        engine.diagnose(
+            List.of(
+                signal("timeout from upstream"),
+                signal("connection refused by dependency"),
+                signal("rollback")));
+
+    assertThat(result.category()).isEqualTo(DiagnosisCategory.DEPENDENCY_FAILURE_SUSPECTED);
+  }
+
+  @Test
   void rejectsMoreThanTheConfiguredSignalBound() {
     List<DiagnosisSignal> signals =
         java.util.stream.IntStream.range(0, DeterministicDiagnosisEngine.MAX_SIGNALS + 1)

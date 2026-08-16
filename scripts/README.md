@@ -10,4 +10,10 @@ Scripts must:
 - Print actionable validation output.
 - Support the documented Windows PowerShell workflow.
 
-Later phases will add bootstrap, verification, event-generation, and demonstration scripts.
+Phase verification scripts are cumulative. Phase 13 provides:
+
+- `verify-phase-13-security.ps1` for secret exclusions, dependency metadata,
+  non-root production containers, Compose rendering, and whitespace.
+- `verify-phase-13-coverage.ps1` for strict Java JaCoCo and frontend Vitest
+  coverage gates.
+- `verify-phase-13.ps1` for the complete Phase 13 close-out boundary.

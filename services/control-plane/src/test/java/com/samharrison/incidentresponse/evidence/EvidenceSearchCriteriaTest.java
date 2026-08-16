@@ -39,4 +39,17 @@ class EvidenceSearchCriteriaTest {
                     10))
         .isInstanceOf(IllegalArgumentException.class);
   }
+
+  @Test
+  void acceptsOneSidedTimeWindowsAndRejectsBothLimitBounds() {
+    Instant now = Instant.now();
+    assertThat(new EvidenceSearchCriteria(null, null, null, null, now, 1).occurredTo())
+        .isEqualTo(now);
+    assertThat(new EvidenceSearchCriteria(null, null, null, now, null, 100).occurredFrom())
+        .isEqualTo(now);
+    assertThatThrownBy(() -> new EvidenceSearchCriteria(null, null, null, null, null, 0))
+        .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new EvidenceSearchCriteria(null, null, null, null, null, 101))
+        .isInstanceOf(IllegalArgumentException.class);
+  }
 }

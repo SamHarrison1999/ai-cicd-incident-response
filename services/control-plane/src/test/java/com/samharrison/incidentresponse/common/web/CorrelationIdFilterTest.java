@@ -30,6 +30,11 @@ class CorrelationIdFilterTest {
     assertThatCodeIsUuid(result);
   }
 
+  @Test
+  void replacesOverlongCorrelationId() {
+    assertThatCodeIsUuid(filter.resolveCorrelationId("x".repeat(129)));
+  }
+
   private static void assertThatCodeIsUuid(String value) {
     assertThat(UUID.fromString(value)).isNotNull();
   }

@@ -152,3 +152,26 @@ Test tenant isolation, deterministic windowing and ordering, provenance referenc
 ## Phase 12 verification controls
 
 The cumulative gate verifies trend persistence, tenant-scoped API filters, deterministic cursors and comparisons, suppressed samples, workspace rendering, security contracts, frontend behaviour, Docker Compose configuration, and Git whitespace.
+## Phase 13 security-hardening verification
+
+Test security headers, cookie and token handling, bounded inputs, rate-limit decisions, fail-closed errors, dependency and image scanning, secret non-disclosure, cross-tenant rejection, malformed-input handling, prompt-injection carry-over, and unsafe-action attempts. Security tests are release gates.
+## Phase 13 Batch 2 transport and credential verification
+
+Unit tests cover every security-header branch, secure versus insecure transport, pre-existing header preservation, bounded authentication errors, and duplicate-account responses. Run the focused tests and `jacocoTestReport`, then inspect the generated report for uncovered security paths before proceeding.
+## Phase 13 coverage requirement
+
+Phase 13 requires 100% coverage of measured production application code. The
+backend JaCoCo gate covers instruction, line, branch, method, and class
+counters. The frontend Vitest gate covers statements, lines, functions, and
+branches. Generated files, type declarations, build output, and test sources
+are excluded. A coverage percentage is not accepted as evidence until the
+strict verifier passes.
+## Phase 13 Batch 3 adversarial verification
+
+The cumulative suite covers malformed and oversized values, invalid cursors and windows, duplicate delivery identifiers, cross-tenant references, secret and signature redaction, prompt-injection carry-over, generic credential errors, and the explicit absence of remediation side effects.
+## Phase 13 Batch 4 security workspace verification
+
+The local security verifier checks repository secret exclusions, dependency metadata and lockfiles, production container user declarations, Compose rendering, and whitespace. CI adds dependency review and CodeQL analysis for Java, Python, and TypeScript.
+## Phase 13 Batch 5 close-out verification
+
+The final verifier requires all Phase 13 batches to be `COMPLETE_VERIFIED` before running the repository, security workspace, backend JaCoCo, frontend Vitest, and whitespace gates.
