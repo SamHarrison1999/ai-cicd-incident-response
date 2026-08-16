@@ -64,7 +64,9 @@ class HistoricalRetrievalServiceCoverageTest {
     when(record.getMatchExplanation()).thenReturn("Same provider and project");
     when(record.getProvenanceReference()).thenReturn("evidence:e-1");
     when(queryService.search(eq(organisationId), eq(projectId), any(), eq(null), eq(null)))
-        .thenReturn(new SliceImpl<>(List.of(record), org.springframework.data.domain.PageRequest.of(0, 10), true));
+        .thenReturn(
+            new SliceImpl<>(
+                List.of(record), org.springframework.data.domain.PageRequest.of(0, 10), true));
 
     HistoricalRetrievalService.HistoricalRetrievalPage page =
         service.search(
@@ -152,7 +154,7 @@ class HistoricalRetrievalServiceCoverageTest {
                     null,
                     null,
                     null,
-            "invalid-cursor",
+                    "invalid-cursor",
                     10))
         .isInstanceOf(com.samharrison.incidentresponse.tenancy.TenantAccessException.class)
         .extracting("status")

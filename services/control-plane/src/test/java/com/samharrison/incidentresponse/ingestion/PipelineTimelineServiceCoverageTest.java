@@ -67,7 +67,19 @@ class PipelineTimelineServiceCoverageTest {
     when(event.getReceivedAt()).thenReturn(receivedAt);
     when(event.getEvidenceSummary()).thenReturn("failure");
     when(repository.searchTimeline(
-            eq(projectId), eq(organisationId), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(PageRequest.class)))
+            eq(projectId),
+            eq(organisationId),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(PageRequest.class)))
         .thenReturn(new SliceImpl<>(List.of(event), PageRequest.of(0, 10), true));
 
     PipelineTimelineService.TimelinePage page =
@@ -95,19 +107,71 @@ class PipelineTimelineServiceCoverageTest {
     when(projectRepository.findByIdAndOrganisationId(projectId, organisationId))
         .thenReturn(Optional.empty());
     assertThatThrownBy(
-            () -> service.list(userId, organisationId, projectId, null, null, null, null, null, null, null, null, 10))
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    10))
         .isInstanceOf(RuntimeException.class);
 
     when(projectRepository.findByIdAndOrganisationId(projectId, organisationId))
         .thenReturn(Optional.of(mock(Project.class)));
     assertThatThrownBy(
-            () -> service.list(userId, organisationId, projectId, "unknown", null, null, null, null, null, null, null, 10))
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    "unknown",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    10))
         .isInstanceOf(RuntimeException.class);
     assertThatThrownBy(
-            () -> service.list(userId, organisationId, projectId, null, null, null, null, null, "bad", null, null, 10))
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "bad",
+                    null,
+                    null,
+                    10))
         .isInstanceOf(RuntimeException.class);
     assertThatThrownBy(
-            () -> service.list(userId, organisationId, projectId, null, null, null, null, null, null, null, null, 0))
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    0))
         .isInstanceOf(RuntimeException.class);
   }
 }
