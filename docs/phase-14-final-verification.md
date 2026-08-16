@@ -29,14 +29,14 @@ control-plane, and intelligence-service endpoints. For a clean demonstration:
 
 ## Review checklist
 
-- [ ] Phase 13 checks remain green on the reviewed base commit.
-- [ ] Compose configuration, image builds, startup ordering, and health checks pass.
-- [ ] The screenshot sequence in docs/phase-14-demo-evidence.md is complete.
-- [ ] Published screenshots contain no credentials, tokens, private data, or local paths.
-- [ ] The portfolio project link points to this repository and the overview image is current.
-- [ ] The case study states the local-demo and non-production limitations.
-- [ ] git diff --check is clean.
-- [ ] The pull request checks are green before merge.
+- [x] Phase 13 checks remain green on the reviewed base commit.
+- [x] Compose configuration, image builds, startup ordering, and health checks pass.
+- [x] The screenshot sequence in docs/phase-14-demo-evidence.md is complete.
+- [x] Published screenshots contain no credentials, tokens, private data, or local paths.
+- [x] The portfolio project link points to this repository and the overview image is current.
+- [x] The case study states the local-demo and non-production limitations.
+- [x] git diff --check is clean.
+- [x] The pull request checks are green before merge.
 
 ## Release marker
 

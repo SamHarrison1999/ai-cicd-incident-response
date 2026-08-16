@@ -5,9 +5,9 @@ release evidence, a portfolio demonstration, and an honest case study.
 
 | Batch | Scope | Status |
 | --- | --- | --- |
-| 1 | Deployment contract and local runbook | COMPLETE_UNVERIFIED |
-| 2 | Demo workflow and screenshot evidence | COMPLETE_UNVERIFIED |
-| 3 | Portfolio case study and close-out | COMPLETE_UNVERIFIED |
+| 1 | Deployment contract and local runbook | COMPLETE_VERIFIED |
+| 2 | Demo workflow and screenshot evidence | COMPLETE_VERIFIED |
+| 3 | Portfolio case study and close-out | COMPLETE_VERIFIED |
 
 The phase remains IN_PROGRESS until the commands in the final verification
 checklist have been run on the reviewed commit and their output recorded.

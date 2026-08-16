@@ -28,7 +28,7 @@ A phase cannot be `COMPLETE_VERIFIED` until Samuel provides or records the requi
 | 11 — Feedback governance and learning signals | COMPLETE_VERIFIED | Golden data, metrics, dashboard | — |
 | 12 — Operational learning and trend intelligence | COMPLETE_VERIFIED | Generator, logs, metrics, traces, dashboards | — |
 | 13 — Security hardening | COMPLETE_VERIFIED | Threat model, limits, scans, adversarial tests | — |
-| 14 — Deployment and release | IN_PROGRESS | Docker Compose runbook, demo evidence, portfolio case study | docs/phase-14-final-verification.md |
+| 14 — Deployment and release | COMPLETE_VERIFIED | Docker Compose runbook, demo evidence, portfolio case study | docs/phase-14-final-verification.md |
 
 ## Phase 0 decisions
 
