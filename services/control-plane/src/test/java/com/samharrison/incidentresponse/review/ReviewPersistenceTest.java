@@ -57,5 +57,44 @@ class ReviewPersistenceTest {
                     "resolution",
                     UUID.randomUUID(),
                     Instant.now()));
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                new IncidentResolution(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    "",
+                    UUID.randomUUID(),
+                    Instant.now()));
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                new IncidentResolution(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    null,
+                    UUID.randomUUID(),
+                    Instant.now()));
+    assertThatIllegalArgumentException()
+        .isThrownBy(
+            () ->
+                new IncidentResolution(
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    UUID.randomUUID(),
+                    "x".repeat(2001),
+                    UUID.randomUUID(),
+                    Instant.now()));
   }
 }

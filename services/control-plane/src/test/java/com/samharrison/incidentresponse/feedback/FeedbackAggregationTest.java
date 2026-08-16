@@ -35,11 +35,29 @@ class FeedbackAggregationTest {
                 "v1",
                 Instant.parse("2026-08-15T03:00:00Z")),
             signal(
+                organisation,
+                project,
+                FeedbackOutcome.RESOLVED,
+                "v1",
+                Instant.parse("2026-08-14T23:59:59Z")),
+            signal(
+                organisation,
+                project,
+                FeedbackOutcome.RESOLVED,
+                "v1",
+                Instant.parse("2026-08-16T00:00:00Z")),
+            signal(
                 UUID.randomUUID(),
                 project,
                 FeedbackOutcome.RESOLVED,
                 "v1",
-                Instant.parse("2026-08-15T04:00:00Z")));
+                Instant.parse("2026-08-15T04:00:00Z")),
+            signal(
+                organisation,
+                UUID.randomUUID(),
+                FeedbackOutcome.ACCEPTED,
+                "v1",
+                Instant.parse("2026-08-15T05:00:00Z")));
     FeedbackAggregate aggregate =
         new DeterministicFeedbackAggregationService()
             .aggregate(organisation, project, "v1", start, end, signals);

@@ -160,4 +160,61 @@ class HistoricalRetrievalServiceCoverageTest {
         .extracting("status")
         .isEqualTo(HttpStatus.BAD_REQUEST);
   }
+
+  @Test
+  void returnsAnEmptyPageWithoutBuildingACursor() {
+    when(queryService.search(eq(organisationId), eq(projectId), any(), eq(null), eq(null)))
+        .thenReturn(
+            new SliceImpl<>(
+                List.of(), org.springframework.data.domain.PageRequest.of(0, 10), true));
+
+    HistoricalRetrievalService.HistoricalRetrievalPage page =
+        service.search(
+            userId,
+            organisationId,
+            projectId,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            10);
+
+    assertThat(page.items()).isEmpty();
+    assertThat(page.nextCursor()).isNull();
+    assertThat(page.hasNext()).isTrue();
+  }
+
+  @Test
+  void decodesCursorAndPassesItsPositionToTheQuery() {
+    UUID recordId = UUID.randomUUID();
+    Instant occurredAt = Instant.parse("2026-08-16T10:00:00Z");
+    HistoricalRetrievalCursor cursor = new HistoricalRetrievalCursor(occurredAt, recordId);
+    when(queryService.search(
+            eq(organisationId), eq(projectId), any(), eq(occurredAt), eq(recordId)))
+        .thenReturn(
+            new SliceImpl<>(
+                List.of(), org.springframework.data.domain.PageRequest.of(0, 10), false));
+
+    service.search(
+        userId,
+        organisationId,
+        projectId,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        cursor.encode(),
+        10);
+  }
 }

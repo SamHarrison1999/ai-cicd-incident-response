@@ -170,5 +170,30 @@ class EvidenceBundleAssemblerCoverageTest {
             () -> assembler.assemble(organisationId, projectId, null, List.of(historical.getId())))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessage("historical record is outside the tenant scope");
+
+    HistoricalRetrievalRecord wrongProject =
+        new HistoricalRetrievalRecord(
+            historical.getId(),
+            organisationId,
+            UUID.randomUUID(),
+            historical.getIncidentId(),
+            HistoricalSourceKind.INCIDENT,
+            historical.getSourceId(),
+            NOW,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "Summary",
+            "Explanation",
+            "provenance",
+            NOW);
+    when(retrievalRepository.findById(historical.getId())).thenReturn(Optional.of(wrongProject));
+    assertThatThrownBy(
+            () -> assembler.assemble(organisationId, projectId, null, List.of(historical.getId())))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage("historical record is outside the tenant scope");
   }
 }

@@ -100,6 +100,93 @@ class PipelineTimelineServiceCoverageTest {
     assertThat(page.items()).hasSize(1);
     assertThat(page.items().getFirst().pipelineRunId()).isNotNull();
     assertThat(page.nextCursor()).isNotBlank();
+
+    String cursor = new TimelineCursor(occurredAt, receivedAt, eventId).encode();
+    assertThat(
+            service.list(
+                userId,
+                organisationId,
+                projectId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                cursor,
+                10))
+        .isNotNull();
+
+    assertThat(
+            service.list(
+                userId,
+                organisationId,
+                projectId,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "2026-08-15T00:00:00Z",
+                null,
+                null,
+                10))
+        .isNotNull();
+
+    when(event.getPipelineRun()).thenReturn(null);
+    assertThat(
+            service
+                .list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    10)
+                .items()
+                .getFirst()
+                .pipelineRunId())
+        .isNull();
+
+    when(repository.searchTimeline(
+            eq(projectId),
+            eq(organisationId),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(),
+            any(PageRequest.class)))
+        .thenReturn(new SliceImpl<>(List.of(), PageRequest.of(0, 10), true));
+    assertThat(
+            service
+                .list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    10)
+                .nextCursor())
+        .isNull();
   }
 
   @Test
@@ -122,9 +209,24 @@ class PipelineTimelineServiceCoverageTest {
                     null,
                     10))
         .isInstanceOf(RuntimeException.class);
-
     when(projectRepository.findByIdAndOrganisationId(projectId, organisationId))
         .thenReturn(Optional.of(mock(Project.class)));
+    assertThatThrownBy(
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "not-a-valid-cursor",
+                    10))
+        .isInstanceOf(RuntimeException.class);
     assertThatThrownBy(
             () ->
                 service.list(
@@ -172,6 +274,38 @@ class PipelineTimelineServiceCoverageTest {
                     null,
                     null,
                     0))
+        .isInstanceOf(RuntimeException.class);
+    assertThatThrownBy(
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    101))
+        .isInstanceOf(RuntimeException.class);
+    assertThatThrownBy(
+            () ->
+                service.list(
+                    userId,
+                    organisationId,
+                    projectId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "2026-08-17T00:00:00Z",
+                    "2026-08-16T00:00:00Z",
+                    null,
+                    10))
         .isInstanceOf(RuntimeException.class);
   }
 }

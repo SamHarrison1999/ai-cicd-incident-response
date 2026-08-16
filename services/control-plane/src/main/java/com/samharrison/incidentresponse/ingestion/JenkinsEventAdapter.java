@@ -30,7 +30,7 @@ class JenkinsEventAdapter implements ProviderEventAdapter {
     }
 
     String result = firstText(build, "result", "status");
-    boolean completed = result != null && !result.isBlank();
+    boolean completed = result != null;
     PipelineRunStatus pipelineStatus =
         completed ? completedStatus(result) : PipelineRunStatus.RUNNING;
     NormalisedEventType eventType =
