@@ -207,8 +207,12 @@ public final class ProductionSurfaceCoverageSupport {
   @SuppressWarnings({"unchecked", "rawtypes"})
   private static Object value(Type genericType, Class<?> type, String name, int variant) {
     boolean boundary = variant == 1;
-    if (type == Authentication.class) return authenticated();
-    if (type == Jwt.class) return jwt();
+    if (type == Authentication.class) {
+        return authenticated();
+    }
+    if (type == Jwt.class) {
+        return jwt();
+    }
     if (boundary
         && !type.isPrimitive()
         && type != Optional.class
@@ -219,24 +223,48 @@ public final class ProductionSurfaceCoverageSupport {
       return null;
     }
     if (type == String.class) {
-      if (variant == 1) return null;
-      if (variant == 2) return "";
-      if (variant == 3) return "SUCCESS";
-      if (variant == 4) return "FAILURE";
-      if (variant == 5) return "ABORTED";
-      if (variant == 6) return "NOT_BUILT";
-      if (variant == 7) return "queued";
-      if (variant == 8) return "running";
-      if (variant == 9) return "completed";
+      if (variant == 1) {
+          return null;
+      }
+      if (variant == 2) {
+          return "";
+      }
+      if (variant == 3) {
+          return "SUCCESS";
+      }
+      if (variant == 4) {
+          return "FAILURE";
+      }
+      if (variant == 5) {
+          return "ABORTED";
+      }
+      if (variant == 6) {
+          return "NOT_BUILT";
+      }
+      if (variant == 7) {
+          return "queued";
+      }
+      if (variant == 8) {
+          return "running";
+      }
+      if (variant == 9) {
+          return "completed";
+      }
       return name.toLowerCase().contains("email")
           ? "coverage@example.test"
           : name.toLowerCase().contains("json") || name.toLowerCase().contains("payload")
               ? "{}"
               : "coverage-value";
     }
-    if (type == UUID.class) return ID;
-    if (type == Instant.class) return NOW;
-    if (type == OffsetDateTime.class) return OFFSET_NOW;
+    if (type == UUID.class) {
+        return ID;
+    }
+    if (type == Instant.class) {
+        return NOW;
+    }
+    if (type == OffsetDateTime.class) {
+        return OFFSET_NOW;
+    }
     if (type == byte[].class) {
       return boundary ? new byte[0] : "{}".getBytes(java.nio.charset.StandardCharsets.UTF_8);
     }
@@ -244,14 +272,30 @@ public final class ProductionSurfaceCoverageSupport {
       return new ByteArrayInputStream(
           boundary ? new byte[0] : "{}".getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
-    if (type == boolean.class || type == Boolean.class) return !boundary;
-    if (type == int.class || type == Integer.class) return variant == 1 ? 0 : variant >= 2 ? 2 : 1;
-    if (type == long.class || type == Long.class) return boundary ? 0L : 1L;
-    if (type == double.class || type == Double.class) return boundary ? 0d : 1d;
-    if (type == float.class || type == Float.class) return boundary ? 0f : 1f;
-    if (type == short.class || type == Short.class) return (short) (boundary ? 0 : 1);
-    if (type == byte.class || type == Byte.class) return (byte) (boundary ? 0 : 1);
-    if (type == char.class || type == Character.class) return boundary ? '\0' : 'c';
+    if (type == boolean.class || type == Boolean.class) {
+        return !boundary;
+    }
+    if (type == int.class || type == Integer.class) {
+        return variant == 1 ? 0 : variant >= 2 ? 2 : 1;
+    }
+    if (type == long.class || type == Long.class) {
+        return boundary ? 0L : 1L;
+    }
+    if (type == double.class || type == Double.class) {
+        return boundary ? 0d : 1d;
+    }
+    if (type == float.class || type == Float.class) {
+        return boundary ? 0f : 1f;
+    }
+    if (type == short.class || type == Short.class) {
+        return (short) (boundary ? 0 : 1);
+    }
+    if (type == byte.class || type == Byte.class) {
+        return (byte) (boundary ? 0 : 1);
+    }
+    if (type == char.class || type == Character.class) {
+        return boundary ? '\0' : 'c';
+    }
     if (type == Optional.class) {
       return boundary
           ? Optional.empty()
@@ -273,7 +317,9 @@ public final class ProductionSurfaceCoverageSupport {
       Object[] constants = type.getEnumConstants();
       return constants.length == 0 ? null : constants[Math.min(variant, constants.length - 1)];
     }
-    if (type == Object.class) return "coverage-value";
+    if (type == Object.class) {
+        return "coverage-value";
+    }
     try {
       return smartMock(type);
     } catch (RuntimeException ignored) {
@@ -285,21 +331,51 @@ public final class ProductionSurfaceCoverageSupport {
     Method method = invocation.getMethod();
     Class<?> type = method.getReturnType();
     String name = method.getName().toLowerCase();
-    if (type == void.class) return null;
-    if (type == boolean.class || type == Boolean.class) return true;
-    if (type == int.class || type == Integer.class) return 1;
-    if (type == long.class || type == Long.class) return 1L;
-    if (type == double.class || type == Double.class) return 1d;
-    if (type == float.class || type == Float.class) return 1f;
-    if (type == short.class || type == Short.class) return (short) 1;
-    if (type == byte.class || type == Byte.class) return (byte) 1;
-    if (type == char.class || type == Character.class) return 'c';
-    if (type == String.class) return name.contains("subject") ? ID.toString() : "coverage-value";
-    if (type == UUID.class) return ID;
-    if (type == Instant.class) return NOW;
-    if (type == OffsetDateTime.class) return OFFSET_NOW;
-    if (type == Authentication.class) return authenticated();
-    if (type == Jwt.class) return jwt();
+    if (type == void.class) {
+        return null;
+    }
+    if (type == boolean.class || type == Boolean.class) {
+        return true;
+    }
+    if (type == int.class || type == Integer.class) {
+        return 1;
+    }
+    if (type == long.class || type == Long.class) {
+        return 1L;
+    }
+    if (type == double.class || type == Double.class) {
+        return 1d;
+    }
+    if (type == float.class || type == Float.class) {
+        return 1f;
+    }
+    if (type == short.class || type == Short.class) {
+        return (short) 1;
+    }
+    if (type == byte.class || type == Byte.class) {
+        return (byte) 1;
+    }
+    if (type == char.class || type == Character.class) {
+        return 'c';
+    }
+    if (type == String.class) {
+        return name.contains("subject") ? ID.toString() : "coverage-value";
+    }
+    if (type == UUID.class) {
+        return ID;
+    }
+    if (type == Instant.class) {
+        return NOW;
+    }
+    if (type == OffsetDateTime.class) {
+        return OFFSET_NOW;
+    }
+    if (type == Authentication.class) {
+        return authenticated();
+    }
+    if (type == Jwt.class) {
+        return jwt();
+    }
     if (type.isEnum()) {
       Object[] constants = type.getEnumConstants();
       return constants.length == 0 ? null : constants[0];
@@ -313,7 +389,9 @@ public final class ProductionSurfaceCoverageSupport {
     if (Set.class.isAssignableFrom(type)) {
       return Set.of(objectForType(typeArgument(method.getGenericReturnType())));
     }
-    if (Map.class.isAssignableFrom(type)) return new HashMap<>();
+    if (Map.class.isAssignableFrom(type)) {
+        return new HashMap<>();
+    }
     if (Stream.class.isAssignableFrom(type)) {
       return Stream.of(objectForType(typeArgument(method.getGenericReturnType())));
     }
@@ -336,20 +414,40 @@ public final class ProductionSurfaceCoverageSupport {
 
   private static Object objectForType(Type type) {
     Class<?> raw = rawClass(type);
-    if (raw == String.class) return "coverage-value";
-    if (raw == UUID.class) return ID;
-    if (raw == Instant.class) return NOW;
-    if (raw == OffsetDateTime.class) return OFFSET_NOW;
-    if (raw == int.class || raw == Integer.class) return 1;
-    if (raw == long.class || raw == Long.class) return 1L;
-    if (raw == boolean.class || raw == Boolean.class) return true;
-    if (raw == Authentication.class) return authenticated();
-    if (raw == Jwt.class) return jwt();
+    if (raw == String.class) {
+        return "coverage-value";
+    }
+    if (raw == UUID.class) {
+        return ID;
+    }
+    if (raw == Instant.class) {
+        return NOW;
+    }
+    if (raw == OffsetDateTime.class) {
+        return OFFSET_NOW;
+    }
+    if (raw == int.class || raw == Integer.class) {
+        return 1;
+    }
+    if (raw == long.class || raw == Long.class) {
+        return 1L;
+    }
+    if (raw == boolean.class || raw == Boolean.class) {
+        return true;
+    }
+    if (raw == Authentication.class) {
+        return authenticated();
+    }
+    if (raw == Jwt.class) {
+        return jwt();
+    }
     if (raw.isEnum()) {
       Object[] constants = raw.getEnumConstants();
       return constants.length == 0 ? null : constants[0];
     }
-    if (raw == Object.class) return "coverage-value";
+    if (raw == Object.class) {
+        return "coverage-value";
+    }
     try {
       return smartMock(raw);
     } catch (RuntimeException ignored) {
@@ -358,7 +456,9 @@ public final class ProductionSurfaceCoverageSupport {
   }
 
   private static Class<?> rawClass(Type type) {
-    if (type instanceof Class<?> clazz) return clazz;
+    if (type instanceof Class<?> clazz) {
+        return clazz;
+    }
     if (type instanceof ParameterizedType parameterizedType) {
       return rawClass(parameterizedType.getRawType());
     }
