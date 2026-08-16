@@ -29,7 +29,14 @@ export default defineConfig({
             provider: "v8",
             reporter: ["text", "html", "lcov"],
             include: ["src/**/*.{ts,tsx}"],
-            exclude: ["src/main.tsx", "src/vite-env.d.ts"],
+            all: true,
+            exclude: ["src/vite-env.d.ts"],
+            thresholds: {
+                branches: 100,
+                functions: 100,
+                lines: 100,
+                statements: 100,
+            },
         },
     },
 });

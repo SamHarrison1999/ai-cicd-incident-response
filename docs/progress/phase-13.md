@@ -6,7 +6,7 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 | --- | --- | --- |
 | 1 | Security-hardening contract, threat model, and verification boundary | IN_PROGRESS |
 | 2 | Transport, browser, credential, and secret hardening | IN_PROGRESS |
-| 3 | Abuse resistance, request limits, and adversarial tests | NOT_STARTED |
+| 3 | Abuse resistance, request limits, adversarial tests, and strict coverage | IN_PROGRESS |
 | 4 | Dependency, image, and security verification workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 13 verification | NOT_STARTED |
 
@@ -23,3 +23,13 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 - HSTS is emitted only for secure requests and earlier response headers are preserved.
 - Authentication error responses do not disclose credentials, tokens, or raw email values.
 - Security-focused tests include cumulative JaCoCo reporting to expose uncovered branches before close-out.
+
+### Coverage implementation record
+
+- Strict backend and frontend coverage targets are now documented and wired to
+  a dedicated verifier.
+- The strict gate remains incomplete until meaningful tests cover every
+  measured production path; no Phase 13 completion claim is made before both
+  backend and frontend gates pass.
+
+- Strict backend and frontend production-code coverage is targeted at 100% before Phase 13 close-out.

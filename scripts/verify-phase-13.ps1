@@ -12,13 +12,17 @@ $required = @(
   "docs\progress\phase-13.md",
   "docs\security-threat-model.md",
   "docs\testing-strategy.md",
+  "docs\adr\0062-global-coverage-boundary.md",
+  "docs\phase-13-coverage.md",
+  "docs\testing-strategy.md",
+  "scripts\verify-phase-13-coverage.ps1",
   "scripts\verify-phase-13.ps1"
 )
 foreach ($relative in $required) {
   if (-not (Test-Path (Join-Path $repoRoot $relative))) { throw "Required Phase 13 file is missing: $relative" }
 }
 $progress = [System.IO.File]::ReadAllText((Join-Path $repoRoot "docs\progress\phase-13.md"))
-foreach ($requiredText in @("Security-hardening contract", "transport", "browser", "credential", "adversarial", "supply-chain", "fail closed")) {
+foreach ($requiredText in @("Security-hardening contract", "transport", "browser", "credential", "adversarial", "supply-chain", "fail closed", "strict coverage")) {
   if (-not $progress.Contains($requiredText)) { throw "Phase 13 content is missing: $requiredText" }
 }
 $readme = [System.IO.File]::ReadAllText((Join-Path $repoRoot "README.md"))

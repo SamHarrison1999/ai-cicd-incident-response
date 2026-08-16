@@ -158,3 +158,11 @@ Test security headers, cookie and token handling, bounded inputs, rate-limit dec
 ## Phase 13 Batch 2 transport and credential verification
 
 Unit tests cover every security-header branch, secure versus insecure transport, pre-existing header preservation, bounded authentication errors, and duplicate-account responses. Run the focused tests and `jacocoTestReport`, then inspect the generated report for uncovered security paths before proceeding.
+## Phase 13 coverage requirement
+
+Phase 13 requires 100% coverage of measured production application code. The
+backend JaCoCo gate covers instruction, line, branch, method, and class
+counters. The frontend Vitest gate covers statements, lines, functions, and
+branches. Generated files, type declarations, build output, and test sources
+are excluded. A coverage percentage is not accepted as evidence until the
+strict verifier passes.

@@ -225,12 +225,34 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\verify-phase-12.ps1
 ```
 
-Expected result: the Phase 12 operational-learning contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
+Expected result: operational-learning contracts, deterministic trend
+observation, bounded trend APIs, frontend checks, Docker Compose validation,
+and cumulative repository checks pass.
+
 ## Phase 13 local verification
 
 ```powershell
-Set-ExecutionPolicy -Scope Process Bypass
 .\scripts\verify-phase-13.ps1
 ```
 
-Expected result: the Phase 13 security-hardening contract and all cumulative repository, Java, frontend, Docker Compose, dependency, and adversarial-security checks pass.
+Expected result: security-hardening contracts, transport and credential
+controls, adversarial tests, dependency and image checks, frontend checks,
+Docker Compose validation, and cumulative repository checks pass.
+
+## Strict coverage verification
+
+Phase 13 requires 100% coverage for the measured production application code.
+The backend gate covers JaCoCo instruction, line, branch, method, and class
+counters. The frontend gate covers Vitest statements, lines, functions, and
+branches. Generated files, type declarations, build output, and test files
+remain excluded from measurement.
+
+Run the coverage gate from PowerShell:
+
+```powershell
+.\scripts\verify-phase-13-coverage.ps1
+```
+
+The command intentionally fails until every uncovered production path has a
+meaningful test. Do not record Phase 13 as complete until this command and the
+cumulative Phase 13 verifier both pass.

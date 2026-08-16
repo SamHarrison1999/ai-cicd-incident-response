@@ -85,6 +85,49 @@ tasks.jacocoTestReport {
     }
 }
 
+tasks.jacocoTestCoverageVerification {
+    dependsOn(tasks.test)
+
+    violationRules {
+        rule {
+            limit {
+                counter = "INSTRUCTION"
+                value = "COVEREDRATIO"
+                minimum = BigDecimal("1.0")
+            }
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = BigDecimal("1.0")
+            }
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = BigDecimal("1.0")
+            }
+            limit {
+                counter = "METHOD"
+                value = "COVEREDRATIO"
+                minimum = BigDecimal("1.0")
+            }
+            limit {
+                counter = "CLASS"
+                value = "COVEREDRATIO"
+                minimum = BigDecimal("1.0")
+            }
+        }
+    }
+}
+
+tasks.register("jacocoCoverageSummary") {
+    dependsOn(tasks.jacocoTestReport)
+    doLast {
+        val report = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml").get().asFile
+        check(report.isFile) { "JaCoCo XML report was not generated: ${report.absolutePath}" }
+        println("JaCoCo XML report generated: ${report.absolutePath}")
+    }
+}
+
 checkstyle {
     toolVersion = "13.2.0"
     configFile = file("config/checkstyle/checkstyle.xml")
@@ -115,6 +158,7 @@ spotless {
 
 tasks.check {
     dependsOn(tasks.spotlessCheck)
+    dependsOn(tasks.jacocoTestCoverageVerification)
 }
 
 springBoot {
