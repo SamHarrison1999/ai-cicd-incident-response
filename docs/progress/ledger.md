@@ -27,8 +27,8 @@ A phase cannot be `COMPLETE_VERIFIED` until Samuel provides or records the requi
 | 10 - Human review | COMPLETE_VERIFIED | Accept, edit, reject, feedback, and resolution workflow | - |
 | 11 — Feedback governance and learning signals | COMPLETE_VERIFIED | Golden data, metrics, dashboard | — |
 | 12 — Operational learning and trend intelligence | COMPLETE_VERIFIED | Generator, logs, metrics, traces, dashboards | — |
-| 13 — Security hardening | IN_PROGRESS | Threat model, limits, scans, adversarial tests | — |
-| 14 — Deployment and release | NOT_STARTED | Images, deployment, demo, case study | — |
+| 13 — Security hardening | COMPLETE_VERIFIED | Threat model, limits, scans, adversarial tests | — |
+| 14 — Deployment and release | IN_PROGRESS | Images, deployment, demo, case study | — |
 
 ## Phase 0 decisions
 
@@ -68,3 +68,8 @@ Phase 10 is in progress. It introduces attributable human review, immutable gene
 | Phase | Scope | Status |
 | --- | --- | --- |
 | 13 | Transport, credential, abuse-resistance, supply-chain, and adversarial security hardening | COMPLETE_VERIFIED |
+
+
+## Phase 14 - Deployment and release
+
+The detailed batch status is maintained in `docs/progress/phase-14.md`.
