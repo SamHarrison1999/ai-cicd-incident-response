@@ -166,3 +166,12 @@ counters. The frontend Vitest gate covers statements, lines, functions, and
 branches. Generated files, type declarations, build output, and test sources
 are excluded. A coverage percentage is not accepted as evidence until the
 strict verifier passes.
+## Phase 13 Batch 3 adversarial verification
+
+The cumulative suite covers malformed and oversized values, invalid cursors and windows, duplicate delivery identifiers, cross-tenant references, secret and signature redaction, prompt-injection carry-over, generic credential errors, and the explicit absence of remediation side effects.
+## Phase 13 Batch 4 security workspace verification
+
+The local security verifier checks repository secret exclusions, dependency metadata and lockfiles, production container user declarations, Compose rendering, and whitespace. CI adds dependency review and CodeQL analysis for Java, Python, and TypeScript.
+## Phase 13 Batch 5 close-out verification
+
+The final verifier requires all Phase 13 batches to be `COMPLETE_VERIFIED` before running the repository, security workspace, backend JaCoCo, frontend Vitest, and whitespace gates.

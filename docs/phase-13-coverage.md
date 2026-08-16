@@ -14,5 +14,5 @@ security headers, and UI error/loading/empty states. Generated files, test
 files, build output, and type declarations are excluded from the target.
 
 Run `scripts/verify-phase-13-coverage.ps1` from the repository root. The
-command is expected to fail while uncovered production paths remain; that
-failure is the work list for the next coverage-test batches.
+command is a release gate and must pass before Phase 13 is recorded as
+complete.

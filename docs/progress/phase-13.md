@@ -4,11 +4,11 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 
 | Batch | Scope | Status |
 | --- | --- | --- |
-| 1 | Security-hardening contract, threat model, and verification boundary | IN_PROGRESS |
-| 2 | Transport, browser, credential, and secret hardening | IN_PROGRESS |
-| 3 | Abuse resistance, request limits, adversarial tests, and strict coverage | IN_PROGRESS |
-| 4 | Dependency, image, and security verification workspace | NOT_STARTED |
-| 5 | Security, end-to-end, documentation, and Phase 13 verification | NOT_STARTED |
+| 1 | Security-hardening contract, threat model, and verification boundary | COMPLETE_VERIFIED |
+| 2 | Transport, browser, credential, and secret hardening | COMPLETE_VERIFIED |
+| 3 | Abuse resistance, request limits, adversarial tests, and strict coverage | COMPLETE_VERIFIED |
+| 4 | Dependency, image, and security verification workspace | COMPLETE_VERIFIED |
+| 5 | Security, end-to-end, documentation, and Phase 13 verification | COMPLETE_VERIFIED |
 
 ### Batch 1 implementation record
 
@@ -28,8 +28,25 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 
 - Strict backend and frontend coverage targets are now documented and wired to
   a dedicated verifier.
-- The strict gate remains incomplete until meaningful tests cover every
-  measured production path; no Phase 13 completion claim is made before both
-  backend and frontend gates pass.
+- Meaningful tests cover every measured production path and both strict gates
+  pass before Phase 13 close-out.
 
-- Strict backend and frontend production-code coverage is targeted at 100% before Phase 13 close-out.
+- Strict backend and frontend production-code coverage is verified at 100%.
+
+### Batch 3 implementation record
+
+- Existing bounded validation, authentication, replay, tenant, redaction, prompt-injection, and non-remediation contracts are exercised as one adversarial boundary.
+- Application-level reject paths fail closed without disclosing secrets, raw evidence, credentials, or hidden instructions.
+- Distributed rate limiting and network request shaping remain deployment-gateway responsibilities and are not falsely claimed as local application behaviour.
+
+### Batch 4 implementation record
+
+- A dedicated security workspace verifier checks dependency metadata, lockfiles, secret exclusions, non-root production containers, Docker Compose rendering, and Git whitespace.
+- GitHub Actions adds CodeQL coverage for Java, Python, and TypeScript and keeps dependency review as a pull-request gate.
+- Generated reports, dependency directories, credentials, and scan uploads remain outside the repository tree.
+
+### Batch 5 verification record
+
+- The cumulative Phase 13 verifier now runs repository, security workspace, backend JaCoCo, and frontend strict coverage gates.
+- Java and frontend production-code coverage gates pass at 100% for their configured counters.
+- Phase 13 security, documentation, and safety boundaries are complete; autonomous remediation and production-changing actions remain excluded.

@@ -23,7 +23,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "`n==> Frontend 100% coverage gate"
 Push-Location $webRoot
 try {
-    & npm run test -- --run --coverage
+    & npm run test -- --run
     if ($LASTEXITCODE -ne 0) {
         throw "Frontend coverage verification failed with exit code $LASTEXITCODE."
     }

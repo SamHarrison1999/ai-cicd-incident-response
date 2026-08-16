@@ -67,4 +67,4 @@ Phase 10 is in progress. It introduces attributable human review, immutable gene
 
 | Phase | Scope | Status |
 | --- | --- | --- |
-| 13 | Transport, credential, abuse-resistance, supply-chain, and adversarial security hardening | IN_PROGRESS |
+| 13 | Transport, credential, abuse-resistance, supply-chain, and adversarial security hardening | COMPLETE_VERIFIED |

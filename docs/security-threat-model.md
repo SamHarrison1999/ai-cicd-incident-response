@@ -213,3 +213,12 @@ Security hardening covers transport and browser controls, credential and secret 
 ## Phase 13 Batch 2 transport and credential controls
 
 Responses include explicit content-security, frame, MIME-sniffing, referrer, permissions, and secure-transport policies. Authentication failures are generic and bounded; passwords, tokens, and request credentials must never be echoed. HSTS applies only to secure requests so local HTTP tests do not create a false production guarantee.
+## Phase 13 Batch 3 abuse-resistance controls
+
+Bounded request models, replay-safe webhook handling, tenant-first authorization, secret redaction, prompt-injection removal, and deterministic abstention are verified as adversarial controls. Distributed rate limiting and network request shaping remain gateway responsibilities and are not claimed as application-local guarantees.
+## Phase 13 Batch 4 supply-chain controls
+
+Dependency metadata, lockfiles, secret exclusions, non-root container declarations, Compose rendering, dependency review, and CodeQL analysis are verified through a dedicated workspace and CI workflow. Generated scan output and credentials are excluded from source control.
+## Phase 13 Batch 5 close-out controls
+
+The final verifier requires all Phase 13 batch rows and the ledger row to be `COMPLETE_VERIFIED`, then runs repository, security workspace, strict backend/frontend coverage, and whitespace gates on the same commit.
