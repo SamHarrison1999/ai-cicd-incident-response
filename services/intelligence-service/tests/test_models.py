@@ -50,6 +50,7 @@ def test_abstained_recommendation_cannot_declare_likely_cause() -> None:
             ),
         )
 
+
 def test_abstained_recommendation_rejects_supporting_evidence() -> None:
     with pytest.raises(ValidationError):
         RecommendationResponse(

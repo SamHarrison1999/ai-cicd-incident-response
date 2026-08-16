@@ -63,12 +63,14 @@ class ProviderEventAdapterCoverageTest {
           objectMapper.readTree(
               "{\"build\":{\"number\":7,\"result\":\""
                   + result
-                  + "\",\"startedAt\":\"bad\",\"completedAt\":\"2026-08-13T12:01:00Z\"},\"scm\":{\"commitId\":42,\"branch\":\"main\"}}");
+                  + "\",\"startedAt\":\"bad\",\"completedAt\":\"2026-08-13T12:01:00Z\"},"
+                  + "\"scm\":{\"commitId\":42,\"branch\":\"main\"}}");
       assertThat(adapter.adapt("build", payload, fallback)).isPresent();
     }
     var running =
         objectMapper.readTree(
-            "{\"name\":\"orders\",\"build\":{\"id\":\"run-1\",\"startedAt\":\"bad\",\"timestamp\":\"not-number\"},\"scm\":{\"branch\":42}}");
+            "{\"name\":\"orders\",\"build\":{\"id\":\"run-1\",\"startedAt\":\"bad\","
+                + "\"timestamp\":\"not-number\"},\"scm\":{\"branch\":42}}");
     assertThat(adapter.adapt("build", running, fallback).orElseThrow().occurredAt())
         .isEqualTo(fallback);
     assertThat(adapter.adapt("build", objectMapper.readTree("{\"name\":\"orders\"}"), fallback))
