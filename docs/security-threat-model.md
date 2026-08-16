@@ -210,3 +210,6 @@ Verification covers tenant isolation, authenticated read access, deterministic o
 ## Phase 13 security-hardening controls
 
 Security hardening covers transport and browser controls, credential and secret handling, bounded request and rate-limit policy, dependency and image scanning, adversarial input, tenant-boundary attacks, and fail-closed error behaviour. Raw secrets, provider prompts, hidden policy instructions, and remediation actions remain excluded.
+## Phase 13 Batch 2 transport and credential controls
+
+Responses include explicit content-security, frame, MIME-sniffing, referrer, permissions, and secure-transport policies. Authentication failures are generic and bounded; passwords, tokens, and request credentials must never be echoed. HSTS applies only to secure requests so local HTTP tests do not create a false production guarantee.

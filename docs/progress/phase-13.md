@@ -5,7 +5,7 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 | Batch | Scope | Status |
 | --- | --- | --- |
 | 1 | Security-hardening contract, threat model, and verification boundary | IN_PROGRESS |
-| 2 | Transport, browser, credential, and secret hardening | NOT_STARTED |
+| 2 | Transport, browser, credential, and secret hardening | IN_PROGRESS |
 | 3 | Abuse resistance, request limits, and adversarial tests | NOT_STARTED |
 | 4 | Dependency, image, and security verification workspace | NOT_STARTED |
 | 5 | Security, end-to-end, documentation, and Phase 13 verification | NOT_STARTED |
@@ -16,3 +16,10 @@ Phase 13 hardens the platform's security posture across transport, browser, cred
 - Transport, browser, credential, abuse-resistance, supply-chain, and adversarial-test dimensions are explicitly scoped.
 - Security failures must fail closed without disclosing raw evidence, secrets, credentials, provider prompts, or hidden policy instructions.
 - Autonomous remediation, production-changing actions, and unrestricted administrative access remain outside the boundary.
+
+### Batch 2 implementation record
+
+- Browser and transport response headers are explicit, bounded, and additive.
+- HSTS is emitted only for secure requests and earlier response headers are preserved.
+- Authentication error responses do not disclose credentials, tokens, or raw email values.
+- Security-focused tests include cumulative JaCoCo reporting to expose uncovered branches before close-out.

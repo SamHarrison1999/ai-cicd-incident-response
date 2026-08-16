@@ -155,3 +155,6 @@ The cumulative gate verifies trend persistence, tenant-scoped API filters, deter
 ## Phase 13 security-hardening verification
 
 Test security headers, cookie and token handling, bounded inputs, rate-limit decisions, fail-closed errors, dependency and image scanning, secret non-disclosure, cross-tenant rejection, malformed-input handling, prompt-injection carry-over, and unsafe-action attempts. Security tests are release gates.
+## Phase 13 Batch 2 transport and credential verification
+
+Unit tests cover every security-header branch, secure versus insecure transport, pre-existing header preservation, bounded authentication errors, and duplicate-account responses. Run the focused tests and `jacocoTestReport`, then inspect the generated report for uncovered security paths before proceeding.
