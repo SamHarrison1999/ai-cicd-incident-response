@@ -207,3 +207,6 @@ Learning outputs are tenant-scoped, bounded, provenance-preserving, suppression-
 ## Phase 12 verification controls
 
 Verification covers tenant isolation, authenticated read access, deterministic ordering, bounded limits, opaque cursors, suppression-aware output, provenance references, and the exclusion of raw content, credentials, training controls, policy mutation, and remediation.
+## Phase 13 security-hardening controls
+
+Security hardening covers transport and browser controls, credential and secret handling, bounded request and rate-limit policy, dependency and image scanning, adversarial input, tenant-boundary attacks, and fail-closed error behaviour. Raw secrets, provider prompts, hidden policy instructions, and remediation actions remain excluded.

@@ -152,3 +152,6 @@ Test tenant isolation, deterministic windowing and ordering, provenance referenc
 ## Phase 12 verification controls
 
 The cumulative gate verifies trend persistence, tenant-scoped API filters, deterministic cursors and comparisons, suppressed samples, workspace rendering, security contracts, frontend behaviour, Docker Compose configuration, and Git whitespace.
+## Phase 13 security-hardening verification
+
+Test security headers, cookie and token handling, bounded inputs, rate-limit decisions, fail-closed errors, dependency and image scanning, secret non-disclosure, cross-tenant rejection, malformed-input handling, prompt-injection carry-over, and unsafe-action attempts. Security tests are release gates.

@@ -4,7 +4,7 @@ A portfolio-grade platform-engineering system that ingests simulated CI/CD and i
 
 ## Project status
 
-**Current phase:** Phase 12 - operational learning and trend intelligence
+**Current phase:** Phase 13 - security hardening
 
 Phases 0 through 12 are complete. The repository now contains a runnable Java control plane, Python intelligence service, React web application, PostgreSQL persistence, Docker Compose environment, continuous-integration quality gates, authentication, organisations, projects, tenant isolation, pipeline timelines, incident correlation, evidence persistence and search, sanitisation, deterministic diagnosis, historical retrieval, provider-neutral recommendations, human review, governed feedback analytics, and the initial operational-learning contract.
 
@@ -52,6 +52,7 @@ Exact dependency patch versions will be pinned when each executable service is c
 - [Phase 10 review model](docs/phase-10-review-model.md)
 - [Phase 11 feedback model](docs/phase-11-feedback-model.md)
 - [Phase 12 learning model](docs/phase-12-learning-model.md)
+- [Phase 13 security model](docs/phase-13-security-model.md)
 - [Product scope](docs/product-scope.md)
 - [Repository structure](docs/repository-structure.md)
 - [Product backlog](docs/product-backlog.md)
@@ -155,11 +156,13 @@ The full release verification requires repository checks, Java tests with Postgr
 
 Phase 7 establishes bounded sanitisation and deterministic diagnosis outputs for human review.
 
-## Project status through Phase 12
+## Project status through Phase 13
 
-Phases 1-12 are complete. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
+Phases 1-12 are complete and Phase 13 is now in progress. The platform includes secure CI/CD event ingestion, deterministic incident correlation, tenant-scoped evidence and historical retrieval, bounded diagnosis, provider-neutral recommendations, human review, governed feedback analytics, and the foundations for operational learning.
 
 Phase 12 established bounded operational learning and deterministic trend intelligence derived from governed platform records. Learning outputs remain tenant-scoped, attributable, versioned, explainable, and advisory. They do not silently retrain providers, change production policy, or execute remediation.
+
+Phase 13 is focused on additive security hardening across transport, browser, credential, abuse-resistance, supply-chain, and adversarial-test boundaries. Security hardening does not introduce autonomous remediation or production-changing actions.
 
 ## Phase 3 local verification
 
@@ -223,3 +226,11 @@ Set-ExecutionPolicy -Scope Process Bypass
 ```
 
 Expected result: the Phase 12 operational-learning contract and all cumulative repository, Java, frontend, Docker Compose, and Git checks pass.
+## Phase 13 local verification
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+.\scripts\verify-phase-13.ps1
+```
+
+Expected result: the Phase 13 security-hardening contract and all cumulative repository, Java, frontend, Docker Compose, dependency, and adversarial-security checks pass.
