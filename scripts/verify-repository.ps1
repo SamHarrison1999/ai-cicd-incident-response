@@ -98,7 +98,7 @@ $trackedGeneratedPaths = @(
     git ls-files |
         Where-Object {
             ($_ -match '(^|/)(node_modules|\.venv|dist|build|coverage|htmlcov|playwright-report|test-results)(/|$)') -and
-            ($_ -notmatch '^services/control-plane/src/test/java/com/samharrison/incidentresponse/coverage/ProductionSurfaceCoverageSupport\.java$')
+            ($_ -notmatch '^services/control-plane/src/test/java/com/samharrison/incidentresponse/coverage/(ProductionSurfaceCoverageSupport|ImpossibleBranchCoverageTest)\.java$')
         }
 )
 
