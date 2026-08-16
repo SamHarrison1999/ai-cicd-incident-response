@@ -45,7 +45,7 @@ ignored evidence directory.
 | 08 | /recommendations | Evidence-grounded decision support |
 | 09 | /review | Human review and governance boundary |
 | 10 | /settings | Safety baseline and disabled automation |
-| 11 | /swagger-ui.html | Control-plane API contract |
+| 11 | http://localhost:8080/swagger-ui.html | Control-plane API contract |
 | 12 | http://localhost:8000/docs | Intelligence API contract |
 
 The portfolio currently presents the overview screenshot as
