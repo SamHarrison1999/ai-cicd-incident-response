@@ -92,7 +92,7 @@ export function RegisterPage() {
 
                     <button className="button" disabled={submitting}>
                         {submitting
-                            ? "Creating accountÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"
+                            ? "Creating account\u2026"
                             : "Create account"}
                     </button>
                 </form>

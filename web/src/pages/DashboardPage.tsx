@@ -14,7 +14,7 @@ export function DashboardPage() {
     const backendDetail = controlPlaneStatus.isPending
         ? "Requesting the system-status endpoint."
         : controlPlaneStatus.isSuccess
-          ? `Version ${controlPlaneStatus.data.version} Â· ${controlPlaneStatus.data.status}`
+          ? `Version ${controlPlaneStatus.data.version} \u00b7 ${controlPlaneStatus.data.status}`
           : "Start the Spring Boot control plane to enable live status.";
 
     return (

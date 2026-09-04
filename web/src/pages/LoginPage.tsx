@@ -88,7 +88,7 @@ export function LoginPage() {
                     </label>
 
                     <button className="button" disabled={submitting}>
-                        {submitting ? "Signing inÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" : "Sign in"}
+                        {submitting ? "Signing in\u2026" : "Sign in"}
                     </button>
                 </form>
 

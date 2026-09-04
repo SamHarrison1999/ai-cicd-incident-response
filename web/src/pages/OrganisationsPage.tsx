@@ -53,7 +53,7 @@ export function OrganisationsPage() {
                     <h3>Your organisations</h3>
 
                     {organisations.isPending ? (
-                        <p>Loading organisationsÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦</p>
+                        <p>Loading organisations\u2026</p>
                     ) : null}
 
                     {organisations.isError ? (
@@ -122,7 +122,7 @@ export function OrganisationsPage() {
                             disabled={createMutation.isPending}
                         >
                             {createMutation.isPending
-                                ? "CreatingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"
+                                ? "Creating\u2026"
                                 : "Create organisation"}
                         </button>
                     </form>
