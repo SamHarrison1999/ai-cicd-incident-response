@@ -65,13 +65,7 @@ function renderRoute(initialEntry: string) {
     });
 
     return render(
-        <MemoryRouter
-            initialEntries={[initialEntry]}
-            future={{
-                v7_relativeSplatPath: true,
-                v7_startTransition: true,
-            }}
-        >
+        <MemoryRouter initialEntries={[initialEntry]}>
             <QueryClientProvider client={queryClient}>
                 <AuthProvider>
                     <AppRoutes />

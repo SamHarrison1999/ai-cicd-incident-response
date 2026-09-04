@@ -20,7 +20,7 @@ export function RegisterPage() {
 
         try {
             await auth.register({ displayName, email, password });
-            navigate("/login", {
+            await navigate("/login", {
                 replace: true,
                 state: { registrationComplete: true },
             });

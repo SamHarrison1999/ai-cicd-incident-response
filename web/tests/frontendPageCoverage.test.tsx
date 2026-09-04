@@ -621,9 +621,30 @@ describe("frontend page and component coverage", () => {
             "timeout",
         );
         await screen.findByText("Evidence items");
+
+        mocks.getEvidence.mockResolvedValueOnce({
+            items: [
+                {
+                    id: "evidence-page-2",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery-page-2",
+                    occurredAt: "2026-08-16T09:55:00Z",
+                    ingestedAt: "2026-08-16T09:56:00Z",
+                    contentHash: "hash-page-2",
+                    contentLineCount: 3,
+                },
+            ],
+            nextCursor: null,
+        });
+
         await user.click(
             screen.getByRole("button", { name: "Load more evidence" }),
         );
+
+        expect(await screen.findByText("2 loaded")).toBeInTheDocument();
+
         cleanup();
 
         mocks.getEvidence.mockReset();

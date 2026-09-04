@@ -26,7 +26,7 @@ export function LoginPage() {
 
         try {
             await auth.login(email, password);
-            navigate(state?.from ?? "/", { replace: true });
+            await navigate(state?.from ?? "/", { replace: true });
         } catch (caught) {
             setError(
                 caught instanceof ApiError

@@ -8,7 +8,7 @@ export function AccountMenu() {
 
     async function handleLogout() {
         await auth.logout();
-        navigate("/login", { replace: true });
+        await navigate("/login", { replace: true });
     }
 
     return (
