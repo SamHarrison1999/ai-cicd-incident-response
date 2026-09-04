@@ -24,4 +24,4 @@ COPY --from=builder /workspace/build/libs/control-plane-*.jar app.jar
 USER appuser
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75.0", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=50.0", "-jar", "/app/app.jar"]

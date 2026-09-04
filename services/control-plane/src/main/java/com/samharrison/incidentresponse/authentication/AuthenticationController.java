@@ -89,7 +89,7 @@ public class AuthenticationController {
         .httpOnly(true)
         .secure(properties.secureCookies())
         .sameSite("Strict")
-        .path("/api/v1/auth")
+        .path(properties.refreshCookiePath())
         .maxAge(properties.refreshTokenTtl())
         .build();
   }
@@ -99,7 +99,7 @@ public class AuthenticationController {
         .httpOnly(true)
         .secure(properties.secureCookies())
         .sameSite("Strict")
-        .path("/api/v1/auth")
+        .path(properties.refreshCookiePath())
         .maxAge(Duration.ZERO)
         .build();
   }

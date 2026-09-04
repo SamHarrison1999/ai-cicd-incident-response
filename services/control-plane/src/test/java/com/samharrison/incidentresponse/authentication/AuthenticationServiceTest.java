@@ -46,6 +46,7 @@ class AuthenticationServiceTest {
             Duration.ofMinutes(15),
             Duration.ofDays(7),
             "incident_refresh",
+            "/api/v1/auth",
             false,
             12);
 

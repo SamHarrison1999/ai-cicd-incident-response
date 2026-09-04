@@ -27,6 +27,7 @@ class JwtAccessTokenServiceCoverageTest {
             Duration.ofMinutes(15),
             Duration.ofDays(1),
             "refresh",
+            "/api/v1/auth",
             true,
             8);
     Instant issuedAt = Instant.parse("2026-01-01T00:00:00Z");

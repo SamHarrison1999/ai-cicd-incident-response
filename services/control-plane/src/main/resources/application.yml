@@ -21,7 +21,7 @@ spring:
     default-property-inclusion: non_null
 
 server:
-  port: ${CONTROL_PLANE_PORT:8080}
+  port: ${PORT:${CONTROL_PLANE_PORT:8080}}
   shutdown: graceful
   error:
     include-message: never
@@ -75,6 +75,7 @@ application:
     access-token-ttl: ${AUTH_ACCESS_TOKEN_TTL:PT15M}
     refresh-token-ttl: ${AUTH_REFRESH_TOKEN_TTL:P7D}
     refresh-cookie-name: ${AUTH_REFRESH_COOKIE_NAME:incident_refresh}
+    refresh-cookie-path: ${AUTH_REFRESH_COOKIE_PATH:/api/v1/auth}
     secure-cookies: ${AUTH_SECURE_COOKIES:false}
     password-minimum-length: ${AUTH_PASSWORD_MINIMUM_LENGTH:12}
   webhooks:
