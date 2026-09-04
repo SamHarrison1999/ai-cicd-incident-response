@@ -53,7 +53,7 @@ export function OrganisationsPage() {
                     <h3>Your organisations</h3>
 
                     {organisations.isPending ? (
-                        <p>Loading organisations\u2026</p>
+                        <p>{"Loading organisations\u2026"}</p>
                     ) : null}
 
                     {organisations.isError ? (
