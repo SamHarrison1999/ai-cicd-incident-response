@@ -15,10 +15,15 @@ if ($Provider -eq "GITHUB_ACTIONS") {
   $eventType = "build"
   $payload = '{"name":"demo-deployment","build":{"number":9001,"fullDisplayName":"demo-deployment #9001","result":"FAILURE","timestamp":' + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds() + '},"scm":{"commitId":"0123456789abcdef0123456789abcdef01234567","branch":"main"}}'
 }
-$newline = [Environment]::NewLine
+$newline = "`n"
 $signingInput = "CICD-WEBHOOK-V1$($newline)$DeliveryId$($newline)$eventType$($newline)$timestamp$($newline)$payload"
 $hmac = [System.Security.Cryptography.HMACSHA256]::new([Text.Encoding]::UTF8.GetBytes($Secret))
-try { $digest = [Convert]::ToHexString($hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes($signingInput))).ToLowerInvariant() } finally { $hmac.Dispose() }
+try {
+  $hash = $hmac.ComputeHash([Text.Encoding]::UTF8.GetBytes($signingInput))
+  $digest = ($hash | ForEach-Object { $_.ToString("x2") }) -join ""
+} finally {
+  $hmac.Dispose()
+}
 Invoke-RestMethod -Method Post -Uri "$BaseUrl/api/v1/event-sources/$EventSourceId/deliveries" -ContentType "application/json" -Headers @{
   "X-CICD-Delivery-ID" = $DeliveryId
   "X-CICD-Event-Type" = $eventType
