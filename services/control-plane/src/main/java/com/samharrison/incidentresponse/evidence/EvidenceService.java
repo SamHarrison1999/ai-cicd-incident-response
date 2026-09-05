@@ -1,12 +1,14 @@
 package com.samharrison.incidentresponse.evidence;
 
 import com.samharrison.incidentresponse.audit.AuditRecorder;
+import com.samharrison.incidentresponse.organisation.OrganisationMembershipRole;
 import com.samharrison.incidentresponse.project.Project;
 import com.samharrison.incidentresponse.project.ProjectRepository;
 import com.samharrison.incidentresponse.tenancy.TenantAccessException;
 import com.samharrison.incidentresponse.tenancy.TenantAccessService;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EvidenceService {
+
+  private static final Set<OrganisationMembershipRole> EVIDENCE_WRITERS =
+      Set.of(
+          OrganisationMembershipRole.OWNER,
+          OrganisationMembershipRole.ADMIN,
+          OrganisationMembershipRole.MEMBER);
 
   private final EvidenceRepository evidenceRepository;
   private final ProjectRepository projectRepository;
@@ -42,7 +50,7 @@ public class EvidenceService {
       String sourceReference,
       Instant occurredAt,
       String rawContent) {
-    tenantAccessService.requireActiveMembership(organisationId, userId);
+    tenantAccessService.requireRole(organisationId, userId, EVIDENCE_WRITERS);
     Project project = requireProject(organisationId, projectId);
     SanitisedEvidence sanitised = EvidenceSanitiser.sanitise(rawContent);
     String hash = EvidenceContentHasher.sha256Hex(sanitised.content());

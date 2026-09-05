@@ -40,7 +40,7 @@ class EvidenceControllerCoverageTest {
                 List.of(evidence), new EvidenceCursor(occurred, evidenceId)));
 
     EvidenceController.EvidenceSearchResponse response =
-        new EvidenceController(search, users)
+        new EvidenceController(search, mock(EvidenceService.class), users)
             .search(
                 authentication, organisationId, projectId, null, null, null, null, null, null, 10);
     assertThat(response.items()).hasSize(1);
@@ -49,9 +49,66 @@ class EvidenceControllerCoverageTest {
     when(search.search(any(), any(), any(), any(), any()))
         .thenReturn(new EvidenceSearchService.SearchPage(List.of(evidence), null));
     EvidenceController.EvidenceSearchResponse withoutCursor =
-        new EvidenceController(search, users)
+        new EvidenceController(search, mock(EvidenceService.class), users)
             .search(
                 authentication, organisationId, projectId, null, null, null, null, null, null, 10);
     assertThat(withoutCursor.nextCursor()).isNull();
+  }
+
+  @Test
+  void createsEvidenceThroughTheSanitisingService() {
+    EvidenceSearchService search = mock(EvidenceSearchService.class);
+    EvidenceService evidenceService = mock(EvidenceService.class);
+    CurrentUserProvider users = mock(CurrentUserProvider.class);
+    Authentication authentication = mock(Authentication.class);
+
+    UUID userId = UUID.randomUUID();
+    UUID organisationId = UUID.randomUUID();
+    UUID projectId = UUID.randomUUID();
+    UUID evidenceId = UUID.randomUUID();
+    Instant occurredAt = Instant.parse("2026-09-05T13:00:00Z");
+
+    Evidence evidence = mock(Evidence.class);
+
+    when(users.requireUserId(authentication)).thenReturn(userId);
+    when(evidenceService.create(
+            userId,
+            organisationId,
+            projectId,
+            EvidenceKind.LOG_EXCERPT,
+            RetentionClass.STANDARD,
+            "portfolio-demo",
+            "dependency-signal",
+            occurredAt,
+            "dependency failed: connection refused to upstream payments database"))
+        .thenReturn(evidence);
+
+    when(evidence.getId()).thenReturn(evidenceId);
+    when(evidence.getKind()).thenReturn(EvidenceKind.LOG_EXCERPT);
+    when(evidence.getRetentionClass()).thenReturn(RetentionClass.STANDARD);
+    when(evidence.getSourceSystem()).thenReturn("portfolio-demo");
+    when(evidence.getSourceReference()).thenReturn("dependency-signal");
+    when(evidence.getOccurredAt()).thenReturn(occurredAt);
+    when(evidence.getIngestedAt()).thenReturn(occurredAt.plusSeconds(1));
+    when(evidence.getContentHash()).thenReturn("a".repeat(64));
+    when(evidence.getContentLineCount()).thenReturn(1);
+
+    EvidenceController.CreateEvidenceRequest request =
+        new EvidenceController.CreateEvidenceRequest(
+            EvidenceKind.LOG_EXCERPT,
+            RetentionClass.STANDARD,
+            "portfolio-demo",
+            "dependency-signal",
+            occurredAt,
+            "dependency failed: connection refused to upstream payments database");
+
+    EvidenceController.EvidenceResponse response =
+        new EvidenceController(search, evidenceService, users)
+            .create(authentication, organisationId, projectId, request);
+
+    assertThat(response.id()).isEqualTo(evidenceId);
+    assertThat(response.kind()).isEqualTo("LOG_EXCERPT");
+    assertThat(response.sourceSystem()).isEqualTo("portfolio-demo");
+    assertThat(response.sourceReference()).isEqualTo("dependency-signal");
   }
 }

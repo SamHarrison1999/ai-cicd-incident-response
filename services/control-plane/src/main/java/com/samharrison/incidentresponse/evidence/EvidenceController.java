@@ -1,14 +1,22 @@
 package com.samharrison.incidentresponse.evidence;
 
 import com.samharrison.incidentresponse.tenancy.CurrentUserProvider;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -16,11 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class EvidenceController {
 
   private final EvidenceSearchService searchService;
+  private final EvidenceService evidenceService;
   private final CurrentUserProvider currentUserProvider;
 
   public EvidenceController(
-      EvidenceSearchService searchService, CurrentUserProvider currentUserProvider) {
+      EvidenceSearchService searchService,
+      EvidenceService evidenceService,
+      CurrentUserProvider currentUserProvider) {
     this.searchService = searchService;
+    this.evidenceService = evidenceService;
     this.currentUserProvider = currentUserProvider;
   }
 
@@ -50,6 +62,27 @@ public class EvidenceController {
         page.nextCursor() == null ? null : page.nextCursor().encode());
   }
 
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  EvidenceResponse create(
+      Authentication authentication,
+      @PathVariable UUID organisationId,
+      @PathVariable UUID projectId,
+      @Valid @RequestBody CreateEvidenceRequest request) {
+    Evidence evidence =
+        evidenceService.create(
+            currentUserProvider.requireUserId(authentication),
+            organisationId,
+            projectId,
+            request.kind(),
+            request.retentionClass(),
+            request.sourceSystem(),
+            request.sourceReference(),
+            request.occurredAt(),
+            request.content());
+    return toResponse(evidence);
+  }
+
   private static EvidenceResponse toResponse(Evidence evidence) {
     return new EvidenceResponse(
         evidence.getId(),
@@ -62,6 +95,14 @@ public class EvidenceController {
         evidence.getContentHash(),
         evidence.getContentLineCount());
   }
+
+  public record CreateEvidenceRequest(
+      @NotNull EvidenceKind kind,
+      @NotNull RetentionClass retentionClass,
+      @NotBlank @Size(max = 80) String sourceSystem,
+      @NotBlank @Size(max = 200) String sourceReference,
+      @NotNull Instant occurredAt,
+      @NotBlank String content) {}
 
   public record EvidenceSearchResponse(List<EvidenceResponse> items, String nextCursor) {}
 
