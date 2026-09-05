@@ -5,6 +5,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.samharrison.incidentresponse.audit.AuditEventRepository;
+import com.samharrison.incidentresponse.evidence.EvidenceRepository;
+import com.samharrison.incidentresponse.incident.EvidenceEventLinkRepository;
+import com.samharrison.incidentresponse.incident.IncidentCorrelationDecisionRecordRepository;
+import com.samharrison.incidentresponse.incident.IncidentEventLinkRepository;
+import com.samharrison.incidentresponse.incident.IncidentEvidenceLinkRepository;
+import com.samharrison.incidentresponse.incident.IncidentRepository;
+import com.samharrison.incidentresponse.incident.IncidentStatus;
 import com.samharrison.incidentresponse.organisation.Organisation;
 import com.samharrison.incidentresponse.organisation.OrganisationRepository;
 import com.samharrison.incidentresponse.project.Project;
@@ -19,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -51,6 +60,13 @@ class WebhookIngestionIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private WebhookSignatureService signatureService;
+  @Autowired private AuditEventRepository auditEventRepository;
+  @Autowired private EvidenceRepository evidenceRepository;
+  @Autowired private EvidenceEventLinkRepository evidenceEventLinkRepository;
+  @Autowired private IncidentEvidenceLinkRepository incidentEvidenceLinkRepository;
+  @Autowired private IncidentCorrelationDecisionRecordRepository correlationDecisionRepository;
+  @Autowired private IncidentEventLinkRepository incidentEventLinkRepository;
+  @Autowired private IncidentRepository incidentRepository;
   @Autowired private OrganisationRepository organisationRepository;
   @Autowired private ProjectRepository projectRepository;
   @Autowired private EventSourceRepository eventSourceRepository;
@@ -60,6 +76,13 @@ class WebhookIngestionIntegrationTest {
 
   @BeforeEach
   void clearPersistenceModel() {
+    auditEventRepository.deleteAll();
+    correlationDecisionRepository.deleteAll();
+    incidentEvidenceLinkRepository.deleteAll();
+    evidenceEventLinkRepository.deleteAll();
+    incidentEventLinkRepository.deleteAll();
+    incidentRepository.deleteAll();
+    evidenceRepository.deleteAll();
     normalisedCiEventRepository.deleteAll();
     pipelineRunRepository.deleteAll();
     webhookDeliveryRepository.deleteAll();
@@ -79,8 +102,73 @@ class WebhookIngestionIntegrationTest {
         .andExpect(jsonPath("$.status").value("RECEIVED"));
 
     assertThat(webhookDeliveryRepository.count()).isEqualTo(1);
+    assertThat(normalisedCiEventRepository.count()).isEqualTo(1);
+    assertThat(pipelineRunRepository.count()).isEqualTo(1);
+    assertThat(incidentRepository.count()).isEqualTo(1);
+    assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
+    assertThat(correlationDecisionRepository.count()).isEqualTo(1);
+    assertThat(evidenceRepository.count()).isEqualTo(1);
+    assertThat(evidenceEventLinkRepository.count()).isEqualTo(1);
+    assertThat(incidentEvidenceLinkRepository.count()).isEqualTo(1);
+
     WebhookDelivery delivery = webhookDeliveryRepository.findAll().getFirst();
     assertThat(delivery.getPayloadSha256()).isEqualTo(signatureService.sha256Hex(PAYLOAD));
+
+    NormalisedCiEvent event = normalisedCiEventRepository.findAll().getFirst();
+    var incident = incidentRepository.findAll().getFirst();
+    var evidence = evidenceRepository.findAll().getFirst();
+    var decision = correlationDecisionRepository.findByEventId(event.getId()).orElseThrow();
+
+    assertThat(incident.getStatus()).isEqualTo(IncidentStatus.DETECTED);
+    assertThat(decision.getIncidentId()).isEqualTo(incident.getId());
+    assertThat(decision.getEventId()).isEqualTo(event.getId());
+    assertThat(incidentEventLinkRepository.findByEventId(event.getId()))
+        .hasValueSatisfying(
+            link -> assertThat(link.getIncident().getId()).isEqualTo(incident.getId()));
+
+    assertThat(evidence.getSourceReference()).isEqualTo("delivery-1");
+    assertThat(evidence.getContent())
+        .contains("payloadSha256=" + delivery.getPayloadSha256())
+        .doesNotContain("payload=");
+
+    assertThat(
+            evidenceEventLinkRepository.findByEvidenceIdAndEventId(evidence.getId(), event.getId()))
+        .isPresent();
+
+    assertThat(
+            incidentEvidenceLinkRepository.findByIncidentIdAndEvidenceId(
+                incident.getId(), evidence.getId()))
+        .isPresent();
+  }
+
+  @Test
+  void timelineQuerySupportsAbsentTemporalAndCursorFilters() throws Exception {
+    EventSource source = createEventSource(EventSourceStatus.ENABLED, 262_144);
+    String timestamp = currentTimestamp();
+
+    perform(source, "timeline-delivery", "workflow_run", timestamp, PAYLOAD)
+        .andExpect(status().isAccepted());
+
+    var page =
+        normalisedCiEventRepository.searchTimeline(
+            source.getProject().getId(),
+            source.getOrganisation().getId(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            false,
+            null,
+            false,
+            null,
+            null,
+            null,
+            PageRequest.of(0, 25));
+
+    assertThat(page.getContent()).hasSize(1);
   }
 
   @Test
@@ -96,6 +184,14 @@ class WebhookIngestionIntegrationTest {
         .andExpect(jsonPath("$.duplicate").value(true));
 
     assertThat(webhookDeliveryRepository.count()).isEqualTo(1);
+    assertThat(normalisedCiEventRepository.count()).isEqualTo(1);
+    assertThat(pipelineRunRepository.count()).isEqualTo(1);
+    assertThat(incidentRepository.count()).isEqualTo(1);
+    assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
+    assertThat(correlationDecisionRepository.count()).isEqualTo(1);
+    assertThat(evidenceRepository.count()).isEqualTo(1);
+    assertThat(evidenceEventLinkRepository.count()).isEqualTo(1);
+    assertThat(incidentEvidenceLinkRepository.count()).isEqualTo(1);
   }
 
   @Test

@@ -16,5 +16,6 @@ public record AuthenticationProperties(
     Duration accessTokenTtl,
     Duration refreshTokenTtl,
     @NotBlank String refreshCookieName,
+    @NotBlank String refreshCookiePath,
     boolean secureCookies,
     @Min(1) int passwordMinimumLength) {}

@@ -17,8 +17,8 @@ class DeterministicProvider:
         return RecommendationResponse(
             incident_id=request.incident_id,
             summary=(
-                "Evidence was received, but no versioned diagnostic rule matched during "
-                "the foundation phase."
+                "Evidence was received, but the standalone deterministic provider "
+                "did not establish a supported cause."
             ),
             likely_cause=None,
             confidence=ConfidenceLevel.LOW,
@@ -31,8 +31,8 @@ class DeterministicProvider:
             ],
             abstained=True,
             abstention_reason=(
-                "The foundation provider intentionally abstains until deterministic "
-                "classification rules are introduced in Phase 7."
+                "The deterministic provider abstained because the supplied evidence "
+                "did not establish a supported, evidence-grounded recommendation."
             ),
             provider_metadata=ProviderMetadata(
                 provider="deterministic",

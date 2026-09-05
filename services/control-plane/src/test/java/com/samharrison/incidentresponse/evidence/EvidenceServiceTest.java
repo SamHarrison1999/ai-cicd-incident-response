@@ -2,17 +2,20 @@ package com.samharrison.incidentresponse.evidence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.samharrison.incidentresponse.audit.AuditRecorder;
 import com.samharrison.incidentresponse.organisation.Organisation;
+import com.samharrison.incidentresponse.organisation.OrganisationMembershipRole;
 import com.samharrison.incidentresponse.project.Project;
 import com.samharrison.incidentresponse.project.ProjectRepository;
 import com.samharrison.incidentresponse.project.ProjectStatus;
 import com.samharrison.incidentresponse.tenancy.TenantAccessService;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
@@ -58,7 +61,15 @@ class EvidenceServiceTest {
 
     assertThat(result.getContent()).doesNotContain("hidden");
     assertThat(result.getContentHash()).hasSize(64);
-    verify(tenantAccessService).requireActiveMembership(organisationId, userId);
+    verify(tenantAccessService)
+        .requireRole(
+            eq(organisationId),
+            eq(userId),
+            eq(
+                Set.of(
+                    OrganisationMembershipRole.OWNER,
+                    OrganisationMembershipRole.ADMIN,
+                    OrganisationMembershipRole.MEMBER)));
     verify(auditRecorder).record(any(), any(), any(), any(), any(), any());
   }
 }

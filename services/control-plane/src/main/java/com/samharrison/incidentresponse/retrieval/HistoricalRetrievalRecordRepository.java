@@ -17,17 +17,20 @@ public interface HistoricalRetrievalRecordRepository
       from HistoricalRetrievalRecord record
       where record.organisationId = :organisationId
         and record.projectId = :projectId
-        and (:diagnosisCategory is null or record.diagnosisCategory = :diagnosisCategory)
-        and (:provider is null or record.provider = :provider)
-        and (:pipelineName is null or record.pipelineName = :pipelineName)
-        and (:environmentName is null or record.environmentName = :environmentName)
-        and (:gitRef is null or record.gitRef = :gitRef)
-        and (:commitSha is null or record.commitSha = :commitSha)
-        and (:query is null or lower(record.summary) like lower(concat('%', :query, '%')))
-        and (:occurredFrom is null or record.occurredAt >= :occurredFrom)
-        and (:occurredTo is null or record.occurredAt <= :occurredTo)
+        and (cast(:diagnosisCategory as String) is null or record.diagnosisCategory = :diagnosisCategory)
+        and (cast(:provider as String) is null or record.provider = :provider)
+        and (cast(:pipelineName as String) is null or record.pipelineName = :pipelineName)
+        and (cast(:environmentName as String) is null or record.environmentName = :environmentName)
+        and (cast(:gitRef as String) is null or record.gitRef = :gitRef)
+        and (cast(:commitSha as String) is null or record.commitSha = :commitSha)
         and (
-          :cursorOccurredAt is null
+          cast(:query as String) is null
+          or lower(record.summary) like concat('%', lower(cast(:query as String)), '%')
+        )
+        and (cast(:occurredFrom as Instant) is null or record.occurredAt >= :occurredFrom)
+        and (cast(:occurredTo as Instant) is null or record.occurredAt <= :occurredTo)
+        and (
+          cast(:cursorOccurredAt as Instant) is null
           or record.occurredAt < :cursorOccurredAt
           or (record.occurredAt = :cursorOccurredAt and record.id < :cursorId)
         )

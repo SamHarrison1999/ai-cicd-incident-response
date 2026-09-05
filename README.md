@@ -2,6 +2,21 @@
 
 A portfolio-grade platform-engineering system that ingests simulated CI/CD and infrastructure events, correlates related failures into incidents, and produces evidence-grounded recommendations for human review.
 
+## Hosted demonstration
+
+Hosted web application:
+
+https://ai-cicd-incident-response-lmvsduksz.vercel.app
+
+Hosted services:
+
+- Control plane: https://ai-cicd-control-plane.onrender.com
+- Intelligence service: https://ai-cicd-intelligence.onrender.com
+
+The hosted demonstration supports a one-click incident-response workflow. The demo automatically creates or reuses an organisation and project, selects the workspace, submits a deterministic failed CI run, and exposes the resulting pipeline and incident evidence for review.
+
+Historical retrieval is tenant- and project-scoped. A new workspace may initially show `No historical matches`; this is a valid empty state until historical incident records exist.
+
 ## Project status
 
 **Current phase:** Phase 14 - deployment, release, demo, and portfolio case study

@@ -7,6 +7,7 @@ const api = vi.hoisted(() => ({
     getDiagnosis: vi.fn().mockResolvedValue({}),
     getEvidence: vi.fn().mockResolvedValue({ items: [], nextCursor: null }),
     getEvidenceItem: vi.fn().mockResolvedValue({}),
+    createEvidence: vi.fn().mockResolvedValue({ id: "evidence" }),
     getFeedback: vi.fn().mockResolvedValue({ items: [] }),
     getHistoricalRetrieval: vi
         .fn()
@@ -21,6 +22,7 @@ const api = vi.hoisted(() => ({
     getPipelineTimeline: vi
         .fn()
         .mockResolvedValue({ items: [], nextCursor: null, hasNext: false }),
+    simulateDemoCiRun: vi.fn().mockResolvedValue({}),
     generateRecommendation: vi.fn().mockResolvedValue({}),
     getRecommendations: vi.fn().mockResolvedValue({ items: [] }),
     createResolution: vi.fn().mockResolvedValue({}),
@@ -76,6 +78,7 @@ vi.mock("@tanstack/react-query", async () => {
 vi.mock("../src/auth/useAuth", () => ({ useAuth: () => auth }));
 vi.mock("../src/api/diagnosis", () => ({ getDiagnosis: api.getDiagnosis }));
 vi.mock("../src/api/evidence", () => ({
+    createEvidence: api.createEvidence,
     getEvidence: api.getEvidence,
     getEvidenceItem: api.getEvidenceItem,
 }));
@@ -94,6 +97,9 @@ vi.mock("../src/api/learning", () => ({
 vi.mock("../src/api/organisations", () => ({
     createOrganisation: api.createOrganisation,
     getOrganisations: api.getOrganisations,
+}));
+vi.mock("../src/api/demoCi", () => ({
+    simulateDemoCiRun: api.simulateDemoCiRun,
 }));
 vi.mock("../src/api/pipelineRuns", () => ({
     getPipelineRuns: api.getPipelineRuns,
@@ -145,6 +151,18 @@ describe("defensive access-token fallbacks", () => {
             "",
             expect.any(Object),
         );
+        expect(api.createEvidence).toHaveBeenCalledWith(
+            "",
+            "",
+            "",
+            expect.objectContaining({
+                kind: "LOG_EXCERPT",
+                retentionClass: "STANDARD",
+                sourceSystem: "portfolio-demo",
+                sourceReference: "browser-manual-evidence",
+                content: "",
+            }),
+        );
         expect(api.getFeedback).toHaveBeenCalledWith(
             "",
             "",
@@ -177,11 +195,17 @@ describe("defensive access-token fallbacks", () => {
             "",
             expect.any(Object),
         );
+        expect(api.simulateDemoCiRun).toHaveBeenCalledWith("", "", "", {
+            pipelineName: "demo-deployment",
+            branch: "main",
+            outcome: "FAILED",
+        });
         expect(api.getRecommendations).toHaveBeenCalledWith("", "", "");
         expect(api.generateRecommendation).toHaveBeenCalledWith(
             "",
             "",
             "",
+            null,
             [],
             [],
         );

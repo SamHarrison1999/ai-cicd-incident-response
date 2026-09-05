@@ -35,10 +35,10 @@ public interface NormalisedCiEventRepository extends JpaRepository<NormalisedCiE
         and (:commitSha is null or event.commitSha = :commitSha)
         and (:environment is null or event.environmentName = :environment)
         and (:eventType is null or event.eventType = :eventType)
-        and (:fromTime is null or event.occurredAt >= :fromTime)
-        and (:toTime is null or event.occurredAt <= :toTime)
+        and (:fromTimePresent = false or event.occurredAt >= :fromTime)
+        and (:toTimePresent = false or event.occurredAt <= :toTime)
         and (
-          :cursorOccurredAt is null
+          :cursorPresent = false
           or event.occurredAt < :cursorOccurredAt
           or (event.occurredAt = :cursorOccurredAt and event.receivedAt < :cursorReceivedAt)
           or (event.occurredAt = :cursorOccurredAt
@@ -55,8 +55,11 @@ public interface NormalisedCiEventRepository extends JpaRepository<NormalisedCiE
       @Param("commitSha") String commitSha,
       @Param("environment") String environment,
       @Param("eventType") NormalisedEventType eventType,
+      @Param("fromTimePresent") boolean fromTimePresent,
       @Param("fromTime") Instant fromTime,
+      @Param("toTimePresent") boolean toTimePresent,
       @Param("toTime") Instant toTime,
+      @Param("cursorPresent") boolean cursorPresent,
       @Param("cursorOccurredAt") Instant cursorOccurredAt,
       @Param("cursorReceivedAt") Instant cursorReceivedAt,
       @Param("cursorId") UUID cursorId,

@@ -1,12 +1,20 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
 
 import {
+    createEvidence,
     getEvidence,
     getEvidenceItem,
     type EvidenceKind,
+    type EvidenceRetentionClass,
 } from "../api/evidence";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 const evidenceKinds: EvidenceKind[] = [
     "LOG_EXCERPT",
@@ -14,6 +22,12 @@ const evidenceKinds: EvidenceKind[] = [
     "DEPLOYMENT_RECORD",
     "EVENT_SNAPSHOT",
     "STATUS_CHANGE",
+];
+
+const retentionClasses: EvidenceRetentionClass[] = [
+    "SHORT",
+    "STANDARD",
+    "EXTENDED",
 ];
 
 function formatDate(value: string) {
@@ -25,8 +39,20 @@ function formatDate(value: string) {
 
 export function EvidencePage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const queryClient = useQueryClient();
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
+
+    const [createKind, setCreateKind] = useState<EvidenceKind>("LOG_EXCERPT");
+    const [retentionClass, setRetentionClass] =
+        useState<EvidenceRetentionClass>("STANDARD");
+    const [createSourceSystem, setCreateSourceSystem] =
+        useState("portfolio-demo");
+    const [createSourceReference, setCreateSourceReference] = useState(
+        "browser-manual-evidence",
+    );
+    const [createContent, setCreateContent] = useState("");
+
     const [kind, setKind] = useState<EvidenceKind | "">("");
     const [sourceSystem, setSourceSystem] = useState("");
     const [query, setQuery] = useState("");
@@ -73,6 +99,26 @@ export function EvidencePage() {
         enabled:
             canQuery && accessToken !== null && selectedEvidenceId !== null,
     });
+    const createMutation = useMutation({
+        mutationFn: () =>
+            createEvidence(accessToken ?? "", organisationId, projectId, {
+                kind: createKind,
+                retentionClass,
+                sourceSystem: createSourceSystem,
+                sourceReference: createSourceReference,
+                occurredAt: new Date().toISOString(),
+                content: createContent,
+            }),
+        onSuccess: async (created) => {
+            setCreateContent("");
+            setSelectedEvidenceId(created.id);
+
+            await queryClient.invalidateQueries({
+                queryKey: ["evidence", organisationId, projectId],
+            });
+        },
+    });
+
     const items = evidence.data?.pages.flatMap((page) => page.items) ?? [];
 
     return (
@@ -119,6 +165,137 @@ export function EvidencePage() {
                     </p>
                 ) : null}
             </section>
+            <section
+                className="settings-panel"
+                aria-labelledby="create-evidence-heading"
+            >
+                <div className="section-heading">
+                    <div>
+                        <p className="eyebrow">Investigation input</p>
+                        <h3 id="create-evidence-heading">Add evidence</h3>
+                    </div>
+                    <span className="updated-label">Server sanitised</span>
+                </div>
+
+                <p>
+                    Add bounded technical evidence directly from the browser for
+                    investigation and recommendation grounding.
+                </p>
+
+                <div className="evidence-filter-grid">
+                    <label>
+                        New evidence kind
+                        <select
+                            value={createKind}
+                            onChange={(event) => {
+                                setCreateKind(
+                                    event.target.value as EvidenceKind,
+                                );
+                            }}
+                        >
+                            {evidenceKinds.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        Retention class
+                        <select
+                            value={retentionClass}
+                            onChange={(event) => {
+                                setRetentionClass(
+                                    event.target
+                                        .value as EvidenceRetentionClass,
+                                );
+                            }}
+                        >
+                            {retentionClasses.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                            ))}
+                        </select>
+                    </label>
+
+                    <label>
+                        New evidence source system
+                        <input
+                            value={createSourceSystem}
+                            maxLength={80}
+                            required
+                            onChange={(event) => {
+                                setCreateSourceSystem(event.target.value);
+                            }}
+                        />
+                    </label>
+
+                    <label>
+                        Source reference
+                        <input
+                            value={createSourceReference}
+                            maxLength={200}
+                            required
+                            onChange={(event) => {
+                                setCreateSourceReference(event.target.value);
+                            }}
+                        />
+                    </label>
+
+                    <label className="evidence-query-field">
+                        Evidence content
+                        <textarea
+                            value={createContent}
+                            required
+                            onChange={(event) => {
+                                setCreateContent(event.target.value);
+                            }}
+                        />
+                    </label>
+                </div>
+
+                <button
+                    className="button"
+                    type="button"
+                    disabled={
+                        !canQuery ||
+                        accessToken === null ||
+                        createContent.trim().length === 0 ||
+                        createSourceSystem.trim().length === 0 ||
+                        createSourceReference.trim().length === 0 ||
+                        createMutation.isPending
+                    }
+                    onClick={() => {
+                        createMutation.mutate();
+                    }}
+                >
+                    {createMutation.isPending
+                        ? "Adding evidence..."
+                        : "Add evidence"}
+                </button>
+
+                {!canQuery ? (
+                    <p className="field-hint">
+                        Select an organisation and project before adding
+                        evidence.
+                    </p>
+                ) : null}
+
+                {createMutation.isSuccess ? (
+                    <div className="notice notice-success" role="status">
+                        Evidence created and added to the selected workspace.
+                    </div>
+                ) : null}
+
+                {createMutation.isError ? (
+                    <div className="notice notice-error" role="alert">
+                        Evidence creation failed.
+                    </div>
+                ) : null}
+            </section>
+
             <section
                 className="settings-panel"
                 aria-labelledby="evidence-filter-heading"

@@ -29,4 +29,4 @@ COPY --from=builder /app/.venv /app/.venv
 USER appuser
 EXPOSE 8000
 
-CMD ["uvicorn", "incident_intelligence.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "exec uvicorn incident_intelligence.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

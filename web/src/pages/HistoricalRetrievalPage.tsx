@@ -6,11 +6,12 @@ import {
     type HistoricalRetrievalQuery,
 } from "../api/historicalRetrieval";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function HistoricalRetrievalPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const [query, setQuery] = useState<HistoricalRetrievalQuery>({});
     const [cursor, setCursor] = useState<string | undefined>();
     const canQuery =

@@ -9,14 +9,21 @@ import {
     type ReviewReason,
 } from "../api/reviews";
 import { useAuth } from "../auth/useAuth";
+import { ReviewTargetSelector } from "../components/review/ReviewTargetSelector";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function ReviewPage() {
     const { accessToken } = useAuth();
     const queryClient = useQueryClient();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const {
+        organisationId,
+        projectId,
+        incidentId,
+        setOrganisationId,
+        setProjectId,
+        setIncidentId,
+    } = useWorkspace();
     const [recommendationId, setRecommendationId] = useState("");
-    const [incidentId, setIncidentId] = useState("");
     const [action, setAction] = useState<ReviewAction>("ACCEPT");
     const [reason, setReason] = useState<ReviewReason>("NONE");
     const [comment, setComment] = useState("");
@@ -57,7 +64,7 @@ export function ReviewPage() {
                     editedCause: editedCause || null,
                 },
             ),
-        onSuccess: () =>
+        onSuccess: () => {
             void queryClient.invalidateQueries({
                 queryKey: [
                     "review-history",
@@ -65,7 +72,12 @@ export function ReviewPage() {
                     projectId,
                     recommendationId,
                 ],
-            }),
+            });
+
+            void queryClient.invalidateQueries({
+                queryKey: ["feedback", organisationId, projectId],
+            });
+        },
     });
     const resolve = useMutation({
         mutationFn: () =>
@@ -85,6 +97,10 @@ export function ReviewPage() {
             ),
         onSuccess: () => {
             setResolutionText("");
+
+            void queryClient.invalidateQueries({
+                queryKey: ["feedback", organisationId, projectId],
+            });
         },
     });
 
@@ -122,15 +138,15 @@ export function ReviewPage() {
                             }}
                         />
                     </label>
-                    <label>
-                        Recommendation ID
-                        <input
-                            value={recommendationId}
-                            onChange={(event) => {
-                                setRecommendationId(event.target.value);
-                            }}
-                        />
-                    </label>
+                    <ReviewTargetSelector
+                        accessToken={accessToken}
+                        organisationId={organisationId}
+                        projectId={projectId}
+                        incidentId={incidentId}
+                        recommendationId={recommendationId}
+                        onIncidentChange={setIncidentId}
+                        onRecommendationChange={setRecommendationId}
+                    />
                 </div>
                 {!canQuery ? (
                     <p className="field-hint">
@@ -259,15 +275,7 @@ export function ReviewPage() {
             {canQuery ? (
                 <section className="settings-panel review-resolution">
                     <h3>Record incident resolution</h3>
-                    <label>
-                        Incident ID
-                        <input
-                            value={incidentId}
-                            onChange={(event) => {
-                                setIncidentId(event.target.value);
-                            }}
-                        />
-                    </label>
+
                     <label>
                         Resolution text
                         <textarea

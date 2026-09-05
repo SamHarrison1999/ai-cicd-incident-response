@@ -13,7 +13,8 @@
 }
 
 .evidence-filter-grid input,
-.evidence-filter-grid select {
+.evidence-filter-grid select,
+.evidence-filter-grid textarea {
   min-width: 0;
   border: 1px solid var(--border);
   border-radius: 0.55rem;
@@ -24,6 +25,13 @@
 
 .evidence-query-field {
   grid-column: 1 / -1;
+}
+
+.evidence-query-field textarea {
+  min-height: 10rem;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  line-height: 1.5;
 }
 
 .evidence-workspace {

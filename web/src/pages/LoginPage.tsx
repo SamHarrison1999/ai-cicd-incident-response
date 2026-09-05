@@ -26,7 +26,7 @@ export function LoginPage() {
 
         try {
             await auth.login(email, password);
-            navigate(state?.from ?? "/", { replace: true });
+            await navigate(state?.from ?? "/", { replace: true });
         } catch (caught) {
             setError(
                 caught instanceof ApiError
@@ -88,7 +88,7 @@ export function LoginPage() {
                     </label>
 
                     <button className="button" disabled={submitting}>
-                        {submitting ? "Signing inÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" : "Sign in"}
+                        {submitting ? "Signing in\u2026" : "Sign in"}
                     </button>
                 </form>
 

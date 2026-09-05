@@ -22,12 +22,13 @@ describe("historical retrieval API", () => {
 
         await getHistoricalRetrieval("token", "org-1", "project-1", {
             diagnosisCategory: "DEPENDENCY_FAILURE_SUSPECTED",
+            query: "timeout",
             cursor: "cursor-value",
             limit: 10,
         });
 
         expect(fetchMock).toHaveBeenCalledWith(
-            "/control-plane/api/v1/organisations/org-1/projects/project-1/historical-retrieval?diagnosisCategory=DEPENDENCY_FAILURE_SUSPECTED&cursor=cursor-value&limit=10",
+            "/control-plane/api/v1/organisations/org-1/projects/project-1/historical-retrieval?diagnosisCategory=DEPENDENCY_FAILURE_SUSPECTED&q=timeout&cursor=cursor-value&limit=10",
             expect.objectContaining({ credentials: "include" }),
         );
     });

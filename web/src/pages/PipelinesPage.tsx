@@ -1,8 +1,15 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQuery,
+    useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
 
+import { simulateDemoCiRun, type DemoCiOutcome } from "../api/demoCi";
 import { getPipelineRuns, getPipelineTimeline } from "../api/pipelineRuns";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 const statusOptions = [
     "QUEUED",
@@ -33,8 +40,15 @@ function formatDate(value: string) {
 
 export function PipelinesPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const queryClient = useQueryClient();
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
+
+    const simulationAccessToken = accessToken ?? "";
+    const [demoPipelineName, setDemoPipelineName] = useState("demo-deployment");
+    const [demoBranch, setDemoBranch] = useState("main");
+    const [demoOutcome, setDemoOutcome] = useState<DemoCiOutcome>("FAILED");
+
     const [status, setStatus] = useState("");
     const [branch, setBranch] = useState("");
     const [commitSha, setCommitSha] = useState("");
@@ -73,6 +87,30 @@ export function PipelinesPage() {
         getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
         enabled: canQuery && accessToken !== null,
     });
+    const demoSimulation = useMutation({
+        mutationFn: () =>
+            simulateDemoCiRun(
+                simulationAccessToken,
+                organisationId,
+                projectId,
+                {
+                    pipelineName: demoPipelineName,
+                    branch: demoBranch,
+                    outcome: demoOutcome,
+                },
+            ),
+        onSuccess: async () => {
+            await Promise.all([
+                queryClient.invalidateQueries({
+                    queryKey: ["pipeline-runs", organisationId, projectId],
+                }),
+                queryClient.invalidateQueries({
+                    queryKey: ["pipeline-timeline", organisationId, projectId],
+                }),
+            ]);
+        },
+    });
+
     const timelineEvents =
         timeline.data?.pages.flatMap((page) => page.items) ?? [];
 
@@ -117,6 +155,104 @@ export function PipelinesPage() {
                     </p>
                 ) : null}
             </section>
+            <section
+                className="settings-panel"
+                aria-labelledby="demo-ci-heading"
+            >
+                <div className="section-heading">
+                    <div>
+                        <p className="eyebrow">Interactive portfolio demo</p>
+                        <h3 id="demo-ci-heading">Demo CI simulator</h3>
+                    </div>
+                    <span className="updated-label">GitHub Actions</span>
+                </div>
+
+                <p>
+                    Send a deterministic signed CI event through the real
+                    webhook ingestion, normalisation, incident correlation, and
+                    evidence capture pipeline.
+                </p>
+
+                <div className="timeline-filter-grid">
+                    <label>
+                        Pipeline name
+                        <input
+                            value={demoPipelineName}
+                            onChange={(event) => {
+                                setDemoPipelineName(event.target.value);
+                            }}
+                        />
+                    </label>
+
+                    <label>
+                        Demo branch
+                        <input
+                            value={demoBranch}
+                            onChange={(event) => {
+                                setDemoBranch(event.target.value);
+                            }}
+                        />
+                    </label>
+
+                    <label>
+                        Outcome
+                        <select
+                            value={demoOutcome}
+                            onChange={(event) => {
+                                setDemoOutcome(
+                                    event.target.value as DemoCiOutcome,
+                                );
+                            }}
+                        >
+                            <option value="FAILED">Failed</option>
+                            <option value="SUCCEEDED">Succeeded</option>
+                        </select>
+                    </label>
+                </div>
+
+                <button
+                    className="button"
+                    type="button"
+                    disabled={
+                        !canQuery ||
+                        accessToken === null ||
+                        demoSimulation.isPending
+                    }
+                    onClick={() => {
+                        demoSimulation.mutate();
+                    }}
+                >
+                    {demoSimulation.isPending
+                        ? "Simulating..."
+                        : "Simulate CI run"}
+                </button>
+
+                {!canQuery ? (
+                    <p className="field-hint">
+                        Select an organisation and project before running the
+                        browser demo.
+                    </p>
+                ) : null}
+
+                {demoSimulation.isSuccess ? (
+                    <div className="notice notice-success" role="status">
+                        Simulated {demoSimulation.data.outcome} pipeline run
+                        accepted through signed GitHub Actions ingestion.
+                    </div>
+                ) : null}
+
+                {demoSimulation.isError ? (
+                    <div className="notice notice-error" role="alert">
+                        Demo CI simulation failed.
+                    </div>
+                ) : null}
+
+                <p className="field-hint">
+                    This creates observational incident-response data only. It
+                    does not execute automated remediation.
+                </p>
+            </section>
+
             <section
                 className="settings-panel"
                 aria-labelledby="timeline-filter-heading"
@@ -202,8 +338,8 @@ export function PipelinesPage() {
                 <div className="empty-state">
                     <h3>No pipeline runs available</h3>
                     <p>
-                        Run the signed webhook simulator to create a
-                        deterministic demo event.
+                        Use the Demo CI simulator above to create a
+                        deterministic pipeline event in this workspace.
                     </p>
                 </div>
             ) : null}
@@ -266,8 +402,8 @@ export function PipelinesPage() {
                     <div className="empty-state">
                         <h3>No events match these filters</h3>
                         <p>
-                            Try clearing a filter or run the signed webhook
-                            simulator to create a timeline event.
+                            Try clearing a filter or use the Demo CI simulator
+                            above to create a timeline event.
                         </p>
                     </div>
                 ) : null}

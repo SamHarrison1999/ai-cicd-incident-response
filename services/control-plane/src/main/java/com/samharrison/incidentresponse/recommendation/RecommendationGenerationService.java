@@ -12,14 +12,17 @@ public class RecommendationGenerationService {
   private final EvidenceBundleAssembler assembler;
   private final ProviderRecommendationRegistry registry;
   private final RecommendationService recommendationService;
+  private final RecommendationCitationRepository citationRepository;
 
   public RecommendationGenerationService(
       EvidenceBundleAssembler assembler,
       ProviderRecommendationRegistry registry,
-      RecommendationService recommendationService) {
+      RecommendationService recommendationService,
+      RecommendationCitationRepository citationRepository) {
     this.assembler = assembler;
     this.registry = registry;
     this.recommendationService = recommendationService;
+    this.citationRepository = citationRepository;
   }
 
   @Transactional
@@ -63,6 +66,28 @@ public class RecommendationGenerationService {
             "retrieval-1",
             "recommendation-1",
             Instant.now());
-    return recommendationService.save(userId, recommendation);
+    Recommendation saved = recommendationService.save(userId, recommendation);
+
+    for (EvidenceBundleAssembler.EvidenceSummary evidence : bundle.evidence()) {
+      citationRepository.save(
+          new RecommendationCitation(
+              UUID.randomUUID(),
+              saved.getId(),
+              evidence.id(),
+              null,
+              "Evidence supplied to bounded recommendation generation."));
+    }
+
+    for (EvidenceBundleAssembler.HistoricalSummary historical : bundle.historical()) {
+      citationRepository.save(
+          new RecommendationCitation(
+              UUID.randomUUID(),
+              saved.getId(),
+              null,
+              historical.id(),
+              "Historical record supplied to bounded recommendation generation."));
+    }
+
+    return saved;
   }
 }

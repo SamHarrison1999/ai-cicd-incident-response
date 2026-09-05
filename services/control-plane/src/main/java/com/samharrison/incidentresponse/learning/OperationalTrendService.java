@@ -37,11 +37,25 @@ public class OperationalTrendService {
   public TrendComparison compare(
       UUID userId, UUID organisationId, UUID projectId, TrendQueryCriteria criteria) {
     List<OperationalTrend> items = list(userId, organisationId, projectId, criteria);
-    if (items.size() < 2) {
+
+    if (items.isEmpty()) {
       return new TrendComparison(null, 0, 0, 0, TrendSuppressionReason.INSUFFICIENT_SAMPLE);
     }
+
     OperationalTrend current = items.get(0);
-    OperationalTrend previous = items.get(1);
+
+    OperationalTrend previous =
+        items.stream()
+            .skip(1)
+            .filter(item -> current.getDimension() == item.getDimension())
+            .filter(item -> current.getDimensionKey().equals(item.getDimensionKey()))
+            .findFirst()
+            .orElse(null);
+
+    if (previous == null) {
+      return new TrendComparison(null, 0, 0, 0, TrendSuppressionReason.INSUFFICIENT_SAMPLE);
+    }
+
     return new TrendComparison(
         current.getDimensionKey(),
         current.getObservedCount(),

@@ -12,6 +12,9 @@ public interface EventSourceRepository extends JpaRepository<EventSource, UUID> 
 
   Optional<EventSource> findByIdAndOrganisationId(UUID id, UUID organisationId);
 
+  Optional<EventSource> findByProjectIdAndOrganisationIdAndDisplayName(
+      UUID projectId, UUID organisationId, String displayName);
+
   @EntityGraph(attributePaths = {"organisation", "project"})
   @Query("select source from EventSource source where source.id = :id")
   Optional<EventSource> findForWebhookIngestionById(@Param("id") UUID id);

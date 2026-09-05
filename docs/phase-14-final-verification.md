@@ -52,3 +52,13 @@ git push origin phase-14.0.0-demo
 
 The tag identifies the reviewed demonstration state. It is not a production
 release and does not imply public deployment.
+
+## Hosted smoke test
+
+- [ ] Hosted URL returns HTTP 200.
+- [ ] A newly registered user can open the Overview page.
+- [ ] The one-click demo provisions or reuses the portfolio workspace.
+- [ ] The demo run is accepted.
+- [ ] Pipeline runs shows the deterministic failed CI run.
+- [ ] Historical retrieval returns either records or the valid empty state.
+- [ ] No credentials, tokens, private data, or secrets appear in screenshots or documentation.

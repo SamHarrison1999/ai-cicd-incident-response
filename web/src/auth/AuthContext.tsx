@@ -18,6 +18,7 @@ import {
     registerUser,
     type RegisterRequest,
 } from "../api/authentication";
+import { restoreWorkspaceForAccount } from "../workspace/restoreWorkspace";
 
 interface AuthState {
     accessToken: string | null;
@@ -53,11 +54,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
         [],
     );
 
+    const restoreWorkspaceSafely = useCallback(async (accessToken: string) => {
+        try {
+            await restoreWorkspaceForAccount(accessToken);
+        } catch {
+            // Workspace discovery must never prevent authentication.
+        }
+    }, []);
+
     useEffect(() => {
         let active = true;
 
         refreshSession()
-            .then((authentication) => {
+            .then(async (authentication) => {
+                await restoreWorkspaceSafely(authentication.accessToken);
+
                 if (active) {
                     applyAuthentication(authentication);
                 }
@@ -75,13 +86,20 @@ export function AuthProvider({ children }: PropsWithChildren) {
         return () => {
             active = false;
         };
-    }, [applyAuthentication]);
+    }, [applyAuthentication, restoreWorkspaceSafely]);
 
     const login = useCallback(
         async (email: string, password: string) => {
-            applyAuthentication(await loginUser({ email, password }));
+            const authentication = await loginUser({
+                email,
+                password,
+            });
+
+            await restoreWorkspaceSafely(authentication.accessToken);
+
+            applyAuthentication(authentication);
         },
-        [applyAuthentication],
+        [applyAuthentication, restoreWorkspaceSafely],
     );
 
     const register = useCallback(async (request: RegisterRequest) => {

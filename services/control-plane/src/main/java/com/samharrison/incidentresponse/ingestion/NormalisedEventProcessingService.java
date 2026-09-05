@@ -2,6 +2,9 @@ package com.samharrison.incidentresponse.ingestion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samharrison.incidentresponse.evidence.IngestionEvidenceService;
+import com.samharrison.incidentresponse.incident.Incident;
+import com.samharrison.incidentresponse.incident.IncidentCorrelationWorkflow;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
@@ -17,18 +20,24 @@ class NormalisedEventProcessingService {
   private final NormalisedCiEventRepository normalisedCiEventRepository;
   private final WebhookDeliveryRepository webhookDeliveryRepository;
   private final IngestionMetrics ingestionMetrics;
+  private final IncidentCorrelationWorkflow incidentCorrelationWorkflow;
+  private final IngestionEvidenceService ingestionEvidenceService;
 
   NormalisedEventProcessingService(
       ProviderEventAdapterRegistry adapterRegistry,
       PipelineRunRepository pipelineRunRepository,
       NormalisedCiEventRepository normalisedCiEventRepository,
       WebhookDeliveryRepository webhookDeliveryRepository,
-      IngestionMetrics ingestionMetrics) {
+      IngestionMetrics ingestionMetrics,
+      IncidentCorrelationWorkflow incidentCorrelationWorkflow,
+      IngestionEvidenceService ingestionEvidenceService) {
     this.adapterRegistry = adapterRegistry;
     this.pipelineRunRepository = pipelineRunRepository;
     this.normalisedCiEventRepository = normalisedCiEventRepository;
     this.webhookDeliveryRepository = webhookDeliveryRepository;
     this.ingestionMetrics = ingestionMetrics;
+    this.incidentCorrelationWorkflow = incidentCorrelationWorkflow;
+    this.ingestionEvidenceService = ingestionEvidenceService;
   }
 
   @Transactional
@@ -83,7 +92,7 @@ class NormalisedEventProcessingService {
     }
     pipelineRun = pipelineRunRepository.save(pipelineRun);
 
-    normalisedCiEventRepository.save(
+    NormalisedCiEvent normalisedEvent =
         new NormalisedCiEvent(
             java.util.UUID.randomUUID(),
             eventSource.getOrganisation(),
@@ -104,7 +113,11 @@ class NormalisedEventProcessingService {
             mapped.gitRef(),
             mapped.environmentName(),
             mapped.evidenceSummary(),
-            mapped.sourceFields()));
+            mapped.sourceFields());
+
+    normalisedCiEventRepository.save(normalisedEvent);
+    Optional<Incident> incident = incidentCorrelationWorkflow.correlate(normalisedEvent);
+    ingestionEvidenceService.capture(normalisedEvent, incident, delivery, receivedAt);
 
     delivery.markProcessed("NORMALISED_EVENT_CREATED", receivedAt);
     ingestionMetrics.recordNormalisedEvent();

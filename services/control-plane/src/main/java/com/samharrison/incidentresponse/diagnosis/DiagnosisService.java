@@ -34,7 +34,7 @@ public class DiagnosisService {
     this.engine = engine;
   }
 
-  @Transactional(readOnly = true)
+  @Transactional
   public DiagnosisResult diagnose(UUID userId, UUID organisationId, UUID projectId) {
     tenantAccessService.requireActiveMembership(organisationId, userId);
     requireProject(organisationId, projectId);

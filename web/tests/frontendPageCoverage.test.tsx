@@ -27,6 +27,7 @@ const mocks = vi.hoisted(() => ({
     getDiagnosis: vi.fn(),
     getEvidence: vi.fn(),
     getEvidenceItem: vi.fn(),
+    createEvidence: vi.fn(),
     getFeedback: vi.fn(),
     getHistoricalRetrieval: vi.fn(),
     getIncidents: vi.fn(),
@@ -35,6 +36,8 @@ const mocks = vi.hoisted(() => ({
     getLearningTrends: vi.fn(),
     createOrganisation: vi.fn(),
     getOrganisations: vi.fn(),
+    createProject: vi.fn(),
+    getProjects: vi.fn(),
     getPipelineRuns: vi.fn(),
     getPipelineTimeline: vi.fn(),
     generateRecommendation: vi.fn(),
@@ -52,6 +55,7 @@ vi.mock("../src/api/diagnosis", () => ({
     getDiagnosis: mocks.getDiagnosis,
 }));
 vi.mock("../src/api/evidence", () => ({
+    createEvidence: mocks.createEvidence,
     getEvidence: mocks.getEvidence,
     getEvidenceItem: mocks.getEvidenceItem,
 }));
@@ -70,6 +74,10 @@ vi.mock("../src/api/learning", () => ({
 vi.mock("../src/api/organisations", () => ({
     createOrganisation: mocks.createOrganisation,
     getOrganisations: mocks.getOrganisations,
+}));
+vi.mock("../src/api/projects", () => ({
+    createProject: mocks.createProject,
+    getProjects: mocks.getProjects,
 }));
 vi.mock("../src/api/pipelineRuns", () => ({
     getPipelineRuns: mocks.getPipelineRuns,
@@ -113,8 +121,27 @@ function client() {
     });
 }
 
-function renderPage(element: ReactElement) {
+function renderPage(
+    element: ReactElement,
+    workspace?: {
+        organisationId: string;
+        projectId: string;
+    },
+) {
+    sessionStorage.clear();
     cleanup();
+
+    if (workspace !== undefined) {
+        sessionStorage.setItem(
+            "incident-response.workspace",
+            JSON.stringify({
+                organisationId: workspace.organisationId,
+                projectId: workspace.projectId,
+                incidentId: "",
+            }),
+        );
+    }
+
     return render(
         <MemoryRouter>
             <QueryClientProvider client={client()}>
@@ -133,6 +160,18 @@ async function fillScope(
     }
 }
 
+async function fillPipelineScope(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("Organisation ID"), "org");
+    await user.type(screen.getByLabelText("Project ID"), "project");
+}
+
+async function fillPipelineFilters(user: ReturnType<typeof userEvent.setup>) {
+    await fillPipelineScope(user);
+    await user.type(screen.getByLabelText("Branch"), "main");
+    await user.type(screen.getByLabelText("Commit SHA"), "abc");
+    await user.type(screen.getByLabelText("Environment"), "prod");
+}
+
 beforeEach(() => {
     vi.clearAllMocks();
     mocks.auth.accessToken = "token";
@@ -147,6 +186,17 @@ beforeEach(() => {
         missingEvidence: ["logs"],
         warnings: ["review"],
         abstentionReason: null,
+    });
+    mocks.createEvidence.mockResolvedValue({
+        id: "created-evidence",
+        kind: "LOG_EXCERPT",
+        retentionClass: "STANDARD",
+        sourceSystem: "portfolio-demo",
+        sourceReference: "browser-manual-evidence",
+        occurredAt: "2026-09-05T16:00:00Z",
+        ingestedAt: "2026-09-05T16:00:01Z",
+        contentHash: "hash",
+        contentLineCount: 1,
     });
     mocks.getEvidence.mockResolvedValue({
         items: [
@@ -264,7 +314,38 @@ beforeEach(() => {
             version: 1,
         },
     ]);
-    mocks.createOrganisation.mockResolvedValue({});
+    mocks.createOrganisation.mockResolvedValue({
+        id: "new-org",
+        name: "New org",
+        slug: "new-org",
+        createdAt: "now",
+        updatedAt: "now",
+        version: 1,
+    });
+    mocks.getProjects.mockResolvedValue([
+        {
+            id: "project",
+            organisationId: "org",
+            name: "Project",
+            slug: "project",
+            description: "Portfolio project",
+            status: "ACTIVE",
+            createdAt: "now",
+            updatedAt: "now",
+            version: 1,
+        },
+    ]);
+    mocks.createProject.mockResolvedValue({
+        id: "new-project",
+        organisationId: "org",
+        name: "New project",
+        slug: "new-project",
+        description: "Created in the browser",
+        status: "ACTIVE",
+        createdAt: "now",
+        updatedAt: "now",
+        version: 1,
+    });
     mocks.getPipelineRuns.mockResolvedValue([
         {
             id: "run",
@@ -309,6 +390,7 @@ beforeEach(() => {
         items: [
             {
                 id: "recommendation",
+                incidentId: "incident",
                 category: "DEPENDENCY",
                 summary: "Investigate dependency",
                 likelyCause: "dependency",
@@ -417,8 +499,25 @@ describe("frontend page and component coverage", () => {
         await user.click(screen.getByRole("button", { name: /Load more/ }));
         historical.unmount();
 
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project", "INCIDENT", "UNKNOWN"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
+
+        await user.selectOptions(
+            screen.getByLabelText("Dimension"),
+            "INCIDENT_CATEGORY",
+        );
+
+        await screen.findByRole("option", {
+            name: "Unknown",
+        });
+
+        await user.selectOptions(
+            screen.getByLabelText("Dimension key"),
+            "UNKNOWN",
+        );
+
         expect(
             await screen.findByText("Adjacent-window comparison"),
         ).toBeInTheDocument();
@@ -431,6 +530,7 @@ describe("frontend page and component coverage", () => {
         const incidents = renderPage(<IncidentsPage />);
         await fillScope(user, ["org", "project"]);
         expect(await screen.findByText("Pipeline failed")).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Use incident" }));
         await user.selectOptions(
             screen.getByRole("combobox", { name: /Change status/ }),
             "TRIAGED",
@@ -438,32 +538,65 @@ describe("frontend page and component coverage", () => {
         incidents.unmount();
 
         const pipelines = renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByRole("heading", { name: "build" }),
         ).toBeInTheDocument();
-        await user.selectOptions(screen.getAllByRole("combobox")[0]!, "FAILED");
+        await user.selectOptions(screen.getByLabelText("Status"), "FAILED");
         pipelines.unmount();
 
         const recommendations = renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+
         expect(
             await screen.findByText("Investigate dependency"),
         ).toBeInTheDocument();
-        await user.click(
-            screen.getByRole("button", { name: /Generate bounded/ }),
+
+        const generateButton = screen.getByRole("button", {
+            name: /Generate bounded/,
+        });
+
+        expect(generateButton).toBeDisabled();
+
+        const evidenceCheckbox = await screen.findByRole("checkbox", {
+            name: /Select LOG_EXCERPT delivery/,
+        });
+
+        await user.click(evidenceCheckbox);
+        expect(generateButton).toBeEnabled();
+
+        await user.click(evidenceCheckbox);
+        expect(generateButton).toBeDisabled();
+
+        await user.click(evidenceCheckbox);
+
+        await user.type(
+            screen.getByLabelText("Incident ID (optional)"),
+            "incident",
         );
+
+        await user.click(generateButton);
+
+        expect(mocks.generateRecommendation).toHaveBeenCalledWith(
+            "token",
+            "org",
+            "project",
+            "incident",
+            ["evidence"],
+            [],
+        );
+
         recommendations.unmount();
 
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(await screen.findByText("ACCEPT")).toBeInTheDocument();
         await user.selectOptions(screen.getByLabelText("Action"), "EDIT");
         await user.type(screen.getByLabelText("Edited summary"), "edited");
         await user.type(screen.getByLabelText("Edited cause"), "cause");
         await user.type(screen.getByLabelText("Comment"), "comment");
         await user.click(screen.getByRole("button", { name: "Submit review" }));
-        await user.type(screen.getByLabelText("Incident ID"), "incident");
+
         await user.type(screen.getByLabelText("Resolution text"), "resolution");
         await user.click(
             screen.getByRole("button", { name: /Record bounded/ }),
@@ -474,6 +607,7 @@ describe("frontend page and component coverage", () => {
         const user = userEvent.setup();
         const organisations = renderPage(<OrganisationsPage />);
         expect(await screen.findByText("Org")).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Use workspace" }));
         await user.type(screen.getByLabelText("Name"), "New org");
         await user.type(screen.getAllByRole("textbox")[1]!, "new-org");
         await user.click(
@@ -529,6 +663,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({ items: [], nextCursor: null });
         renderPage(<EvidencePage />);
         await fillScope(user, ["org", "project"]);
@@ -554,6 +699,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -593,6 +749,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -621,12 +788,44 @@ describe("frontend page and component coverage", () => {
             "timeout",
         );
         await screen.findByText("Evidence items");
+
+        mocks.getEvidence.mockResolvedValueOnce({
+            items: [
+                {
+                    id: "evidence-page-2",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery-page-2",
+                    occurredAt: "2026-08-16T09:55:00Z",
+                    ingestedAt: "2026-08-16T09:56:00Z",
+                    contentHash: "hash-page-2",
+                    contentLineCount: 3,
+                },
+            ],
+            nextCursor: null,
+        });
+
         await user.click(
             screen.getByRole("button", { name: "Load more evidence" }),
         );
+
+        expect(await screen.findByText("2 loaded")).toBeInTheDocument();
+
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -941,8 +1140,10 @@ describe("frontend page and component coverage", () => {
             delta: -2,
             suppressionReason: "SMALL_SAMPLE",
         });
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(
             await screen.findByText("No comparable dimension"),
         ).toBeInTheDocument();
@@ -954,8 +1155,10 @@ describe("frontend page and component coverage", () => {
 
         mocks.getLearningTrends.mockReset();
         mocks.getLearningTrends.mockReturnValue(never);
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(
             await screen.findByText("Loading trends..."),
         ).toBeInTheDocument();
@@ -963,8 +1166,10 @@ describe("frontend page and component coverage", () => {
 
         mocks.getLearningTrends.mockReset();
         mocks.getLearningTrends.mockRejectedValue(new Error("learning"));
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "Operational learning could not",
         );
@@ -1048,7 +1253,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockResolvedValue([]);
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText(/No pipeline runs available/),
         ).toBeInTheDocument();
@@ -1057,7 +1262,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockReturnValue(never);
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText("Loading pipeline runs..."),
         ).toBeInTheDocument();
@@ -1066,7 +1271,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockRejectedValue(new Error("runs"));
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "Pipeline runs could not",
         );
@@ -1081,7 +1286,7 @@ describe("frontend page and component coverage", () => {
             hasNext: false,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText(/No events match these filters/),
         ).toBeInTheDocument();
@@ -1109,9 +1314,9 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineTimeline.mockReset();
         mocks.getPipelineTimeline.mockRejectedValue(new Error("timeline"));
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project", "main", "abc", "prod"]);
+        await fillPipelineFilters(user);
         await user.selectOptions(
-            screen.getAllByRole("combobox")[1]!,
+            screen.getByLabelText("Event type"),
             "PIPELINE_RUN_COMPLETED",
         );
         expect(await screen.findByRole("alert")).toHaveTextContent(
@@ -1143,7 +1348,7 @@ describe("frontend page and component coverage", () => {
             hasNext: false,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project", "main", "abc", "prod"]);
+        await fillPipelineFilters(user);
         expect(
             (await screen.findAllByText("PIPELINE_RUN_COMPLETED")).length,
         ).toBeGreaterThan(0);
@@ -1173,7 +1378,7 @@ describe("frontend page and component coverage", () => {
             hasNext: true,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         await screen.findAllByText("PIPELINE_RUN_COMPLETED");
         mocks.getPipelineTimeline.mockReset();
         mocks.getPipelineTimeline.mockReturnValue(never);
@@ -1184,6 +1389,80 @@ describe("frontend page and component coverage", () => {
             await screen.findByRole("button", { name: "Loading more..." }),
         ).toBeDisabled();
         cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
+        mocks.getEvidence.mockResolvedValue({
+            items: [],
+            nextCursor: null,
+        });
+        mocks.getRecommendations.mockReset();
+        mocks.getRecommendations.mockResolvedValue({ items: [] });
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(
+            await screen.findByText(
+                "No evidence inputs are available for this project.",
+            ),
+        ).toBeInTheDocument();
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockReturnValue(never);
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(
+            await screen.findByText("Loading evidence inputs..."),
+        ).toBeInTheDocument();
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockRejectedValue(new Error("evidence inputs"));
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(await screen.findByRole("alert")).toHaveTextContent(
+            "Evidence inputs could not be loaded.",
+        );
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
 
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
@@ -1242,10 +1521,43 @@ describe("frontend page and component coverage", () => {
 
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
+        mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
         mocks.generateRecommendation.mockReset();
         mocks.generateRecommendation.mockRejectedValue(new Error("generate"));
         renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+        await user.click(
+            await screen.findByRole("checkbox", {
+                name: /Select LOG_EXCERPT delivery/,
+            }),
+        );
         await user.click(
             screen.getByRole("button", { name: /Generate bounded/ }),
         );
@@ -1256,10 +1568,43 @@ describe("frontend page and component coverage", () => {
 
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
+        mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
         mocks.generateRecommendation.mockReset();
         mocks.generateRecommendation.mockReturnValue(never);
         renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+        await user.click(
+            await screen.findByRole("checkbox", {
+                name: /Select LOG_EXCERPT delivery/,
+            }),
+        );
         await user.click(
             screen.getByRole("button", { name: /Generate bounded/ }),
         );
@@ -1268,10 +1613,31 @@ describe("frontend page and component coverage", () => {
         ).toBeDisabled();
         cleanup();
 
+        mocks.getRecommendations.mockReset();
+        mocks.getRecommendations.mockResolvedValue({
+            items: [
+                {
+                    id: "recommendation",
+                    incidentId: "incident",
+                    category: "DEPENDENCY",
+                    summary: "Investigate dependency",
+                    likelyCause: "dependency",
+                    confidence: 0.8,
+                    confidenceExplanation: "Supported signal",
+                    status: "RECOMMENDED",
+                    abstentionReason: null,
+                    providerName: "deterministic",
+                    modelVersion: "v1",
+                    retrievalSetVersion: "v1",
+                    citations: 1,
+                },
+            ],
+        });
+
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockResolvedValue({ items: [] });
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(
             await screen.findByText(/No reviews recorded/),
         ).toBeInTheDocument();
@@ -1287,7 +1653,7 @@ describe("frontend page and component coverage", () => {
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockReturnValue(never);
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(
             await screen.findByText("Loading review history..."),
         ).toBeInTheDocument();
@@ -1311,13 +1677,13 @@ describe("frontend page and component coverage", () => {
         mocks.createResolution.mockReset();
         mocks.createResolution.mockReturnValue(never);
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         await screen.findByText("ACCEPT");
         await user.click(screen.getByRole("button", { name: "Submit review" }));
         expect(
             await screen.findByRole("button", { name: "Submitting..." }),
         ).toBeDisabled();
-        await user.type(screen.getByLabelText("Incident ID"), "incident");
+
         await user.type(screen.getByLabelText("Resolution text"), "resolution");
         await user.click(
             screen.getByRole("button", { name: "Record bounded resolution" }),
@@ -1330,7 +1696,7 @@ describe("frontend page and component coverage", () => {
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockRejectedValue(new Error("history"));
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "review operation could not",
         );

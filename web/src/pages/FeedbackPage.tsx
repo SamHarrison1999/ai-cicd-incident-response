@@ -3,11 +3,12 @@ import { useState } from "react";
 
 import { getFeedback } from "../api/feedback";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function FeedbackPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const [policyVersion, setPolicyVersion] = useState("");
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");

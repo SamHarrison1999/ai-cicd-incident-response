@@ -51,7 +51,10 @@ The local demonstration is started with:
 
 ### Honest limitations
 
-This is a portfolio-grade local demonstration, not a production deployment.
+This is a portfolio-grade hosted and local demonstration, not a production
+deployment. The hosted environment is intended for synthetic portfolio
+verification and does not claim production-grade availability, managed backups,
+capacity guarantees, or autonomous remediation.
 It does not claim managed infrastructure, TLS termination, secret-manager
 integration, public image publication, backup and restore automation,
 Kubernetes operations, measured capacity, or autonomous remediation.

@@ -6,13 +6,18 @@ import {
 } from "../src/api/authentication";
 import { getControlPlaneStatus } from "../src/api/controlPlane";
 import { getDiagnosis } from "../src/api/diagnosis";
-import { getEvidence, getEvidenceItem } from "../src/api/evidence";
+import {
+    createEvidence,
+    getEvidence,
+    getEvidenceItem,
+} from "../src/api/evidence";
 import { getFeedback } from "../src/api/feedback";
 import { getHistoricalRetrieval } from "../src/api/historicalRetrieval";
 import { ApiError, requestJson } from "../src/api/httpClient";
 import { getIncidents, transitionIncident } from "../src/api/incidents";
 import { getLearningComparison, getLearningTrends } from "../src/api/learning";
 import { createOrganisation, getOrganisations } from "../src/api/organisations";
+import { createProject, getProjects } from "../src/api/projects";
 import { getPipelineRuns, getPipelineTimeline } from "../src/api/pipelineRuns";
 import {
     generateRecommendation,
@@ -154,6 +159,14 @@ describe("frontend API production coverage", () => {
             limit: 10,
         });
         await getEvidence("token", "org", "project");
+        await createEvidence("token", "org", "project", {
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            content: "dependency timeout",
+        });
         await getEvidenceItem("token", "org", "project", "evidence");
         await getFeedback("token", "org", "project", {
             policyVersion: "policy",
@@ -219,6 +232,12 @@ describe("frontend API production coverage", () => {
         });
         await getOrganisations("token");
         await createOrganisation("token", { name: "Org", slug: "org" });
+        await getProjects("token", "org");
+        await createProject("token", "org", {
+            name: "Project",
+            slug: "project",
+            description: "Portfolio project",
+        });
         await getPipelineRuns("token", "org", "project");
         await getPipelineTimeline("token", "org", "project", {
             status: "FAILED",
@@ -233,7 +252,14 @@ describe("frontend API production coverage", () => {
         });
         await getPipelineTimeline("token", "org", "project");
         await getRecommendations("token", "org", "project");
-        await generateRecommendation("token", "org", "project", ["e"], ["h"]);
+        await generateRecommendation(
+            "token",
+            "org",
+            "project",
+            "incident",
+            ["e"],
+            ["h"],
+        );
         await getReviewHistory("token", "org", "project", "recommendation");
         await submitReview("token", "org", "project", "recommendation", {
             action: "EDIT",

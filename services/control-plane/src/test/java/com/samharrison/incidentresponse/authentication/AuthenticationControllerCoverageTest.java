@@ -35,6 +35,7 @@ class AuthenticationControllerCoverageTest {
             Duration.ofMinutes(15),
             Duration.ofDays(7),
             "incident_refresh",
+            "/api/v1/auth",
             false,
             12);
     controller = new AuthenticationController(authenticationService, properties);
@@ -75,7 +76,8 @@ class AuthenticationControllerCoverageTest {
     assertThat(response.getBody().accessToken()).isEqualTo("access-token");
     assertThat(response.getBody().tokenType()).isEqualTo("Bearer");
     assertThat(response.getHeaders().getFirst(HttpHeaders.SET_COOKIE))
-        .contains("incident_refresh=refresh-token");
+        .contains("incident_refresh=refresh-token")
+        .contains("Path=/api/v1/auth");
   }
 
   @Test
