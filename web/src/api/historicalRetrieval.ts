@@ -55,7 +55,9 @@ export function getHistoricalRetrieval(
 ): Promise<HistoricalRetrievalResponse> {
     const params = new URLSearchParams();
     for (const [key, value] of Object.entries(query)) {
-        if (value !== undefined && value !== "") params.set(key, String(value));
+        if (value !== undefined && value !== "") {
+            params.set(key === "query" ? "q" : key, String(value));
+        }
     }
     params.set("limit", String(query.limit ?? 25));
     return requestJson(
