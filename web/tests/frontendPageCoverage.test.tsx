@@ -35,6 +35,8 @@ const mocks = vi.hoisted(() => ({
     getLearningTrends: vi.fn(),
     createOrganisation: vi.fn(),
     getOrganisations: vi.fn(),
+    createProject: vi.fn(),
+    getProjects: vi.fn(),
     getPipelineRuns: vi.fn(),
     getPipelineTimeline: vi.fn(),
     generateRecommendation: vi.fn(),
@@ -70,6 +72,10 @@ vi.mock("../src/api/learning", () => ({
 vi.mock("../src/api/organisations", () => ({
     createOrganisation: mocks.createOrganisation,
     getOrganisations: mocks.getOrganisations,
+}));
+vi.mock("../src/api/projects", () => ({
+    createProject: mocks.createProject,
+    getProjects: mocks.getProjects,
 }));
 vi.mock("../src/api/pipelineRuns", () => ({
     getPipelineRuns: mocks.getPipelineRuns,
@@ -265,7 +271,38 @@ beforeEach(() => {
             version: 1,
         },
     ]);
-    mocks.createOrganisation.mockResolvedValue({});
+    mocks.createOrganisation.mockResolvedValue({
+        id: "new-org",
+        name: "New org",
+        slug: "new-org",
+        createdAt: "now",
+        updatedAt: "now",
+        version: 1,
+    });
+    mocks.getProjects.mockResolvedValue([
+        {
+            id: "project",
+            organisationId: "org",
+            name: "Project",
+            slug: "project",
+            description: "Portfolio project",
+            status: "ACTIVE",
+            createdAt: "now",
+            updatedAt: "now",
+            version: 1,
+        },
+    ]);
+    mocks.createProject.mockResolvedValue({
+        id: "new-project",
+        organisationId: "org",
+        name: "New project",
+        slug: "new-project",
+        description: "Created in the browser",
+        status: "ACTIVE",
+        createdAt: "now",
+        updatedAt: "now",
+        version: 1,
+    });
     mocks.getPipelineRuns.mockResolvedValue([
         {
             id: "run",
