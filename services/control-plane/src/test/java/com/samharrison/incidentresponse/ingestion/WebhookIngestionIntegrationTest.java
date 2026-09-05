@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -111,6 +112,36 @@ class WebhookIngestionIntegrationTest {
     assertThat(incidentEventLinkRepository.findByEventId(event.getId()))
         .hasValueSatisfying(
             link -> assertThat(link.getIncident().getId()).isEqualTo(incident.getId()));
+  }
+
+  @Test
+  void timelineQuerySupportsAbsentTemporalAndCursorFilters() throws Exception {
+    EventSource source = createEventSource(EventSourceStatus.ENABLED, 262_144);
+    String timestamp = currentTimestamp();
+
+    perform(source, "timeline-delivery", "workflow_run", timestamp, PAYLOAD)
+        .andExpect(status().isAccepted());
+
+    var page =
+        normalisedCiEventRepository.searchTimeline(
+            source.getProject().getId(),
+            source.getOrganisation().getId(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            false,
+            null,
+            false,
+            null,
+            false,
+            null,
+            null,
+            null,
+            PageRequest.of(0, 25));
+
+    assertThat(page.getContent()).hasSize(1);
   }
 
   @Test
