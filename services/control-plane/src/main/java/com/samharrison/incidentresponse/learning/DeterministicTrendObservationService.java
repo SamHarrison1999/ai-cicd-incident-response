@@ -3,7 +3,9 @@ package com.samharrison.incidentresponse.learning;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeterministicTrendObservationService {
   private static final int MINIMUM_SAMPLE_SIZE = 3;
 

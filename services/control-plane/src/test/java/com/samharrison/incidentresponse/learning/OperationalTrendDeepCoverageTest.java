@@ -76,6 +76,49 @@ class OperationalTrendDeepCoverageTest {
     assertThat(comparison.dimensionKey()).isEqualTo("service-a");
     assertThat(comparison.delta()).isEqualTo(2);
 
+    OperationalTrend differentDimension =
+        new OperationalTrend(
+            UUID.randomUUID(),
+            organisationId,
+            projectId,
+            TrendDimension.RECOMMENDATION_OUTCOME,
+            "service-a",
+            new ObservationWindow(start, end),
+            "v1",
+            5,
+            3,
+            "feedback",
+            TrendSuppressionReason.NONE);
+
+    OperationalTrend differentKey = trend(UUID.randomUUID(), "service-b", 5, 3);
+
+    when(repository
+            .findAllByOrganisationIdAndProjectIdOrderByWindowEndDescDimensionAscDimensionKeyAscIdDesc(
+                organisationId, projectId))
+        .thenReturn(List.of(first, differentDimension, differentKey, second));
+
+    OperationalTrendService.TrendComparison comparableAfterUnrelatedRows =
+        service.compare(
+            userId, organisationId, projectId, new TrendQueryCriteria(null, null, null, null, 50));
+
+    assertThat(comparableAfterUnrelatedRows.dimensionKey()).isEqualTo("service-a");
+    assertThat(comparableAfterUnrelatedRows.delta()).isEqualTo(2);
+
+    when(repository
+            .findAllByOrganisationIdAndProjectIdOrderByWindowEndDescDimensionAscDimensionKeyAscIdDesc(
+                organisationId, projectId))
+        .thenReturn(List.of(first, differentDimension, differentKey));
+
+    assertThat(
+            service
+                .compare(
+                    userId,
+                    organisationId,
+                    projectId,
+                    new TrendQueryCriteria(null, null, null, null, 50))
+                .suppressionReason())
+        .isEqualTo(TrendSuppressionReason.INSUFFICIENT_SAMPLE);
+
     TrendQueryCriteria mismatch =
         new TrendQueryCriteria(TrendDimension.DIAGNOSIS_OUTCOME, "other", null, null, 50);
     assertThat(service.compare(userId, organisationId, projectId, mismatch).suppressionReason())

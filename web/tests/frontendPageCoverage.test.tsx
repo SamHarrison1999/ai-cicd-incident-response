@@ -121,9 +121,27 @@ function client() {
     });
 }
 
-function renderPage(element: ReactElement) {
+function renderPage(
+    element: ReactElement,
+    workspace?: {
+        organisationId: string;
+        projectId: string;
+    },
+) {
     sessionStorage.clear();
     cleanup();
+
+    if (workspace !== undefined) {
+        sessionStorage.setItem(
+            "incident-response.workspace",
+            JSON.stringify({
+                organisationId: workspace.organisationId,
+                projectId: workspace.projectId,
+                incidentId: "",
+            }),
+        );
+    }
+
     return render(
         <MemoryRouter>
             <QueryClientProvider client={client()}>
@@ -481,8 +499,25 @@ describe("frontend page and component coverage", () => {
         await user.click(screen.getByRole("button", { name: /Load more/ }));
         historical.unmount();
 
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project", "INCIDENT", "UNKNOWN"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
+
+        await user.selectOptions(
+            screen.getByLabelText("Dimension"),
+            "INCIDENT_CATEGORY",
+        );
+
+        await screen.findByRole("option", {
+            name: "Unknown",
+        });
+
+        await user.selectOptions(
+            screen.getByLabelText("Dimension key"),
+            "UNKNOWN",
+        );
+
         expect(
             await screen.findByText("Adjacent-window comparison"),
         ).toBeInTheDocument();
@@ -1105,8 +1140,10 @@ describe("frontend page and component coverage", () => {
             delta: -2,
             suppressionReason: "SMALL_SAMPLE",
         });
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(
             await screen.findByText("No comparable dimension"),
         ).toBeInTheDocument();
@@ -1118,8 +1155,10 @@ describe("frontend page and component coverage", () => {
 
         mocks.getLearningTrends.mockReset();
         mocks.getLearningTrends.mockReturnValue(never);
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(
             await screen.findByText("Loading trends..."),
         ).toBeInTheDocument();
@@ -1127,8 +1166,10 @@ describe("frontend page and component coverage", () => {
 
         mocks.getLearningTrends.mockReset();
         mocks.getLearningTrends.mockRejectedValue(new Error("learning"));
-        renderPage(<LearningPage />);
-        await fillScope(user, ["org", "project"]);
+        renderPage(<LearningPage />, {
+            organisationId: "org",
+            projectId: "project",
+        });
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "Operational learning could not",
         );

@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.samharrison.incidentresponse.learning.OperationalLearningMaterializationService;
 import com.samharrison.incidentresponse.review.IncidentResolution;
 import com.samharrison.incidentresponse.review.RecommendationReview;
 import com.samharrison.incidentresponse.review.RecommendationReviewRepository;
@@ -24,6 +25,8 @@ class FeedbackMaterializationServiceTest {
     FeedbackSignalRepository signalRepository = mock(FeedbackSignalRepository.class);
     FeedbackAggregateRepository aggregateRepository = mock(FeedbackAggregateRepository.class);
     RecommendationReviewRepository reviewRepository = mock(RecommendationReviewRepository.class);
+    OperationalLearningMaterializationService learningMaterializationService =
+        mock(OperationalLearningMaterializationService.class);
 
     List<FeedbackSignal> signals = new ArrayList<>();
     List<FeedbackAggregate> aggregates = new ArrayList<>();
@@ -35,7 +38,8 @@ class FeedbackMaterializationServiceTest {
             signalRepository,
             aggregateRepository,
             new DeterministicFeedbackAggregationService(),
-            reviewRepository);
+            reviewRepository,
+            learningMaterializationService);
 
     UUID organisationId = UUID.randomUUID();
     UUID projectId = UUID.randomUUID();
@@ -106,6 +110,8 @@ class FeedbackMaterializationServiceTest {
     FeedbackSignalRepository signalRepository = mock(FeedbackSignalRepository.class);
     FeedbackAggregateRepository aggregateRepository = mock(FeedbackAggregateRepository.class);
     RecommendationReviewRepository reviewRepository = mock(RecommendationReviewRepository.class);
+    OperationalLearningMaterializationService learningMaterializationService =
+        mock(OperationalLearningMaterializationService.class);
 
     List<FeedbackSignal> signals = new ArrayList<>();
     List<FeedbackAggregate> aggregates = new ArrayList<>();
@@ -117,7 +123,8 @@ class FeedbackMaterializationServiceTest {
             signalRepository,
             aggregateRepository,
             new DeterministicFeedbackAggregationService(),
-            reviewRepository);
+            reviewRepository,
+            learningMaterializationService);
 
     UUID organisationId = UUID.randomUUID();
     UUID projectId = UUID.randomUUID();

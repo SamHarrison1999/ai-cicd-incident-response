@@ -1,5 +1,6 @@
 package com.samharrison.incidentresponse.feedback;
 
+import com.samharrison.incidentresponse.learning.OperationalLearningMaterializationService;
 import com.samharrison.incidentresponse.review.IncidentResolution;
 import com.samharrison.incidentresponse.review.RecommendationReview;
 import com.samharrison.incidentresponse.review.RecommendationReviewRepository;
@@ -18,16 +19,19 @@ public class FeedbackMaterializationService {
   private final FeedbackAggregateRepository aggregateRepository;
   private final DeterministicFeedbackAggregationService aggregationService;
   private final RecommendationReviewRepository reviewRepository;
+  private final OperationalLearningMaterializationService learningMaterializationService;
 
   public FeedbackMaterializationService(
       FeedbackSignalRepository signalRepository,
       FeedbackAggregateRepository aggregateRepository,
       DeterministicFeedbackAggregationService aggregationService,
-      RecommendationReviewRepository reviewRepository) {
+      RecommendationReviewRepository reviewRepository,
+      OperationalLearningMaterializationService learningMaterializationService) {
     this.signalRepository = signalRepository;
     this.aggregateRepository = aggregateRepository;
     this.aggregationService = aggregationService;
     this.reviewRepository = reviewRepository;
+    this.learningMaterializationService = learningMaterializationService;
   }
 
   public void recordReview(RecommendationReview review) {
@@ -131,6 +135,8 @@ public class FeedbackMaterializationService {
             calculated.getRejectedCount(),
             calculated.getResolvedCount(),
             calculated.getSuppressionReason()));
+
+    learningMaterializationService.materialize(organisationId, projectId);
   }
 
   private static UUID deterministicId(String... parts) {
