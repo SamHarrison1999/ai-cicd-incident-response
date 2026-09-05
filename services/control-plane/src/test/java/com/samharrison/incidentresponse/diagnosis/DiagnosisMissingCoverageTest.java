@@ -1,5 +1,6 @@
 package com.samharrison.incidentresponse.diagnosis;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -11,8 +12,20 @@ import com.samharrison.incidentresponse.tenancy.TenantAccessService;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 class DiagnosisMissingCoverageTest {
+
+  @Test
+  void diagnosisUsesWritableTransactionBecauseViewingIsAudited() throws Exception {
+    Transactional transactional =
+        DiagnosisService.class
+            .getMethod("diagnose", UUID.class, UUID.class, UUID.class)
+            .getAnnotation(Transactional.class);
+
+    assertThat(transactional).isNotNull();
+    assertThat(transactional.readOnly()).isFalse();
+  }
 
   @Test
   void rejectsDiagnosisForAProjectOutsideTheTenant() {
