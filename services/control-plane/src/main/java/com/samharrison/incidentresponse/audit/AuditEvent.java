@@ -7,8 +7,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.ColumnTransformer;
 
 @Entity
 @Table(name = "audit_events")
@@ -35,7 +34,7 @@ public class AuditEvent {
   private String correlationId;
 
   @Column(columnDefinition = "jsonb", nullable = false)
-  @JdbcTypeCode(SqlTypes.JSON)
+  @ColumnTransformer(write = "?::jsonb")
   private String metadata;
 
   @Column(name = "occurred_at", nullable = false)

@@ -7,8 +7,7 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.annotations.ColumnTransformer;
 
 @Entity
 @Table(name = "incident_correlation_decisions")
@@ -38,11 +37,11 @@ public class IncidentCorrelationDecisionRecord {
   private int threshold;
 
   @Column(name = "matched_dimensions", columnDefinition = "jsonb", nullable = false)
-  @JdbcTypeCode(SqlTypes.JSON)
+  @ColumnTransformer(write = "?::jsonb")
   private String matchedDimensions;
 
   @Column(name = "considered_candidates", columnDefinition = "jsonb", nullable = false)
-  @JdbcTypeCode(SqlTypes.JSON)
+  @ColumnTransformer(write = "?::jsonb")
   private String consideredCandidates;
 
   @Column(name = "created_at", nullable = false)
