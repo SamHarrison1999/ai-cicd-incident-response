@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RecommendationCitationRepository
     extends JpaRepository<RecommendationCitation, UUID> {
   List<RecommendationCitation> findAllByRecommendationIdOrderByIdAsc(UUID recommendationId);
+
+  long countByRecommendationId(UUID recommendationId);
 }

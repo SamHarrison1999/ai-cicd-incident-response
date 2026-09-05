@@ -16,14 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecommendationController {
   private final RecommendationService recommendationService;
   private final RecommendationGenerationService generationService;
+  private final RecommendationCitationRepository citationRepository;
   private final CurrentUserProvider currentUserProvider;
 
   public RecommendationController(
       RecommendationService recommendationService,
       RecommendationGenerationService generationService,
+      RecommendationCitationRepository citationRepository,
       CurrentUserProvider currentUserProvider) {
     this.recommendationService = recommendationService;
     this.generationService = generationService;
+    this.citationRepository = citationRepository;
     this.currentUserProvider = currentUserProvider;
   }
 
@@ -33,24 +36,76 @@ public class RecommendationController {
       @PathVariable UUID organisationId,
       @PathVariable UUID projectId) {
     return new RecommendationList(
-        recommendationService.list(
-            currentUserProvider.requireUserId(authentication), organisationId, projectId));
+        recommendationService
+            .list(currentUserProvider.requireUserId(authentication), organisationId, projectId)
+            .stream()
+            .map(this::toResponse)
+            .toList());
   }
 
   @PostMapping
-  Recommendation generate(
+  RecommendationResponse generate(
       Authentication authentication,
       @PathVariable UUID organisationId,
       @PathVariable UUID projectId,
       @RequestBody GenerateRequest request) {
-    return generationService.generate(
-        currentUserProvider.requireUserId(authentication),
-        organisationId,
-        projectId,
-        request.incidentId(),
-        request.evidenceIds(),
-        request.historicalRecordIds());
+    Recommendation recommendation =
+        generationService.generate(
+            currentUserProvider.requireUserId(authentication),
+            organisationId,
+            projectId,
+            request.incidentId(),
+            request.evidenceIds(),
+            request.historicalRecordIds());
+
+    return toResponse(recommendation);
   }
+
+  private RecommendationResponse toResponse(Recommendation recommendation) {
+    return new RecommendationResponse(
+        recommendation.getId(),
+        recommendation.getOrganisationId(),
+        recommendation.getProjectId(),
+        recommendation.getIncidentId(),
+        recommendation.getCategory(),
+        recommendation.getSummary(),
+        recommendation.getLikelyCause(),
+        recommendation.getConfidence(),
+        recommendation.getConfidenceExplanation(),
+        recommendation.getStatus(),
+        recommendation.getAbstentionReason(),
+        recommendation.getProviderName(),
+        recommendation.getModelVersion(),
+        recommendation.getPromptTemplateVersion(),
+        recommendation.getRulesetVersion(),
+        recommendation.getRetrievalSetVersion(),
+        recommendation.getSchemaVersion(),
+        recommendation.getGeneratedAt(),
+        recommendation.getCreatedAt(),
+        citationRepository.countByRecommendationId(recommendation.getId()));
+  }
+
+  public record RecommendationResponse(
+      UUID id,
+      UUID organisationId,
+      UUID projectId,
+      UUID incidentId,
+      String category,
+      String summary,
+      String likelyCause,
+      java.math.BigDecimal confidence,
+      String confidenceExplanation,
+      RecommendationStatus status,
+      String abstentionReason,
+      String providerName,
+      String modelVersion,
+      String promptTemplateVersion,
+      String rulesetVersion,
+      String retrievalSetVersion,
+      String schemaVersion,
+      java.time.Instant generatedAt,
+      java.time.Instant createdAt,
+      long citations) {}
 
   public record GenerateRequest(
       UUID incidentId, List<UUID> evidenceIds, List<UUID> historicalRecordIds) {
@@ -61,5 +116,5 @@ public class RecommendationController {
     }
   }
 
-  public record RecommendationList(List<Recommendation> items) {}
+  public record RecommendationList(List<RecommendationResponse> items) {}
 }
