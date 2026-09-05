@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { getPipelineRuns, getPipelineTimeline } from "../api/pipelineRuns";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 const statusOptions = [
     "QUEUED",
@@ -33,8 +34,8 @@ function formatDate(value: string) {
 
 export function PipelinesPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const [status, setStatus] = useState("");
     const [branch, setBranch] = useState("");
     const [commitSha, setCommitSha] = useState("");

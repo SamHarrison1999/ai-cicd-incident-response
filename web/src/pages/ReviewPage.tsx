@@ -9,14 +9,20 @@ import {
     type ReviewReason,
 } from "../api/reviews";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function ReviewPage() {
     const { accessToken } = useAuth();
     const queryClient = useQueryClient();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const {
+        organisationId,
+        projectId,
+        incidentId,
+        setOrganisationId,
+        setProjectId,
+        setIncidentId,
+    } = useWorkspace();
     const [recommendationId, setRecommendationId] = useState("");
-    const [incidentId, setIncidentId] = useState("");
     const [action, setAction] = useState<ReviewAction>("ACCEPT");
     const [reason, setReason] = useState<ReviewReason>("NONE");
     const [comment, setComment] = useState("");

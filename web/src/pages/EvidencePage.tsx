@@ -7,6 +7,7 @@ import {
     type EvidenceKind,
 } from "../api/evidence";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 const evidenceKinds: EvidenceKind[] = [
     "LOG_EXCERPT",
@@ -25,8 +26,8 @@ function formatDate(value: string) {
 
 export function EvidencePage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const [kind, setKind] = useState<EvidenceKind | "">("");
     const [sourceSystem, setSourceSystem] = useState("");
     const [query, setQuery] = useState("");

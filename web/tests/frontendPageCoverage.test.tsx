@@ -114,6 +114,7 @@ function client() {
 }
 
 function renderPage(element: ReactElement) {
+    sessionStorage.clear();
     cleanup();
     return render(
         <MemoryRouter>
@@ -431,6 +432,7 @@ describe("frontend page and component coverage", () => {
         const incidents = renderPage(<IncidentsPage />);
         await fillScope(user, ["org", "project"]);
         expect(await screen.findByText("Pipeline failed")).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Use incident" }));
         await user.selectOptions(
             screen.getByRole("combobox", { name: /Change status/ }),
             "TRIAGED",
@@ -507,6 +509,7 @@ describe("frontend page and component coverage", () => {
         const user = userEvent.setup();
         const organisations = renderPage(<OrganisationsPage />);
         expect(await screen.findByText("Org")).toBeInTheDocument();
+        await user.click(screen.getByRole("button", { name: "Use workspace" }));
         await user.type(screen.getByLabelText("Name"), "New org");
         await user.type(screen.getAllByRole("textbox")[1]!, "new-org");
         await user.click(

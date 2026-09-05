@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-
 import { getDiagnosis } from "../api/diagnosis";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 function formatConfidence(value: number) {
     return String(Math.round(value * 100)) + "%";
@@ -10,8 +9,8 @@ function formatConfidence(value: number) {
 
 export function DiagnosisPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const canQuery =
         organisationId.trim().length > 0 && projectId.trim().length > 0;
     const diagnosis = useQuery({

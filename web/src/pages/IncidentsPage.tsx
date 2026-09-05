@@ -1,12 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-
 import {
     getIncidents,
     type IncidentStatus,
     transitionIncident,
 } from "../api/incidents";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 const statusOptions: IncidentStatus[] = [
     "DETECTED",
@@ -20,8 +19,13 @@ const statusOptions: IncidentStatus[] = [
 export function IncidentsPage() {
     const { accessToken } = useAuth();
     const queryClient = useQueryClient();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const {
+        organisationId,
+        projectId,
+        setOrganisationId,
+        setProjectId,
+        setIncidentId,
+    } = useWorkspace();
     const canQuery =
         organisationId.trim().length > 0 && projectId.trim().length > 0;
     const incidents = useQuery({
@@ -142,6 +146,15 @@ export function IncidentsPage() {
                                     <span>Resolved {incident.resolvedAt}</span>
                                 ) : null}
                             </div>
+                            <button
+                                className="button button-secondary"
+                                type="button"
+                                onClick={() => {
+                                    setIncidentId(incident.id);
+                                }}
+                            >
+                                Use incident
+                            </button>
                             <label className="incident-transition">
                                 Change status
                                 <select

@@ -3,10 +3,12 @@ import { type SyntheticEvent, useState } from "react";
 
 import { createOrganisation, getOrganisations } from "../api/organisations";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function OrganisationsPage() {
     const { accessToken } = useAuth();
     const queryClient = useQueryClient();
+    const { setOrganisationId } = useWorkspace();
     const [name, setName] = useState("");
     const [slug, setSlug] = useState("");
 
@@ -77,6 +79,15 @@ export function OrganisationsPage() {
                                     <span>{organisation.slug}</span>
                                 </div>
                                 <span className="status-badge">Active</span>
+                                <button
+                                    className="button button-secondary"
+                                    type="button"
+                                    onClick={() => {
+                                        setOrganisationId(organisation.id);
+                                    }}
+                                >
+                                    Use workspace
+                                </button>
                             </li>
                         ))}
                     </ul>

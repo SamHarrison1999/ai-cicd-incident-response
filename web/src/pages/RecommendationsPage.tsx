@@ -7,6 +7,7 @@ import {
     getRecommendations,
 } from "../api/recommendations";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 function formatConfidence(value: number) {
     return String(Math.round(value * 100)) + "%";
@@ -16,9 +17,14 @@ export function RecommendationsPage() {
     const { accessToken } = useAuth();
     const queryClient = useQueryClient();
 
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
-    const [incidentId, setIncidentId] = useState("");
+    const {
+        organisationId,
+        projectId,
+        incidentId,
+        setOrganisationId,
+        setProjectId,
+        setIncidentId,
+    } = useWorkspace();
     const [selectedEvidenceIds, setSelectedEvidenceIds] = useState<string[]>(
         [],
     );

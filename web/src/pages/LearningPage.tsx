@@ -3,11 +3,12 @@ import { useState } from "react";
 
 import { getLearningComparison, getLearningTrends } from "../api/learning";
 import { useAuth } from "../auth/useAuth";
+import { useWorkspace } from "../workspace/useWorkspace";
 
 export function LearningPage() {
     const { accessToken } = useAuth();
-    const [organisationId, setOrganisationId] = useState("");
-    const [projectId, setProjectId] = useState("");
+    const { organisationId, projectId, setOrganisationId, setProjectId } =
+        useWorkspace();
     const [dimension, setDimension] = useState("");
     const [dimensionKey, setDimensionKey] = useState("");
     const canQuery = Boolean(
