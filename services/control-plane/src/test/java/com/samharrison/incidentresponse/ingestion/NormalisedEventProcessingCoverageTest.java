@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.samharrison.incidentresponse.incident.IncidentCorrelationWorkflow;
 import com.samharrison.incidentresponse.organisation.Organisation;
 import com.samharrison.incidentresponse.project.Project;
 import java.time.Instant;
@@ -44,7 +45,13 @@ class NormalisedEventProcessingCoverageTest {
     when(source.getProvider()).thenReturn(EventProvider.GITHUB_ACTIONS);
     when(adapters.find(EventProvider.GITHUB_ACTIONS)).thenReturn(Optional.empty());
 
-    new NormalisedEventProcessingService(adapters, pipelineRuns, events, deliveries, metrics)
+    new NormalisedEventProcessingService(
+            adapters,
+            pipelineRuns,
+            events,
+            deliveries,
+            metrics,
+            mock(IncidentCorrelationWorkflow.class))
         .process(source, delivery, "{}".getBytes(), Instant.parse("2026-08-16T10:00:00Z"));
 
     org.mockito.Mockito.verify(delivery)
@@ -99,7 +106,13 @@ class NormalisedEventProcessingCoverageTest {
     when(pipelineRuns.save(run)).thenReturn(run);
 
     NormalisedEventProcessingService service =
-        new NormalisedEventProcessingService(adapters, pipelineRuns, events, deliveries, metrics);
+        new NormalisedEventProcessingService(
+            adapters,
+            pipelineRuns,
+            events,
+            deliveries,
+            metrics,
+            mock(IncidentCorrelationWorkflow.class));
     service.process(source, delivery, "{}".getBytes(), occurred);
 
     org.mockito.Mockito.verify(run).applyStatus(PipelineRunStatus.FAILED, occurred);
@@ -126,6 +139,7 @@ class NormalisedEventProcessingCoverageTest {
         mock(PipelineRunRepository.class),
         mock(NormalisedCiEventRepository.class),
         mock(WebhookDeliveryRepository.class),
-        mock(IngestionMetrics.class));
+        mock(IngestionMetrics.class),
+        mock(IncidentCorrelationWorkflow.class));
   }
 }

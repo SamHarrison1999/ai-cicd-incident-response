@@ -5,6 +5,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.samharrison.incidentresponse.audit.AuditEventRepository;
+import com.samharrison.incidentresponse.incident.IncidentCorrelationDecisionRecordRepository;
+import com.samharrison.incidentresponse.incident.IncidentEventLinkRepository;
+import com.samharrison.incidentresponse.incident.IncidentRepository;
+import com.samharrison.incidentresponse.incident.IncidentStatus;
 import com.samharrison.incidentresponse.organisation.Organisation;
 import com.samharrison.incidentresponse.organisation.OrganisationRepository;
 import com.samharrison.incidentresponse.project.Project;
@@ -51,6 +56,10 @@ class WebhookIngestionIntegrationTest {
 
   @Autowired private MockMvc mockMvc;
   @Autowired private WebhookSignatureService signatureService;
+  @Autowired private AuditEventRepository auditEventRepository;
+  @Autowired private IncidentCorrelationDecisionRecordRepository correlationDecisionRepository;
+  @Autowired private IncidentEventLinkRepository incidentEventLinkRepository;
+  @Autowired private IncidentRepository incidentRepository;
   @Autowired private OrganisationRepository organisationRepository;
   @Autowired private ProjectRepository projectRepository;
   @Autowired private EventSourceRepository eventSourceRepository;
@@ -60,6 +69,10 @@ class WebhookIngestionIntegrationTest {
 
   @BeforeEach
   void clearPersistenceModel() {
+    auditEventRepository.deleteAll();
+    correlationDecisionRepository.deleteAll();
+    incidentEventLinkRepository.deleteAll();
+    incidentRepository.deleteAll();
     normalisedCiEventRepository.deleteAll();
     pipelineRunRepository.deleteAll();
     webhookDeliveryRepository.deleteAll();
@@ -79,8 +92,25 @@ class WebhookIngestionIntegrationTest {
         .andExpect(jsonPath("$.status").value("RECEIVED"));
 
     assertThat(webhookDeliveryRepository.count()).isEqualTo(1);
+    assertThat(normalisedCiEventRepository.count()).isEqualTo(1);
+    assertThat(pipelineRunRepository.count()).isEqualTo(1);
+    assertThat(incidentRepository.count()).isEqualTo(1);
+    assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
+    assertThat(correlationDecisionRepository.count()).isEqualTo(1);
+
     WebhookDelivery delivery = webhookDeliveryRepository.findAll().getFirst();
     assertThat(delivery.getPayloadSha256()).isEqualTo(signatureService.sha256Hex(PAYLOAD));
+
+    NormalisedCiEvent event = normalisedCiEventRepository.findAll().getFirst();
+    var incident = incidentRepository.findAll().getFirst();
+    var decision = correlationDecisionRepository.findByEventId(event.getId()).orElseThrow();
+
+    assertThat(incident.getStatus()).isEqualTo(IncidentStatus.DETECTED);
+    assertThat(decision.getIncidentId()).isEqualTo(incident.getId());
+    assertThat(decision.getEventId()).isEqualTo(event.getId());
+    assertThat(incidentEventLinkRepository.findByEventId(event.getId()))
+        .hasValueSatisfying(
+            link -> assertThat(link.getIncident().getId()).isEqualTo(incident.getId()));
   }
 
   @Test
@@ -96,6 +126,11 @@ class WebhookIngestionIntegrationTest {
         .andExpect(jsonPath("$.duplicate").value(true));
 
     assertThat(webhookDeliveryRepository.count()).isEqualTo(1);
+    assertThat(normalisedCiEventRepository.count()).isEqualTo(1);
+    assertThat(pipelineRunRepository.count()).isEqualTo(1);
+    assertThat(incidentRepository.count()).isEqualTo(1);
+    assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
+    assertThat(correlationDecisionRepository.count()).isEqualTo(1);
   }
 
   @Test

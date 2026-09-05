@@ -2,6 +2,7 @@ package com.samharrison.incidentresponse.ingestion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samharrison.incidentresponse.incident.IncidentCorrelationWorkflow;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
@@ -17,18 +18,21 @@ class NormalisedEventProcessingService {
   private final NormalisedCiEventRepository normalisedCiEventRepository;
   private final WebhookDeliveryRepository webhookDeliveryRepository;
   private final IngestionMetrics ingestionMetrics;
+  private final IncidentCorrelationWorkflow incidentCorrelationWorkflow;
 
   NormalisedEventProcessingService(
       ProviderEventAdapterRegistry adapterRegistry,
       PipelineRunRepository pipelineRunRepository,
       NormalisedCiEventRepository normalisedCiEventRepository,
       WebhookDeliveryRepository webhookDeliveryRepository,
-      IngestionMetrics ingestionMetrics) {
+      IngestionMetrics ingestionMetrics,
+      IncidentCorrelationWorkflow incidentCorrelationWorkflow) {
     this.adapterRegistry = adapterRegistry;
     this.pipelineRunRepository = pipelineRunRepository;
     this.normalisedCiEventRepository = normalisedCiEventRepository;
     this.webhookDeliveryRepository = webhookDeliveryRepository;
     this.ingestionMetrics = ingestionMetrics;
+    this.incidentCorrelationWorkflow = incidentCorrelationWorkflow;
   }
 
   @Transactional
@@ -83,7 +87,7 @@ class NormalisedEventProcessingService {
     }
     pipelineRun = pipelineRunRepository.save(pipelineRun);
 
-    normalisedCiEventRepository.save(
+    NormalisedCiEvent normalisedEvent =
         new NormalisedCiEvent(
             java.util.UUID.randomUUID(),
             eventSource.getOrganisation(),
@@ -104,7 +108,10 @@ class NormalisedEventProcessingService {
             mapped.gitRef(),
             mapped.environmentName(),
             mapped.evidenceSummary(),
-            mapped.sourceFields()));
+            mapped.sourceFields());
+
+    normalisedCiEventRepository.save(normalisedEvent);
+    incidentCorrelationWorkflow.correlate(normalisedEvent);
 
     delivery.markProcessed("NORMALISED_EVENT_CREATED", receivedAt);
     ingestionMetrics.recordNormalisedEvent();

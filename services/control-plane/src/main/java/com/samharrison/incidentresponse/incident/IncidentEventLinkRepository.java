@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IncidentEventLinkRepository extends JpaRepository<IncidentEventLink, UUID> {
 
   Optional<IncidentEventLink> findByEventId(UUID eventId);
+
+  Optional<IncidentEventLink> findFirstByIncident_IdOrderByLinkedAtAsc(UUID incidentId);
 }
