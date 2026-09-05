@@ -69,9 +69,13 @@ class EvidenceDeepCoverageTest {
             org.mockito.ArgumentMatchers.eq(projectId),
             org.mockito.ArgumentMatchers.eq(EvidenceKind.LOG_EXCERPT),
             org.mockito.ArgumentMatchers.eq("github"),
+            org.mockito.ArgumentMatchers.eq(true),
             org.mockito.ArgumentMatchers.eq("query"),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.isNull(),
             org.mockito.ArgumentMatchers.isNull(),
             org.mockito.ArgumentMatchers.any()))
@@ -89,9 +93,13 @@ class EvidenceDeepCoverageTest {
             org.mockito.ArgumentMatchers.eq(projectId),
             org.mockito.ArgumentMatchers.eq(EvidenceKind.LOG_EXCERPT),
             org.mockito.ArgumentMatchers.eq("github"),
+            org.mockito.ArgumentMatchers.eq(true),
             org.mockito.ArgumentMatchers.eq("query"),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             org.mockito.ArgumentMatchers.eq(firstTime),
             org.mockito.ArgumentMatchers.eq(firstId),
             org.mockito.ArgumentMatchers.any()))
@@ -114,9 +122,13 @@ class EvidenceDeepCoverageTest {
             eq(projectId),
             eq(EvidenceKind.LOG_EXCERPT),
             eq("github"),
+            eq(true),
             eq("query"),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             isNull(),
+            org.mockito.ArgumentMatchers.anyBoolean(),
             isNull(),
             isNull(),
             any()))
@@ -126,6 +138,52 @@ class EvidenceDeepCoverageTest {
                 .search(UUID.randomUUID(), organisationId, projectId, criteria, null)
                 .nextCursor())
         .isNull();
+  }
+
+  @Test
+  void searchCoversAbsentQueryAndPresentTemporalBounds() {
+    EvidenceRepository evidenceRepository = mock(EvidenceRepository.class);
+    ProjectRepository projectRepository = mock(ProjectRepository.class);
+    TenantAccessService tenantAccessService = mock(TenantAccessService.class);
+    Project project = mock(Project.class);
+
+    UUID organisationId = UUID.randomUUID();
+    UUID projectId = UUID.randomUUID();
+    Instant occurredFrom = Instant.parse("2026-01-01T00:00:00Z");
+    Instant occurredTo = Instant.parse("2026-01-31T23:59:59Z");
+
+    when(projectRepository.findByIdAndOrganisationId(projectId, organisationId))
+        .thenReturn(Optional.of(project));
+
+    when(evidenceRepository.search(
+            eq(organisationId),
+            eq(projectId),
+            eq(EvidenceKind.LOG_EXCERPT),
+            eq("github"),
+            eq(false),
+            eq(""),
+            eq(true),
+            eq(occurredFrom),
+            eq(true),
+            eq(occurredTo),
+            eq(false),
+            isNull(),
+            isNull(),
+            any()))
+        .thenReturn(new SliceImpl<>(List.of(), PageRequest.of(0, 10), false));
+
+    EvidenceSearchService service =
+        new EvidenceSearchService(evidenceRepository, projectRepository, tenantAccessService);
+
+    EvidenceSearchCriteria criteria =
+        new EvidenceSearchCriteria(
+            EvidenceKind.LOG_EXCERPT, "github", null, occurredFrom, occurredTo, 10);
+
+    EvidenceSearchService.SearchPage result =
+        service.search(UUID.randomUUID(), organisationId, projectId, criteria, null);
+
+    assertThat(result.items()).isEmpty();
+    assertThat(result.nextCursor()).isNull();
   }
 
   @Test

@@ -25,11 +25,11 @@ public interface EvidenceRepository extends JpaRepository<Evidence, UUID> {
         and evidence.project.id = :projectId
         and (:kind is null or evidence.kind = :kind)
         and (:sourceSystem is null or evidence.sourceSystem = :sourceSystem)
-        and (:query is null or lower(evidence.content) like lower(concat('%', :query, '%')))
-        and (:occurredFrom is null or evidence.occurredAt >= :occurredFrom)
-        and (:occurredTo is null or evidence.occurredAt <= :occurredTo)
+        and (:queryPresent = false or lower(evidence.content) like lower(concat('%', :query, '%')))
+        and (:occurredFromPresent = false or evidence.occurredAt >= :occurredFrom)
+        and (:occurredToPresent = false or evidence.occurredAt <= :occurredTo)
         and (
-          :cursorOccurredAt is null
+          :cursorPresent = false
           or evidence.occurredAt < :cursorOccurredAt
           or (evidence.occurredAt = :cursorOccurredAt and evidence.id < :cursorId)
         )
@@ -40,9 +40,13 @@ public interface EvidenceRepository extends JpaRepository<Evidence, UUID> {
       @Param("projectId") UUID projectId,
       @Param("kind") EvidenceKind kind,
       @Param("sourceSystem") String sourceSystem,
+      @Param("queryPresent") boolean queryPresent,
       @Param("query") String query,
+      @Param("occurredFromPresent") boolean occurredFromPresent,
       @Param("occurredFrom") Instant occurredFrom,
+      @Param("occurredToPresent") boolean occurredToPresent,
       @Param("occurredTo") Instant occurredTo,
+      @Param("cursorPresent") boolean cursorPresent,
       @Param("cursorOccurredAt") Instant cursorOccurredAt,
       @Param("cursorId") UUID cursorId,
       Pageable pageable);
