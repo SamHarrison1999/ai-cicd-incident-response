@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-const STORAGE_KEY = "incident-response.workspace";
+export const WORKSPACE_STORAGE_KEY = "incident-response.workspace";
+
+const WORKSPACE_CHANGED_EVENT = "incident-response.workspace.changed";
 
 export interface WorkspaceSelection {
     organisationId: string;
@@ -8,7 +10,7 @@ export interface WorkspaceSelection {
     incidentId: string;
 }
 
-function emptyWorkspace(): WorkspaceSelection {
+export function emptyWorkspaceSelection(): WorkspaceSelection {
     return {
         organisationId: "",
         projectId: "",
@@ -16,54 +18,117 @@ function emptyWorkspace(): WorkspaceSelection {
     };
 }
 
-function readWorkspace(): WorkspaceSelection {
-    const stored = sessionStorage.getItem(STORAGE_KEY);
+export function readWorkspaceSelection(): WorkspaceSelection {
+    const stored = sessionStorage.getItem(WORKSPACE_STORAGE_KEY);
 
-    return stored === null
-        ? emptyWorkspace()
-        : (JSON.parse(stored) as WorkspaceSelection);
+    if (stored === null) {
+        return emptyWorkspaceSelection();
+    }
+
+    try {
+        const parsed = JSON.parse(stored) as Partial<WorkspaceSelection> | null;
+
+        const organisationId =
+            typeof parsed?.organisationId === "string"
+                ? parsed.organisationId
+                : "";
+
+        const projectId =
+            organisationId.length > 0 && typeof parsed?.projectId === "string"
+                ? parsed.projectId
+                : "";
+
+        const incidentId =
+            projectId.length > 0 && typeof parsed?.incidentId === "string"
+                ? parsed.incidentId
+                : "";
+
+        return {
+            organisationId,
+            projectId,
+            incidentId,
+        };
+    } catch {
+        return emptyWorkspaceSelection();
+    }
+}
+
+export function writeWorkspaceSelection(workspace: WorkspaceSelection): void {
+    sessionStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify(workspace));
+}
+
+function publishWorkspaceChange(): void {
+    window.dispatchEvent(new Event(WORKSPACE_CHANGED_EVENT));
 }
 
 export function useWorkspace() {
-    const [workspace, setWorkspace] =
-        useState<WorkspaceSelection>(readWorkspace);
+    const [workspace, setWorkspace] = useState<WorkspaceSelection>(
+        readWorkspaceSelection,
+    );
 
-    function updateWorkspace(
-        transform: (current: WorkspaceSelection) => WorkspaceSelection,
-    ) {
-        setWorkspace((current) => {
+    useEffect(() => {
+        const handleWorkspaceChange = () => {
+            setWorkspace(readWorkspaceSelection());
+        };
+
+        window.addEventListener(WORKSPACE_CHANGED_EVENT, handleWorkspaceChange);
+
+        return () => {
+            window.removeEventListener(
+                WORKSPACE_CHANGED_EVENT,
+                handleWorkspaceChange,
+            );
+        };
+    }, []);
+
+    const updateWorkspace = useCallback(
+        (transform: (current: WorkspaceSelection) => WorkspaceSelection) => {
+            const current = readWorkspaceSelection();
+
             const next = transform(current);
-            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-            return next;
-        });
-    }
 
-    function setOrganisationId(organisationId: string) {
-        updateWorkspace(() => ({
-            organisationId,
-            projectId: "",
-            incidentId: "",
-        }));
-    }
+            writeWorkspaceSelection(next);
+            setWorkspace(next);
+            publishWorkspaceChange();
+        },
+        [],
+    );
 
-    function setProjectId(projectId: string) {
-        updateWorkspace((current) => ({
-            ...current,
-            projectId,
-            incidentId: "",
-        }));
-    }
+    const setOrganisationId = useCallback(
+        (organisationId: string) => {
+            updateWorkspace(() => ({
+                organisationId,
+                projectId: "",
+                incidentId: "",
+            }));
+        },
+        [updateWorkspace],
+    );
 
-    function setIncidentId(incidentId: string) {
-        updateWorkspace((current) => ({
-            ...current,
-            incidentId,
-        }));
-    }
+    const setProjectId = useCallback(
+        (projectId: string) => {
+            updateWorkspace((current) => ({
+                ...current,
+                projectId,
+                incidentId: "",
+            }));
+        },
+        [updateWorkspace],
+    );
 
-    function clearWorkspace() {
-        updateWorkspace(() => emptyWorkspace());
-    }
+    const setIncidentId = useCallback(
+        (incidentId: string) => {
+            updateWorkspace((current) => ({
+                ...current,
+                incidentId,
+            }));
+        },
+        [updateWorkspace],
+    );
+
+    const clearWorkspace = useCallback(() => {
+        updateWorkspace(() => emptyWorkspaceSelection());
+    }, [updateWorkspace]);
 
     return {
         ...workspace,

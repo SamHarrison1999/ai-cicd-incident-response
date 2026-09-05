@@ -11,7 +11,12 @@ const api = vi.hoisted(() => ({
     registerUser: vi.fn(),
 }));
 
+const workspace = vi.hoisted(() => ({
+    restoreWorkspaceForAccount: vi.fn(),
+}));
+
 vi.mock("../src/api/authentication", () => api);
+vi.mock("../src/workspace/restoreWorkspace", () => workspace);
 
 import { AppProviders } from "../src/app/AppProviders";
 import {
@@ -117,6 +122,7 @@ describe("frontend authentication coverage", () => {
         api.loginUser.mockResolvedValue(authentication);
         api.registerUser.mockResolvedValue(undefined);
         api.logoutUser.mockResolvedValue(undefined);
+        workspace.restoreWorkspaceForAccount.mockResolvedValue(undefined);
     });
 
     it("restores, logs in, registers, and logs out through the provider", async () => {
@@ -126,6 +132,10 @@ describe("frontend authentication coverage", () => {
         expect(await screen.findByTestId("token")).toHaveTextContent(
             "access-token",
         );
+        expect(workspace.restoreWorkspaceForAccount).toHaveBeenCalledWith(
+            "access-token",
+        );
+
         await userEventInstance.click(
             screen.getByRole("button", { name: "Login" }),
         );
@@ -142,6 +152,21 @@ describe("frontend authentication coverage", () => {
         );
         expect(await screen.findByTestId("token")).toHaveTextContent(
             "signed-out",
+        );
+    });
+
+    it("does not block authentication when workspace restoration fails", async () => {
+        workspace.restoreWorkspaceForAccount.mockRejectedValue(
+            new Error("workspace unavailable"),
+        );
+
+        renderWithAuth();
+
+        expect(await screen.findByTestId("token")).toHaveTextContent(
+            "access-token",
+        );
+        expect(workspace.restoreWorkspaceForAccount).toHaveBeenCalledWith(
+            "access-token",
         );
     });
 
