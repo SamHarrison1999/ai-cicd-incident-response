@@ -1,5 +1,6 @@
 package com.samharrison.incidentresponse.review;
 
+import com.samharrison.incidentresponse.feedback.FeedbackMaterializationService;
 import com.samharrison.incidentresponse.recommendation.RecommendationRepository;
 import com.samharrison.incidentresponse.tenancy.TenantAccessService;
 import java.time.Instant;
@@ -16,18 +17,21 @@ public class ReviewApiService {
   private final ReviewedRecommendationVersionRepository versionRepository;
   private final IncidentResolutionRepository resolutionRepository;
   private final TenantAccessService tenantAccessService;
+  private final FeedbackMaterializationService feedbackMaterializationService;
 
   public ReviewApiService(
       RecommendationRepository recommendationRepository,
       RecommendationReviewRepository reviewRepository,
       ReviewedRecommendationVersionRepository versionRepository,
       IncidentResolutionRepository resolutionRepository,
-      TenantAccessService tenantAccessService) {
+      TenantAccessService tenantAccessService,
+      FeedbackMaterializationService feedbackMaterializationService) {
     this.recommendationRepository = recommendationRepository;
     this.reviewRepository = reviewRepository;
     this.versionRepository = versionRepository;
     this.resolutionRepository = resolutionRepository;
     this.tenantAccessService = tenantAccessService;
+    this.feedbackMaterializationService = feedbackMaterializationService;
   }
 
   public List<RecommendationReview> history(
@@ -50,18 +54,22 @@ public class ReviewApiService {
       String editedSummary,
       String editedCause) {
     requireRecommendation(userId, organisationId, projectId, recommendationId);
-    return new RecommendationReviewService(
-            recommendationRepository, reviewRepository, versionRepository, tenantAccessService)
-        .review(
-            userId,
-            organisationId,
-            projectId,
-            recommendationId,
-            action,
-            reason,
-            comment,
-            editedSummary,
-            editedCause);
+    RecommendationReview review =
+        new RecommendationReviewService(
+                recommendationRepository, reviewRepository, versionRepository, tenantAccessService)
+            .review(
+                userId,
+                organisationId,
+                projectId,
+                recommendationId,
+                action,
+                reason,
+                comment,
+                editedSummary,
+                editedCause);
+
+    feedbackMaterializationService.recordReview(review);
+    return review;
   }
 
   @Transactional
@@ -88,17 +96,21 @@ public class ReviewApiService {
     if (!recommendationRepository.existsById(recommendationId)) {
       throw new ReviewAccessException(HttpStatus.NOT_FOUND, "RECOMMENDATION_NOT_FOUND");
     }
-    return resolutionRepository.save(
-        new IncidentResolution(
-            UUID.randomUUID(),
-            organisationId,
-            projectId,
-            incidentId,
-            recommendationId,
-            version.getId(),
-            resolutionText,
-            userId,
-            Instant.now()));
+    IncidentResolution resolution =
+        resolutionRepository.save(
+            new IncidentResolution(
+                UUID.randomUUID(),
+                organisationId,
+                projectId,
+                incidentId,
+                recommendationId,
+                version.getId(),
+                resolutionText,
+                userId,
+                Instant.now()));
+
+    feedbackMaterializationService.recordResolution(resolution);
+    return resolution;
   }
 
   private void requireRecommendation(

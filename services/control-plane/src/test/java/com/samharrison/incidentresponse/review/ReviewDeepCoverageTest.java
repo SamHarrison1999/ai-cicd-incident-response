@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.samharrison.incidentresponse.feedback.FeedbackMaterializationService;
 import com.samharrison.incidentresponse.recommendation.Recommendation;
 import com.samharrison.incidentresponse.recommendation.RecommendationRepository;
 import com.samharrison.incidentresponse.tenancy.TenantAccessService;
@@ -150,6 +151,8 @@ class ReviewDeepCoverageTest {
         mock(ReviewedRecommendationVersionRepository.class);
     IncidentResolutionRepository resolutionRepository = mock(IncidentResolutionRepository.class);
     TenantAccessService tenantAccessService = mock(TenantAccessService.class);
+    FeedbackMaterializationService feedbackMaterializationService =
+        mock(FeedbackMaterializationService.class);
     Recommendation recommendation = mock(Recommendation.class);
     ReviewedRecommendationVersion version = mock(ReviewedRecommendationVersion.class);
     when(recommendation.getId()).thenReturn(recommendationId);
@@ -175,7 +178,8 @@ class ReviewDeepCoverageTest {
             reviewRepository,
             versionRepository,
             resolutionRepository,
-            tenantAccessService);
+            tenantAccessService,
+            feedbackMaterializationService);
     service.history(userId, organisationId, projectId, recommendationId);
     service.submit(
         userId,
@@ -262,6 +266,8 @@ class ReviewDeepCoverageTest {
         mock(ReviewedRecommendationVersionRepository.class);
     IncidentResolutionRepository resolutionRepository = mock(IncidentResolutionRepository.class);
     TenantAccessService tenantAccessService = mock(TenantAccessService.class);
+    FeedbackMaterializationService feedbackMaterializationService =
+        mock(FeedbackMaterializationService.class);
     Recommendation recommendation = mock(Recommendation.class);
     ReviewedRecommendationVersion version = mock(ReviewedRecommendationVersion.class);
     when(recommendationRepository.findById(recommendationId))
@@ -296,7 +302,8 @@ class ReviewDeepCoverageTest {
             reviewRepository,
             versionRepository,
             resolutionRepository,
-            tenantAccessService);
+            tenantAccessService,
+            feedbackMaterializationService);
     assertThatThrownBy(
             () -> apiService.history(userId, organisationId, UUID.randomUUID(), recommendationId))
         .isInstanceOf(ReviewApiService.ReviewAccessException.class);
