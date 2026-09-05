@@ -4,6 +4,9 @@ export type RecommendationStatus = "RECOMMENDED" | "ABSTAINED" | "REJECTED";
 
 export interface Recommendation {
     id: string;
+    organisationId: string;
+    projectId: string;
+    incidentId: string | null;
     category: string;
     summary: string;
     likelyCause: string | null;
@@ -13,7 +16,12 @@ export interface Recommendation {
     abstentionReason: string | null;
     providerName: string;
     modelVersion: string;
+    promptTemplateVersion: string;
+    rulesetVersion: string;
     retrievalSetVersion: string;
+    schemaVersion: string;
+    generatedAt: string;
+    createdAt: string;
     citations: number;
 }
 
@@ -36,6 +44,7 @@ export function generateRecommendation(
     accessToken: string,
     organisationId: string,
     projectId: string,
+    incidentId: string | null,
     evidenceIds: string[],
     historicalRecordIds: string[],
 ): Promise<Recommendation> {
@@ -51,7 +60,11 @@ export function generateRecommendation(
                 Authorization: "Bearer " + accessToken,
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ evidenceIds, historicalRecordIds }),
+            body: JSON.stringify({
+                incidentId,
+                evidenceIds,
+                historicalRecordIds,
+            }),
         },
     );
 }

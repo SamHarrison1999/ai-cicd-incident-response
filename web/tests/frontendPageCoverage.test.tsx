@@ -447,12 +447,45 @@ describe("frontend page and component coverage", () => {
 
         const recommendations = renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+
         expect(
             await screen.findByText("Investigate dependency"),
         ).toBeInTheDocument();
-        await user.click(
-            screen.getByRole("button", { name: /Generate bounded/ }),
+
+        const generateButton = screen.getByRole("button", {
+            name: /Generate bounded/,
+        });
+
+        expect(generateButton).toBeDisabled();
+
+        const evidenceCheckbox = await screen.findByRole("checkbox", {
+            name: /Select LOG_EXCERPT delivery/,
+        });
+
+        await user.click(evidenceCheckbox);
+        expect(generateButton).toBeEnabled();
+
+        await user.click(evidenceCheckbox);
+        expect(generateButton).toBeDisabled();
+
+        await user.click(evidenceCheckbox);
+
+        await user.type(
+            screen.getByLabelText("Incident ID (optional)"),
+            "incident",
         );
+
+        await user.click(generateButton);
+
+        expect(mocks.generateRecommendation).toHaveBeenCalledWith(
+            "token",
+            "org",
+            "project",
+            "incident",
+            ["evidence"],
+            [],
+        );
+
         recommendations.unmount();
 
         renderPage(<ReviewPage />);
@@ -1206,6 +1239,58 @@ describe("frontend page and component coverage", () => {
         ).toBeDisabled();
         cleanup();
 
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockResolvedValue({
+            items: [],
+            nextCursor: null,
+        });
+        mocks.getRecommendations.mockReset();
+        mocks.getRecommendations.mockResolvedValue({ items: [] });
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(
+            await screen.findByText(
+                "No evidence inputs are available for this project.",
+            ),
+        ).toBeInTheDocument();
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockReturnValue(never);
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(
+            await screen.findByText("Loading evidence inputs..."),
+        ).toBeInTheDocument();
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockRejectedValue(new Error("evidence inputs"));
+        renderPage(<RecommendationsPage />);
+        await fillScope(user, ["org", "project"]);
+        expect(await screen.findByRole("alert")).toHaveTextContent(
+            "Evidence inputs could not be loaded.",
+        );
+        cleanup();
+
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
+
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
         renderPage(<RecommendationsPage />);
@@ -1263,10 +1348,32 @@ describe("frontend page and component coverage", () => {
 
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
         mocks.generateRecommendation.mockReset();
         mocks.generateRecommendation.mockRejectedValue(new Error("generate"));
         renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+        await user.click(
+            await screen.findByRole("checkbox", {
+                name: /Select LOG_EXCERPT delivery/,
+            }),
+        );
         await user.click(
             screen.getByRole("button", { name: /Generate bounded/ }),
         );
@@ -1277,10 +1384,32 @@ describe("frontend page and component coverage", () => {
 
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
+        mocks.getEvidence.mockReset();
+        mocks.getEvidence.mockResolvedValue({
+            items: [
+                {
+                    id: "evidence",
+                    kind: "LOG_EXCERPT",
+                    retentionClass: "STANDARD",
+                    sourceSystem: "github",
+                    sourceReference: "delivery",
+                    occurredAt: "2026-08-16T10:00:00Z",
+                    ingestedAt: "2026-08-16T10:01:00Z",
+                    contentHash: "hash",
+                    contentLineCount: 2,
+                },
+            ],
+            nextCursor: null,
+        });
         mocks.generateRecommendation.mockReset();
         mocks.generateRecommendation.mockReturnValue(never);
         renderPage(<RecommendationsPage />);
         await fillScope(user, ["org", "project"]);
+        await user.click(
+            await screen.findByRole("checkbox", {
+                name: /Select LOG_EXCERPT delivery/,
+            }),
+        );
         await user.click(
             screen.getByRole("button", { name: /Generate bounded/ }),
         );

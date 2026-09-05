@@ -51,3 +51,49 @@
 .recommendation-warning {
   color: var(--warning-text);
 }
+
+.recommendation-input-panel {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+.recommendation-input-panel h3 {
+  margin: 0.25rem 0;
+}
+
+.recommendation-evidence-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.recommendation-evidence-option {
+  align-items: center;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: auto 1fr;
+  padding: 0.875rem 1rem;
+}
+
+.recommendation-evidence-option:has(input:checked) {
+  border-color: var(--accent-strong);
+}
+
+.recommendation-evidence-option span {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.recommendation-evidence-option small,
+.recommendation-selection-count {
+  color: var(--text-muted);
+}
+
+.recommendation-selection-count {
+  margin: 0.75rem 0;
+}

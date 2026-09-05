@@ -233,7 +233,14 @@ describe("frontend API production coverage", () => {
         });
         await getPipelineTimeline("token", "org", "project");
         await getRecommendations("token", "org", "project");
-        await generateRecommendation("token", "org", "project", ["e"], ["h"]);
+        await generateRecommendation(
+            "token",
+            "org",
+            "project",
+            "incident",
+            ["e"],
+            ["h"],
+        );
         await getReviewHistory("token", "org", "project", "recommendation");
         await submitReview("token", "org", "project", "recommendation", {
             action: "EDIT",

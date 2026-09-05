@@ -182,6 +182,7 @@ describe("defensive access-token fallbacks", () => {
             "",
             "",
             "",
+            null,
             [],
             [],
         );
