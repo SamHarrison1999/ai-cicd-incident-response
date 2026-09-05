@@ -28,7 +28,7 @@ export interface LearningTrendResponse {
 }
 
 export interface LearningComparison {
-    dimensionKey: string | null;
+    dimensionKey?: string | null;
     currentCount: number;
     previousCount: number;
     delta: number;

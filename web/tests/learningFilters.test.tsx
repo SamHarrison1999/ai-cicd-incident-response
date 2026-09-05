@@ -243,6 +243,25 @@ describe("Operational Learning filters", () => {
         expect(mocks.getLearningComparison).not.toHaveBeenCalled();
     });
 
+    it("renders a comparison when the nullable dimension key is omitted", async () => {
+        seedWorkspace();
+
+        mocks.getLearningComparison.mockResolvedValue({
+            currentCount: 0,
+            previousCount: 0,
+            delta: 0,
+            suppressionReason: "INSUFFICIENT_SAMPLE",
+        });
+
+        renderPage();
+
+        expect(
+            await screen.findByText("No comparable dimension"),
+        ).toBeInTheDocument();
+
+        expect(screen.getByText("+0 change")).toBeInTheDocument();
+    });
+
     it("shows a bounded load failure", async () => {
         seedWorkspace();
 

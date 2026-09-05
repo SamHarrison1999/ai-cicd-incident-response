@@ -189,7 +189,7 @@ export function LearningPage() {
                     <h3>Adjacent-window comparison</h3>
 
                     <p>
-                        {comparison.data.dimensionKey === null
+                        {comparison.data.dimensionKey == null
                             ? "No comparable dimension"
                             : formatDimensionKey(comparison.data.dimensionKey)}
                     </p>
