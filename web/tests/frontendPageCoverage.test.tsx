@@ -140,6 +140,18 @@ async function fillScope(
     }
 }
 
+async function fillPipelineScope(user: ReturnType<typeof userEvent.setup>) {
+    await user.type(screen.getByLabelText("Organisation ID"), "org");
+    await user.type(screen.getByLabelText("Project ID"), "project");
+}
+
+async function fillPipelineFilters(user: ReturnType<typeof userEvent.setup>) {
+    await fillPipelineScope(user);
+    await user.type(screen.getByLabelText("Branch"), "main");
+    await user.type(screen.getByLabelText("Commit SHA"), "abc");
+    await user.type(screen.getByLabelText("Environment"), "prod");
+}
+
 beforeEach(() => {
     vi.clearAllMocks();
     mocks.auth.accessToken = "token";
@@ -477,11 +489,11 @@ describe("frontend page and component coverage", () => {
         incidents.unmount();
 
         const pipelines = renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByRole("heading", { name: "build" }),
         ).toBeInTheDocument();
-        await user.selectOptions(screen.getAllByRole("combobox")[0]!, "FAILED");
+        await user.selectOptions(screen.getByLabelText("Status"), "FAILED");
         pipelines.unmount();
 
         const recommendations = renderPage(<RecommendationsPage />);
@@ -1142,7 +1154,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockResolvedValue([]);
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText(/No pipeline runs available/),
         ).toBeInTheDocument();
@@ -1151,7 +1163,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockReturnValue(never);
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText("Loading pipeline runs..."),
         ).toBeInTheDocument();
@@ -1160,7 +1172,7 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineRuns.mockReset();
         mocks.getPipelineRuns.mockRejectedValue(new Error("runs"));
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "Pipeline runs could not",
         );
@@ -1175,7 +1187,7 @@ describe("frontend page and component coverage", () => {
             hasNext: false,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         expect(
             await screen.findByText(/No events match these filters/),
         ).toBeInTheDocument();
@@ -1203,9 +1215,9 @@ describe("frontend page and component coverage", () => {
         mocks.getPipelineTimeline.mockReset();
         mocks.getPipelineTimeline.mockRejectedValue(new Error("timeline"));
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project", "main", "abc", "prod"]);
+        await fillPipelineFilters(user);
         await user.selectOptions(
-            screen.getAllByRole("combobox")[1]!,
+            screen.getByLabelText("Event type"),
             "PIPELINE_RUN_COMPLETED",
         );
         expect(await screen.findByRole("alert")).toHaveTextContent(
@@ -1237,7 +1249,7 @@ describe("frontend page and component coverage", () => {
             hasNext: false,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project", "main", "abc", "prod"]);
+        await fillPipelineFilters(user);
         expect(
             (await screen.findAllByText("PIPELINE_RUN_COMPLETED")).length,
         ).toBeGreaterThan(0);
@@ -1267,7 +1279,7 @@ describe("frontend page and component coverage", () => {
             hasNext: true,
         });
         renderPage(<PipelinesPage />);
-        await fillScope(user, ["org", "project"]);
+        await fillPipelineScope(user);
         await screen.findAllByText("PIPELINE_RUN_COMPLETED");
         mocks.getPipelineTimeline.mockReset();
         mocks.getPipelineTimeline.mockReturnValue(never);

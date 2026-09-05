@@ -21,6 +21,7 @@ const api = vi.hoisted(() => ({
     getPipelineTimeline: vi
         .fn()
         .mockResolvedValue({ items: [], nextCursor: null, hasNext: false }),
+    simulateDemoCiRun: vi.fn().mockResolvedValue({}),
     generateRecommendation: vi.fn().mockResolvedValue({}),
     getRecommendations: vi.fn().mockResolvedValue({ items: [] }),
     createResolution: vi.fn().mockResolvedValue({}),
@@ -94,6 +95,9 @@ vi.mock("../src/api/learning", () => ({
 vi.mock("../src/api/organisations", () => ({
     createOrganisation: api.createOrganisation,
     getOrganisations: api.getOrganisations,
+}));
+vi.mock("../src/api/demoCi", () => ({
+    simulateDemoCiRun: api.simulateDemoCiRun,
 }));
 vi.mock("../src/api/pipelineRuns", () => ({
     getPipelineRuns: api.getPipelineRuns,
@@ -177,6 +181,11 @@ describe("defensive access-token fallbacks", () => {
             "",
             expect.any(Object),
         );
+        expect(api.simulateDemoCiRun).toHaveBeenCalledWith("", "", "", {
+            pipelineName: "demo-deployment",
+            branch: "main",
+            outcome: "FAILED",
+        });
         expect(api.getRecommendations).toHaveBeenCalledWith("", "", "");
         expect(api.generateRecommendation).toHaveBeenCalledWith(
             "",
