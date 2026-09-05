@@ -23,7 +23,10 @@ public interface HistoricalRetrievalRecordRepository
         and (cast(:environmentName as String) is null or record.environmentName = :environmentName)
         and (cast(:gitRef as String) is null or record.gitRef = :gitRef)
         and (cast(:commitSha as String) is null or record.commitSha = :commitSha)
-        and (cast(:query as String) is null or lower(record.summary) like concat('%', lower(cast(:query as String)), '%'))
+        and (
+          cast(:query as String) is null
+          or lower(record.summary) like concat('%', lower(cast(:query as String)), '%')
+        )
         and (cast(:occurredFrom as Instant) is null or record.occurredAt >= :occurredFrom)
         and (cast(:occurredTo as Instant) is null or record.occurredAt <= :occurredTo)
         and (
