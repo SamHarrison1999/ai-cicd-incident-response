@@ -372,6 +372,7 @@ beforeEach(() => {
         items: [
             {
                 id: "recommendation",
+                incidentId: "incident",
                 category: "DEPENDENCY",
                 summary: "Investigate dependency",
                 likelyCause: "dependency",
@@ -553,14 +554,14 @@ describe("frontend page and component coverage", () => {
         recommendations.unmount();
 
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(await screen.findByText("ACCEPT")).toBeInTheDocument();
         await user.selectOptions(screen.getByLabelText("Action"), "EDIT");
         await user.type(screen.getByLabelText("Edited summary"), "edited");
         await user.type(screen.getByLabelText("Edited cause"), "cause");
         await user.type(screen.getByLabelText("Comment"), "comment");
         await user.click(screen.getByRole("button", { name: "Submit review" }));
-        await user.type(screen.getByLabelText("Incident ID"), "incident");
+
         await user.type(screen.getByLabelText("Resolution text"), "resolution");
         await user.click(
             screen.getByRole("button", { name: /Record bounded/ }),
@@ -1571,10 +1572,31 @@ describe("frontend page and component coverage", () => {
         ).toBeDisabled();
         cleanup();
 
+        mocks.getRecommendations.mockReset();
+        mocks.getRecommendations.mockResolvedValue({
+            items: [
+                {
+                    id: "recommendation",
+                    incidentId: "incident",
+                    category: "DEPENDENCY",
+                    summary: "Investigate dependency",
+                    likelyCause: "dependency",
+                    confidence: 0.8,
+                    confidenceExplanation: "Supported signal",
+                    status: "RECOMMENDED",
+                    abstentionReason: null,
+                    providerName: "deterministic",
+                    modelVersion: "v1",
+                    retrievalSetVersion: "v1",
+                    citations: 1,
+                },
+            ],
+        });
+
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockResolvedValue({ items: [] });
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(
             await screen.findByText(/No reviews recorded/),
         ).toBeInTheDocument();
@@ -1590,7 +1612,7 @@ describe("frontend page and component coverage", () => {
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockReturnValue(never);
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(
             await screen.findByText("Loading review history..."),
         ).toBeInTheDocument();
@@ -1614,13 +1636,13 @@ describe("frontend page and component coverage", () => {
         mocks.createResolution.mockReset();
         mocks.createResolution.mockReturnValue(never);
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         await screen.findByText("ACCEPT");
         await user.click(screen.getByRole("button", { name: "Submit review" }));
         expect(
             await screen.findByRole("button", { name: "Submitting..." }),
         ).toBeDisabled();
-        await user.type(screen.getByLabelText("Incident ID"), "incident");
+
         await user.type(screen.getByLabelText("Resolution text"), "resolution");
         await user.click(
             screen.getByRole("button", { name: "Record bounded resolution" }),
@@ -1633,7 +1655,7 @@ describe("frontend page and component coverage", () => {
         mocks.getReviewHistory.mockReset();
         mocks.getReviewHistory.mockRejectedValue(new Error("history"));
         renderPage(<ReviewPage />);
-        await fillScope(user, ["org", "project", "recommendation"]);
+        await fillScope(user, ["org", "project"]);
         expect(await screen.findByRole("alert")).toHaveTextContent(
             "review operation could not",
         );
