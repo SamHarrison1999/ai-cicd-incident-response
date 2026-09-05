@@ -7,6 +7,17 @@ export type EvidenceKind =
     | "EVENT_SNAPSHOT"
     | "STATUS_CHANGE";
 
+export type EvidenceRetentionClass = "SHORT" | "STANDARD" | "EXTENDED";
+
+export interface CreateEvidenceRequest {
+    kind: EvidenceKind;
+    retentionClass: EvidenceRetentionClass;
+    sourceSystem: string;
+    sourceReference: string;
+    occurredAt: string;
+    content: string;
+}
+
 export interface EvidenceSummary {
     id: string;
     kind: EvidenceKind;
@@ -46,6 +57,21 @@ function evidencePath(organisationId: string, projectId: string): string {
         projectId +
         "/evidence"
     );
+}
+
+export function createEvidence(
+    accessToken: string,
+    organisationId: string,
+    projectId: string,
+    request: CreateEvidenceRequest,
+): Promise<EvidenceSummary> {
+    return requestJson(evidencePath(organisationId, projectId), {
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + accessToken,
+        },
+        body: JSON.stringify(request),
+    });
 }
 
 export function getEvidence(

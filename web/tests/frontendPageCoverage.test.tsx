@@ -27,6 +27,7 @@ const mocks = vi.hoisted(() => ({
     getDiagnosis: vi.fn(),
     getEvidence: vi.fn(),
     getEvidenceItem: vi.fn(),
+    createEvidence: vi.fn(),
     getFeedback: vi.fn(),
     getHistoricalRetrieval: vi.fn(),
     getIncidents: vi.fn(),
@@ -54,6 +55,7 @@ vi.mock("../src/api/diagnosis", () => ({
     getDiagnosis: mocks.getDiagnosis,
 }));
 vi.mock("../src/api/evidence", () => ({
+    createEvidence: mocks.createEvidence,
     getEvidence: mocks.getEvidence,
     getEvidenceItem: mocks.getEvidenceItem,
 }));
@@ -166,6 +168,17 @@ beforeEach(() => {
         missingEvidence: ["logs"],
         warnings: ["review"],
         abstentionReason: null,
+    });
+    mocks.createEvidence.mockResolvedValue({
+        id: "created-evidence",
+        kind: "LOG_EXCERPT",
+        retentionClass: "STANDARD",
+        sourceSystem: "portfolio-demo",
+        sourceReference: "browser-manual-evidence",
+        occurredAt: "2026-09-05T16:00:00Z",
+        ingestedAt: "2026-09-05T16:00:01Z",
+        contentHash: "hash",
+        contentLineCount: 1,
     });
     mocks.getEvidence.mockResolvedValue({
         items: [
@@ -614,6 +627,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({ items: [], nextCursor: null });
         renderPage(<EvidencePage />);
         await fillScope(user, ["org", "project"]);
@@ -639,6 +663,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -678,6 +713,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -733,6 +779,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -1292,6 +1349,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [],
             nextCursor: null,
@@ -1326,6 +1394,17 @@ describe("frontend page and component coverage", () => {
         cleanup();
 
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -1401,6 +1480,17 @@ describe("frontend page and component coverage", () => {
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {
@@ -1437,6 +1527,17 @@ describe("frontend page and component coverage", () => {
         mocks.getRecommendations.mockReset();
         mocks.getRecommendations.mockResolvedValue({ items: [] });
         mocks.getEvidence.mockReset();
+        mocks.createEvidence.mockResolvedValue({
+            id: "created-evidence",
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            ingestedAt: "2026-09-05T16:00:01Z",
+            contentHash: "hash",
+            contentLineCount: 1,
+        });
         mocks.getEvidence.mockResolvedValue({
             items: [
                 {

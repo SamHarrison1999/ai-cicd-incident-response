@@ -6,7 +6,11 @@ import {
 } from "../src/api/authentication";
 import { getControlPlaneStatus } from "../src/api/controlPlane";
 import { getDiagnosis } from "../src/api/diagnosis";
-import { getEvidence, getEvidenceItem } from "../src/api/evidence";
+import {
+    createEvidence,
+    getEvidence,
+    getEvidenceItem,
+} from "../src/api/evidence";
 import { getFeedback } from "../src/api/feedback";
 import { getHistoricalRetrieval } from "../src/api/historicalRetrieval";
 import { ApiError, requestJson } from "../src/api/httpClient";
@@ -155,6 +159,14 @@ describe("frontend API production coverage", () => {
             limit: 10,
         });
         await getEvidence("token", "org", "project");
+        await createEvidence("token", "org", "project", {
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            content: "dependency timeout",
+        });
         await getEvidenceItem("token", "org", "project", "evidence");
         await getFeedback("token", "org", "project", {
             policyVersion: "policy",

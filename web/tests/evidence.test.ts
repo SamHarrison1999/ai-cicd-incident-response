@@ -1,4 +1,8 @@
-import { getEvidence, getEvidenceItem } from "../src/api/evidence";
+import {
+    createEvidence,
+    getEvidence,
+    getEvidenceItem,
+} from "../src/api/evidence";
 
 describe("evidence API", () => {
     afterEach(() => {
@@ -26,6 +30,73 @@ describe("evidence API", () => {
         expect(requestUrl).toContain("kind=LOG_EXCERPT");
         expect(requestUrl).toContain("q=timeout");
         expect(requestUrl).toContain("limit=25");
+    });
+
+    it("creates tenant-scoped evidence", async () => {
+        const fetchMock = vi.fn<
+            (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+        >(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify({
+                        id: "evidence-new",
+                        kind: "LOG_EXCERPT",
+                        retentionClass: "STANDARD",
+                        sourceSystem: "portfolio-demo",
+                        sourceReference: "browser-manual-evidence",
+                        occurredAt: "2026-09-05T16:00:00Z",
+                        ingestedAt: "2026-09-05T16:00:01Z",
+                        contentHash: "a".repeat(64),
+                        contentLineCount: 1,
+                    }),
+                    { status: 201 },
+                ),
+            ),
+        );
+
+        vi.stubGlobal("fetch", fetchMock);
+
+        await createEvidence("token", "org-1", "project-1", {
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            content: "dependency timeout",
+        });
+
+        const firstCall = fetchMock.mock.calls[0];
+
+        if (firstCall === undefined) {
+            throw new Error("Expected fetch to be called.");
+        }
+
+        const [url, init] = firstCall;
+
+        if (init === undefined || typeof init.body !== "string") {
+            throw new Error("Expected JSON request options.");
+        }
+
+        if (typeof url !== "string") {
+            throw new Error("Expected evidence request URL to be a string.");
+        }
+
+        expect(url).toContain(
+            "/organisations/org-1/projects/project-1/evidence",
+        );
+        expect(init.method).toBe("POST");
+        expect(new Headers(init.headers).get("Authorization")).toBe(
+            "Bearer token",
+        );
+
+        expect(JSON.parse(init.body)).toEqual({
+            kind: "LOG_EXCERPT",
+            retentionClass: "STANDARD",
+            sourceSystem: "portfolio-demo",
+            sourceReference: "browser-manual-evidence",
+            occurredAt: "2026-09-05T16:00:00Z",
+            content: "dependency timeout",
+        });
     });
 
     it("loads a single bounded viewer projection", async () => {

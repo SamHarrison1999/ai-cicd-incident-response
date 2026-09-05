@@ -7,6 +7,7 @@ const api = vi.hoisted(() => ({
     getDiagnosis: vi.fn().mockResolvedValue({}),
     getEvidence: vi.fn().mockResolvedValue({ items: [], nextCursor: null }),
     getEvidenceItem: vi.fn().mockResolvedValue({}),
+    createEvidence: vi.fn().mockResolvedValue({ id: "evidence" }),
     getFeedback: vi.fn().mockResolvedValue({ items: [] }),
     getHistoricalRetrieval: vi
         .fn()
@@ -77,6 +78,7 @@ vi.mock("@tanstack/react-query", async () => {
 vi.mock("../src/auth/useAuth", () => ({ useAuth: () => auth }));
 vi.mock("../src/api/diagnosis", () => ({ getDiagnosis: api.getDiagnosis }));
 vi.mock("../src/api/evidence", () => ({
+    createEvidence: api.createEvidence,
     getEvidence: api.getEvidence,
     getEvidenceItem: api.getEvidenceItem,
 }));
@@ -148,6 +150,18 @@ describe("defensive access-token fallbacks", () => {
             "",
             "",
             expect.any(Object),
+        );
+        expect(api.createEvidence).toHaveBeenCalledWith(
+            "",
+            "",
+            "",
+            expect.objectContaining({
+                kind: "LOG_EXCERPT",
+                retentionClass: "STANDARD",
+                sourceSystem: "portfolio-demo",
+                sourceReference: "browser-manual-evidence",
+                content: "",
+            }),
         );
         expect(api.getFeedback).toHaveBeenCalledWith(
             "",
