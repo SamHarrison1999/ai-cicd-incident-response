@@ -69,8 +69,8 @@ export function DashboardPage() {
                     </div>
                 </div>
                 <EmptyState
-                    title="No incidents have been ingested"
-                    description="Signed event ingestion and incident correlation are introduced in later phases."
+                    title="Incident activity is project-scoped"
+                    description="Signed event ingestion and deterministic incident correlation are available. Open the Incidents workspace with an organisation and project ID to review correlated failures."
                 />
             </section>
         </>
