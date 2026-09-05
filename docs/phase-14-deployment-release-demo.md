@@ -12,6 +12,31 @@ release evidence, a portfolio demonstration, and an honest case study.
 The phase remains IN_PROGRESS until the commands in the final verification
 checklist have been run on the reviewed commit and their output recorded.
 
+## Hosted demonstration
+
+The hosted web application is available at:
+
+[Open the hosted demonstration](YOUR-HOSTED-WEB-URL)
+
+Hosting provider: `YOUR-HOSTING-PROVIDER`
+
+### Hosted smoke test
+
+1. Open the hosted URL in a private browser window.
+2. Register a new synthetic test account.
+3. Confirm that the Overview page loads.
+4. Select **Run one-click demo**.
+5. Confirm that `Portfolio Verification` and `Incident Demo` are selected.
+6. Confirm that the success message says `Demo CI run accepted`.
+7. Open Pipeline runs and confirm the `portfolio-demo` failed run exists.
+8. Open Historical retrieval and confirm it loads without an error.
+9. `No historical matches` is expected when the workspace has no reviewed
+   historical records.
+
+The hosted environment is a portfolio demonstration and is not a production
+deployment. Do not publish credentials, tokens, private data, or backend
+secrets.
+
 ## Local demonstration
 
 From the repository root:
