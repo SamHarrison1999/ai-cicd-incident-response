@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.samharrison.incidentresponse.evidence.IngestionEvidenceService;
 import com.samharrison.incidentresponse.incident.IncidentCorrelationWorkflow;
 import com.samharrison.incidentresponse.organisation.Organisation;
 import com.samharrison.incidentresponse.project.Project;
@@ -51,7 +52,8 @@ class NormalisedEventProcessingCoverageTest {
             events,
             deliveries,
             metrics,
-            mock(IncidentCorrelationWorkflow.class))
+            mock(IncidentCorrelationWorkflow.class),
+            mock(IngestionEvidenceService.class))
         .process(source, delivery, "{}".getBytes(), Instant.parse("2026-08-16T10:00:00Z"));
 
     org.mockito.Mockito.verify(delivery)
@@ -112,7 +114,8 @@ class NormalisedEventProcessingCoverageTest {
             events,
             deliveries,
             metrics,
-            mock(IncidentCorrelationWorkflow.class));
+            mock(IncidentCorrelationWorkflow.class),
+            mock(IngestionEvidenceService.class));
     service.process(source, delivery, "{}".getBytes(), occurred);
 
     org.mockito.Mockito.verify(run).applyStatus(PipelineRunStatus.FAILED, occurred);
@@ -140,6 +143,7 @@ class NormalisedEventProcessingCoverageTest {
         mock(NormalisedCiEventRepository.class),
         mock(WebhookDeliveryRepository.class),
         mock(IngestionMetrics.class),
-        mock(IncidentCorrelationWorkflow.class));
+        mock(IncidentCorrelationWorkflow.class),
+        mock(IngestionEvidenceService.class));
   }
 }

@@ -2,6 +2,8 @@ package com.samharrison.incidentresponse.ingestion;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samharrison.incidentresponse.evidence.IngestionEvidenceService;
+import com.samharrison.incidentresponse.incident.Incident;
 import com.samharrison.incidentresponse.incident.IncidentCorrelationWorkflow;
 import java.io.IOException;
 import java.time.Instant;
@@ -19,6 +21,7 @@ class NormalisedEventProcessingService {
   private final WebhookDeliveryRepository webhookDeliveryRepository;
   private final IngestionMetrics ingestionMetrics;
   private final IncidentCorrelationWorkflow incidentCorrelationWorkflow;
+  private final IngestionEvidenceService ingestionEvidenceService;
 
   NormalisedEventProcessingService(
       ProviderEventAdapterRegistry adapterRegistry,
@@ -26,13 +29,15 @@ class NormalisedEventProcessingService {
       NormalisedCiEventRepository normalisedCiEventRepository,
       WebhookDeliveryRepository webhookDeliveryRepository,
       IngestionMetrics ingestionMetrics,
-      IncidentCorrelationWorkflow incidentCorrelationWorkflow) {
+      IncidentCorrelationWorkflow incidentCorrelationWorkflow,
+      IngestionEvidenceService ingestionEvidenceService) {
     this.adapterRegistry = adapterRegistry;
     this.pipelineRunRepository = pipelineRunRepository;
     this.normalisedCiEventRepository = normalisedCiEventRepository;
     this.webhookDeliveryRepository = webhookDeliveryRepository;
     this.ingestionMetrics = ingestionMetrics;
     this.incidentCorrelationWorkflow = incidentCorrelationWorkflow;
+    this.ingestionEvidenceService = ingestionEvidenceService;
   }
 
   @Transactional
@@ -111,7 +116,8 @@ class NormalisedEventProcessingService {
             mapped.sourceFields());
 
     normalisedCiEventRepository.save(normalisedEvent);
-    incidentCorrelationWorkflow.correlate(normalisedEvent);
+    Optional<Incident> incident = incidentCorrelationWorkflow.correlate(normalisedEvent);
+    ingestionEvidenceService.capture(normalisedEvent, incident, delivery, receivedAt);
 
     delivery.markProcessed("NORMALISED_EVENT_CREATED", receivedAt);
     ingestionMetrics.recordNormalisedEvent();

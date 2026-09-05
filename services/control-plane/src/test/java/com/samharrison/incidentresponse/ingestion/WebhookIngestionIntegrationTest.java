@@ -6,8 +6,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.samharrison.incidentresponse.audit.AuditEventRepository;
+import com.samharrison.incidentresponse.evidence.EvidenceRepository;
+import com.samharrison.incidentresponse.incident.EvidenceEventLinkRepository;
 import com.samharrison.incidentresponse.incident.IncidentCorrelationDecisionRecordRepository;
 import com.samharrison.incidentresponse.incident.IncidentEventLinkRepository;
+import com.samharrison.incidentresponse.incident.IncidentEvidenceLinkRepository;
 import com.samharrison.incidentresponse.incident.IncidentRepository;
 import com.samharrison.incidentresponse.incident.IncidentStatus;
 import com.samharrison.incidentresponse.organisation.Organisation;
@@ -58,6 +61,9 @@ class WebhookIngestionIntegrationTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private WebhookSignatureService signatureService;
   @Autowired private AuditEventRepository auditEventRepository;
+  @Autowired private EvidenceRepository evidenceRepository;
+  @Autowired private EvidenceEventLinkRepository evidenceEventLinkRepository;
+  @Autowired private IncidentEvidenceLinkRepository incidentEvidenceLinkRepository;
   @Autowired private IncidentCorrelationDecisionRecordRepository correlationDecisionRepository;
   @Autowired private IncidentEventLinkRepository incidentEventLinkRepository;
   @Autowired private IncidentRepository incidentRepository;
@@ -72,8 +78,11 @@ class WebhookIngestionIntegrationTest {
   void clearPersistenceModel() {
     auditEventRepository.deleteAll();
     correlationDecisionRepository.deleteAll();
+    incidentEvidenceLinkRepository.deleteAll();
+    evidenceEventLinkRepository.deleteAll();
     incidentEventLinkRepository.deleteAll();
     incidentRepository.deleteAll();
+    evidenceRepository.deleteAll();
     normalisedCiEventRepository.deleteAll();
     pipelineRunRepository.deleteAll();
     webhookDeliveryRepository.deleteAll();
@@ -98,12 +107,16 @@ class WebhookIngestionIntegrationTest {
     assertThat(incidentRepository.count()).isEqualTo(1);
     assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
     assertThat(correlationDecisionRepository.count()).isEqualTo(1);
+    assertThat(evidenceRepository.count()).isEqualTo(1);
+    assertThat(evidenceEventLinkRepository.count()).isEqualTo(1);
+    assertThat(incidentEvidenceLinkRepository.count()).isEqualTo(1);
 
     WebhookDelivery delivery = webhookDeliveryRepository.findAll().getFirst();
     assertThat(delivery.getPayloadSha256()).isEqualTo(signatureService.sha256Hex(PAYLOAD));
 
     NormalisedCiEvent event = normalisedCiEventRepository.findAll().getFirst();
     var incident = incidentRepository.findAll().getFirst();
+    var evidence = evidenceRepository.findAll().getFirst();
     var decision = correlationDecisionRepository.findByEventId(event.getId()).orElseThrow();
 
     assertThat(incident.getStatus()).isEqualTo(IncidentStatus.DETECTED);
@@ -112,6 +125,20 @@ class WebhookIngestionIntegrationTest {
     assertThat(incidentEventLinkRepository.findByEventId(event.getId()))
         .hasValueSatisfying(
             link -> assertThat(link.getIncident().getId()).isEqualTo(incident.getId()));
+
+    assertThat(evidence.getSourceReference()).isEqualTo("delivery-1");
+    assertThat(evidence.getContent())
+        .contains("payloadSha256=" + delivery.getPayloadSha256())
+        .doesNotContain("payload=");
+
+    assertThat(
+            evidenceEventLinkRepository.findByEvidenceIdAndEventId(evidence.getId(), event.getId()))
+        .isPresent();
+
+    assertThat(
+            incidentEvidenceLinkRepository.findByIncidentIdAndEvidenceId(
+                incident.getId(), evidence.getId()))
+        .isPresent();
   }
 
   @Test
@@ -162,6 +189,9 @@ class WebhookIngestionIntegrationTest {
     assertThat(incidentRepository.count()).isEqualTo(1);
     assertThat(incidentEventLinkRepository.count()).isEqualTo(1);
     assertThat(correlationDecisionRepository.count()).isEqualTo(1);
+    assertThat(evidenceRepository.count()).isEqualTo(1);
+    assertThat(evidenceEventLinkRepository.count()).isEqualTo(1);
+    assertThat(incidentEvidenceLinkRepository.count()).isEqualTo(1);
   }
 
   @Test
