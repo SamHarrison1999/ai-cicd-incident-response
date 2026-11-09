@@ -48,7 +48,7 @@ jobs:
 
       - name: Set up Java for CodeQL autobuild
         if: matrix.language == 'java-kotlin'
-        uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78
         with:
           distribution: temurin
           java-version: "25"
